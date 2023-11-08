@@ -1,0 +1,72 @@
+
+body {
+    background-color: #57614e;
+}
+
+
+.read-button {
+    background-color: #5d735e;
+    border: none;
+    color: white;
+    padding-left: 150px;
+    padding-right: 150px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: block; /* Change display to block */
+    font-size: 16px;
+    margin: 0 auto; /* Center the button horizontally */
+    cursor: pointer;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+
+
+#NotesFx{
+    margin-bottom: 40px;
+}
+
+#NotesFx , #ToolsFx{
+    background-color: #6a755f; 
+    border-radius: 10px;
+    padding: 20px 50px 50px 15px; /* top, right, bottom, left */
+  }
+
+#NotesFx p, #ToolsFx p, #NotesFx h1, #ToolsFx h1 {
+    color: white; /* Set the text color to white for both <p> and <h1> elements */
+}
+
+#NotesFx h1, #ToolsFx h1 {
+    font-size: large;
+}
+
+
+#buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.tool-button {
+    background-color: #5d735e; /* Green background color */
+    border: none;
+    color: white; /* Text color */
+    padding: 10px 20px; /* Padding for the buttons */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 10px; /* Rounded borders */
+}
+
+
+
+
+
+
+
