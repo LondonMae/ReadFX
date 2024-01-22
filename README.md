@@ -1,6 +1,6 @@
 
 
-#nlp-prototype directory
+# nlp-prototype directory
 
 ### Usage
 
@@ -16,8 +16,8 @@
 
 A sample of the data can be found in nlp-prototype/prototype.ipynb
 
-#Django
+# Django
 
 ### Usage
 
-to test django developement backend, run '''python3 manage.py runserver'''. See documentation [here](https://docs.djangoproject.com/en/5.0/intro/tutorial01/)
+to test django developement backend, run ```python3 manage.py runserver```. See documentation [here](https://docs.djangoproject.com/en/5.0/intro/tutorial01/)
