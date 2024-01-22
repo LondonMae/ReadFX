@@ -1,11 +1,13 @@
 $(function(){
 
+    //on button click
     $('#keywordsubmit').click(function(){
 
+    // what was entered in textbox
 		var search_topic = $('#keyword').val();
 
-
-		if (search_topic){
+    // if not empty, then send message to background
+		if (search_topic) {
                 chrome.runtime.sendMessage(
 					{topic: search_topic},
 					function(response) {
