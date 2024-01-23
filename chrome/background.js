@@ -5,7 +5,7 @@ var serverhost = 'http://127.0.0.1:8000/';
 	chrome.runtime.onMessage.addListener(
 		function(request, sender, sendResponse) {
 
-			// what we set url to in views + specific search
+			// http api call
 			var url = serverhost + 'api/get_wiki_summary/?topic='+ encodeURIComponent(request.topic) ;
 
 			//fetch data from http
@@ -17,3 +17,11 @@ var serverhost = 'http://127.0.0.1:8000/';
 			return true;  // Will respond asynchronously.
 
 	});
+
+// when user clicks extension button, execute content script 
+chrome.action.onClicked.addListener((tab) => {
+  chrome.scripting.executeScript({
+    target: {tabId: tab.id},
+    files: ['scripts/content.js']
+  });
+});
