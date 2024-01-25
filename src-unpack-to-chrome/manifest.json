@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "ReadFx",
-    "version": "0.0.1",
+    "version": "1.0",
     "description": "Text summarizer",
     "action": {
         "action":{
@@ -18,7 +18,7 @@
     "side_panel": {
         "default_path" :"sidepanel/sidepanel.html"
     } ,
-    "permissions": ["activeTab", "sidePanel", "contextMenus", "scripting", "tabs", "notifications"],
+    "permissions": ["sidePanel", "contextMenus", "scripting", "tabs"],
     "host_permissions": [
         "http://*/*",
         "https://*/*"
