@@ -25,7 +25,15 @@ SECRET_KEY = 'django-insecure-1%u3s_sjz$rfpg@v5)@amk6lqt0eupksp94==0j0)db&0y0c7(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['chrome-extension://mngofgemnfgeckocaocgajamidjobcpj','127.0.0.1','localhost','localhost:8000']
+CSRF_TRUSTED_ORIGINS = ['chrome-extension://mngofgemnfgeckocaocgajamidjobcpj']
+
+
+
+
+
+
+
 
 
 # Application definition
@@ -60,6 +68,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
   'http://localhost:3000',
+ 'http://localhost:8000', 
 )
 
 ROOT_URLCONF = 'todo_api.urls'
