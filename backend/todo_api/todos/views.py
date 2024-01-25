@@ -5,6 +5,8 @@ from django.contrib.auth.models import User #####
 from django.http import JsonResponse , HttpResponse ####
 
 import wikipedia
+from django.views.decorators.csrf import csrf_exempt
+
 
 # Importing the model
 from transformers import BartForConditionalGeneration, BartTokenizer, BartConfig
@@ -12,12 +14,18 @@ from transformers import BartForConditionalGeneration, BartTokenizer, BartConfig
 def index(request):
     return HttpResponse("Hello World, you are at wiki index.")
 
+
+
+@csrf_exempt
 def get_wiki_summary(request):
-    topic = request.GET.get("topic", None)
+    if request.method == 'POST':
+        print("Hello")
+        data = json.loads(request.body.decode('utf-8'))
+        print(data)
 
-    print("topic:", topic)
 
-    ARTICLE = topic
+    # ARTICLE = topic
+    ARTICLE = data
 
     tokenizer=BartTokenizer.from_pretrained('facebook/bart-large-cnn')
     model=BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
@@ -39,4 +47,5 @@ def get_wiki_summary(request):
 
     # print("json to be sent: ". data)
 
+    print("Returning data")
     return JsonResponse(data)
