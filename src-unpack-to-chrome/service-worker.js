@@ -7,30 +7,25 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.contextMenus.onClicked.addListener( (data, info, tab) => {
-
-  console.log("Before trying to open side panel")
-  // console.log(info)
-  // console.log(info.menuItemId)
-  
+chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === 'summarize-sentence') {
-    // This will open the panel in all the pages on the current window.
-    console.log("Trying to open side panel")
     chrome.sidePanel.open({ windowId: tab.windowId });
   }
+});
 
-  chrome.sidePanel.open({ windowId: tab.windowId });
 
-  // chrome.runtime.sendMessage({
-  //   name: 'summarize-sentence',
-  //   data: { value: data.selectionText }
-  // });
+chrome.contextMenus.onClicked.addListener(async(data) => {
+
+  chrome.runtime.sendMessage({
+    name: 'summarize-sentence',
+    data: { value: data.selectionText }
+  });
   
   
-  // console.log(typeof data.selectionText)
-  // var response = sendDataToServer(data.selectionText);
-  // console.log("Back at client")
-  // console.log(response["summary"])
+  console.log(typeof data.selectionText)
+  var response =  await sendDataToServer(data.selectionText);
+  console.log("Back at client")
+  console.log(response["summary"])
 
 });
 
