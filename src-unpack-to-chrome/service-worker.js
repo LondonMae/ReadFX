@@ -1,4 +1,3 @@
-
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: 'summarize-sentence',
@@ -7,35 +6,36 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === 'summarize-sentence') {
-    chrome.sidePanel.open({ windowId: tab.windowId });
-  }
-});
+//When the context menu is invoked
+chrome.contextMenus.onClicked.addListener(async(data, tab) => {
 
-
-chrome.contextMenus.onClicked.addListener(async(data) => {
-
-  chrome.runtime.sendMessage({
-    name: 'summarize-sentence',
-    data: { value: data.selectionText }
+  //first open the side panel, wait for promise
+  chrome.sidePanel.open({ windowId: tab.windowId }, ()=>{
+    chrome.runtime.sendMessage({
+      name: 'summarize-sentence',
+      data: { value: "summarizing: " + data.selectionText }
+    });
   });
+  // waits for side panel to be open then     
   
-  
+
   console.log(typeof data.selectionText)
-  var response =  await sendDataToServer(data.selectionText);
+  const response =  await sendDataToServer(data.selectionText);
   console.log("Back at client")
   console.log(response["summary"])
+  
+  chrome.runtime.sendMessage({
+    name: 'summarize-sentence',
+    data: { value: response["summary"] }
+  });
 
 });
-
 
 
 
 async function sendDataToServer(selectedText) {
   const serverEndpoint = 'http://127.0.0.1:8000/api/get_wiki_summary/';
   console.log(selectedText);
-
   const response = await fetch(serverEndpoint, {
     method: 'POST',
     headers: {
