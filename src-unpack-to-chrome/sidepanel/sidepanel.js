@@ -38,7 +38,7 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
             }).then(selectedText => {
                 console.log('Injected a function!');
                 console.log(selectedText)
-                document.getElementById("select-a-word").innerText = selectedText[0].result;
+                document.getElementById("select-a-word").innerText = data.value;
             });
         
         });
