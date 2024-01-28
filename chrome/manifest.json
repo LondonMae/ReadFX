@@ -1,7 +1,20 @@
 {
     "name": "ReadFX",
     "description": "testing woohoo",
-    "version": "0.0",
+    "version": "0.1",
+
+    "action": {
+      "default_popup":"hello.html"
+    },
+
+    "background": {
+      "service_worker": "background.js"
+    },
+
+    "permissions": ["activeTab", "scripting"],
+    "host_permissions": [
+      "http://127.0.0.1:8000/"
+    ],
 
 
     "content_scripts": [
