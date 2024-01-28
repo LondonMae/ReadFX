@@ -1,0 +1,18 @@
+{
+    "name": "ReadFX",
+    "description": "testing woohoo",
+    "version": "0.0",
+
+
+    "content_scripts": [
+        {
+        "matches": [
+            "http://*/*",
+            "https://*/*"
+            ],
+        "js": ["scripts/content.js"],
+        "run_at": "document_end"    // Pay attention to this line
+        }
+    ],
+    "manifest_version": 3
+}
