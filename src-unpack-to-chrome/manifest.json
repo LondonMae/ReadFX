@@ -1,0 +1,29 @@
+{
+    "manifest_version": 3,
+    "name": "ReadFx",
+    "version": "0.0.1",
+    "description": "Text summarizer",
+    "action": {
+        "action":{
+            "default_title": "Click to open panel"
+        },
+        "default_popup": "popup/popup.html",
+        "default_icon": {
+            "16": "images/icon-16.png"
+        }
+    },
+    "background": {
+        "service_worker": "service-worker.js"
+      },
+    "side_panel": {
+        "default_path" :"sidepanel/sidepanel.html"
+    } ,
+    "permissions": ["activeTab", "sidePanel", "contextMenus", "scripting", "tabs", "notifications"],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*",
+        "file://*/*"
+      ]
+
+    }
+
