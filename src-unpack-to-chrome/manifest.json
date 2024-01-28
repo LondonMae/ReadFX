@@ -21,7 +21,8 @@
     "permissions": ["activeTab", "sidePanel", "contextMenus", "scripting", "tabs", "notifications"],
     "host_permissions": [
         "http://*/*",
-        "https://*/*"
+        "https://*/*",
+        "file://*/*"
       ]
 
     }
