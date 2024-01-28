@@ -1,3 +1,30 @@
+async function sendDataToServer(selectedText) {
+  const serverEndpoint = 'http://127.0.0.1:8000/api/get_wiki_summary/';
+  console.log(selectedText);
+  const response = await fetch(serverEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(selectedText),
+  });
+
+  var data = await response.json();
+  console.log("BYEBYE")
+  console.log(data)
+  return data
+}
+
+function stripHTML(x){
+    x = x.replace(/[^\x00-\x7F]/g, "")
+    x = x.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "\n").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "\n")
+    var t = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gi;
+    x = x.replace(t, "")
+    x = x.replace(t, '<a href="$&">$&</a>')
+    return x
+}
+
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: 'summarize-sentence',
@@ -5,16 +32,22 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ['all']
   });
 });
+
 let tabdata = ""
 //When the context menu is invoked
 chrome.contextMenus.onClicked.addListener(async(data, tab) => {
-
   //first open the side panel, wait for promise
   const opened = await chrome.sidePanel.open({ windowId: tab.windowId });
-  tabdata = data.selectionText;
+  tabdata = stripHTML(data.selectionText);
 
-  console.log(typeof data.selectionText)
-  const response =  await sendDataToServer(data.selectionText);
+  chrome.runtime.sendMessage({
+    name: 'summarize-sentence',
+    data: { value: "summarizing: " + tabdata }
+  });
+
+  console.log(typeof tabdata)
+
+  const response =  await sendDataToServer(tabdata);
   console.log("Back at client")
   console.log(response["summary"])
   
@@ -33,25 +66,4 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
     });
     console.log("loaded")
   }
-
 });
-
-
-
-async function sendDataToServer(selectedText) {
-  const serverEndpoint = 'http://127.0.0.1:8000/api/get_wiki_summary/';
-  console.log(selectedText);
-  const response = await fetch(serverEndpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(selectedText),
-  });
-
-  var data = await response.json();
-  console.log("BYEBYE")
-  console.log(data)
-  return data
-}
-
