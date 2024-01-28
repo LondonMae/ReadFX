@@ -44,3 +44,9 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
         });
     }
 });
+
+console.log("loaded")
+chrome.runtime.sendMessage({
+    name: 'loaded',
+    data: { value: "loaded" }
+});

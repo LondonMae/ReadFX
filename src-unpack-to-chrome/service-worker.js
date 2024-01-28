@@ -5,19 +5,13 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ['all']
   });
 });
-
+let tabdata = ""
 //When the context menu is invoked
 chrome.contextMenus.onClicked.addListener(async(data, tab) => {
 
   //first open the side panel, wait for promise
-  chrome.sidePanel.open({ windowId: tab.windowId }, ()=>{
-    chrome.runtime.sendMessage({
-      name: 'summarize-sentence',
-      data: { value: "summarizing: " + data.selectionText }
-    });
-  });
-  // waits for side panel to be open then     
-  
+  const opened = await chrome.sidePanel.open({ windowId: tab.windowId });
+  tabdata = data.selectionText;
 
   console.log(typeof data.selectionText)
   const response =  await sendDataToServer(data.selectionText);
@@ -28,6 +22,17 @@ chrome.contextMenus.onClicked.addListener(async(data, tab) => {
     name: 'summarize-sentence',
     data: { value: response["summary"] }
   });
+
+});
+
+chrome.runtime.onMessage.addListener(({ name, data }) => {
+  if (name === 'loaded') {
+    chrome.runtime.sendMessage({
+      name: 'summarize-sentence',
+      data: { value: "summarizing: " + tabdata }
+    });
+    console.log("loaded")
+  }
 
 });
 
