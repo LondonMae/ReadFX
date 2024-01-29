@@ -1,41 +1,54 @@
 <html>
   <head>
     <title>Dictionary Side Panel</title>
-    <link href="sidepanel.css" rel="stylesheet"/>
+    <link href="sidepanel.css" rel="stylesheet" />
   </head>
 
   <body>
+    <script src="changeFont.js"></script>
     <button class="read-button" id="read-button">READ</button>
     <script src="sidepanel.js"></script>
 
+    <div id="NotesFx">
 
-  <div id="NotesFx">
-        <h1>Notes</h1>
-        <hr />
-        <p id="select-a-word">Summarized Text</p>
-        <div>
-          <h2 id="definition-word"></h2>
-          <p id="definition-text"></p>
-        </div>
+      <div> <h3>Style of the Text Changes with the drop down</h3> </div>
+      <div id="output-text">
+        Hi Guys, Welcome to Javascript Program
+      </div>
+      <div>
+        <select id="input-font" class="input" >
+          <option value="Times-new-roman">Times New Roman</option>
+          <option value="Berlin-sans-fb">Berlin Sans FB</option>
+          <option value="bold" class="bolder">Tebal</option>
+        </select>
+      </div>
+
+      <h1>Notes</h1>
+      <hr />
+      <p id="select-a-word">Summarized Text</p>
+      <div>
+        <h2 id="definition-word"></h2>
+        <p id="definition-text"></p>
+      </div>
     </div>
 
-  <div id="ToolsFx">
-        <h1>Tools</h1>
-        <hr />
-        <p id="select-a-word">Text analysis tools</p>
-        <div>
-          <h2 id="definition-word"></h2>
-          <p id="definition-text"></p>
-        </div>
+    <div id="ToolsFx">
+      <h1>Tools</h1>
+      <hr />
+      <p id="select-a-word">Text analysis tools</p>
+      <div>
+        <h2 id="definition-word"></h2>
+        <p id="definition-text"></p>
+      </div>
 
-        <div id="buttons-container">
-            <button class="tool-button" id="bold-button">Bold Keywords</button>
-            <button class="tool-button" id="space-out-button">Space out Sentences</button>
-            <button class="tool-button" id="change-font-button">Change Font</button>
-        </div>
+      <div id="buttons-container">
+        <button class="tool-button" id="bold-button">Bold Keywords</button>
+        <button class="tool-button" id="space-out-button">Space out
+          Sentences</button>
+        <button class="tool-button" id="change-font-button">Change Font</button>
+      </div>
 
     </div>
-
 
   </body>
 </html>

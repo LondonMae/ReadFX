@@ -22,6 +22,8 @@ document.getElementById("read-button").addEventListener("click", () => {
 });
 
 
+
+
 chrome.runtime.onMessage.addListener(({ name, data }) => {
     if (name === 'summarize-sentence') {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -43,6 +45,37 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
         
         });
     }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const fonts = document.getElementById('input-font');
+    
+        function changingFont (font) {
+            console.log('Current font is: ' + font);
+            console.log(fontstyle.value);
+            console.log(document.getElementById('output-text'));
+            document.getElementById('output-text').className = 'text-center ' + font;
+            return;
+        }
+    
+        fonts.addEventListener('change', (e) => { 
+            console.log('Font change invoked');
+            console.log(`e.target.value = ${e.target.value}`); 
+            selectedFont =  e.target.value;
+            console.log(selectedFont);
+        const tab = tabs[0];
+
+        console.log("Before  Script ");
+        chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            func: changingFont,
+            args: [selectedFont],
+            }).then(() => console.log('Middle of Script')).catch(error=> console.log(error));
+        });
+        console.log("After  Script ");
+        });
 });
 
 console.log("loaded")
