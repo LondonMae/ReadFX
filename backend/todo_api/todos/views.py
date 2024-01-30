@@ -5,6 +5,7 @@ from django.contrib.auth.models import User #####
 from django.http import JsonResponse , HttpResponse ####
 
 import wikipedia
+# TODO: what is this and is it necessary
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -16,6 +17,7 @@ def index(request):
 
 
 
+# TODO: See GET vs POST difference
 @csrf_exempt
 def get_wiki_summary(request):
     if request.method == 'POST':
