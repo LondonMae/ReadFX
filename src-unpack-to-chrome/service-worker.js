@@ -10,7 +10,6 @@ async function sendDataToServer(selectedText) {
   });
 
   var data = await response.json();
-  console.log("BYEBYE")
   console.log(data)
   return data
 }
