@@ -23,7 +23,6 @@ function stripHTML(x){
     return x
 }
 
-
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: 'summarize-sentence',
@@ -57,12 +56,43 @@ chrome.contextMenus.onClicked.addListener(async(data, tab) => {
 
 });
 
+function bold_text(word){
+  //text_elements = document.getElementsByTagName('p') + document.getElementsByTagName('span')
+  text_elements = [
+    document.getElementsByTagName('p'), 
+    document.getElementsByTagName('h1'), 
+    document.getElementsByTagName('h2'), 
+    document.getElementsByTagName('h3'), 
+    document.getElementsByTagName('h4'), 
+    document.getElementsByTagName('h5'),
+    document.getElementsByTagName('span')
+  ]
+  re = "(" + word + ")"
+  re = new RegExp(re)
+  for(ele of text_elements){
+    for(p of ele){
+        p.innerHTML = p.innerHTML.replace(re, "<b>$1</b>")
+    }
+  }
+}
+
 chrome.runtime.onMessage.addListener(({ name, data }) => {
   if (name === 'loaded') {
     chrome.runtime.sendMessage({
       name: 'summarize-sentence',
       data: { value: "summarizing: " + tabdata }
     });
-    console.log("loaded")
+  }
+  if (name === 'bold_text') {
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+      chrome.scripting.executeScript({
+        target: { tabId: tabs[0].id },
+        func: bold_text,
+        args: [ data.value],
+      });
+    });
+    
   }
 });
+
+
