@@ -1,3 +1,45 @@
+// Static functions
+
+let current_theme = 0;
+const palettes = {
+    "purpl":    ["51344d","6f5060","a78682","e7ebc5","ffffff"],
+    "default": ["57614e","6a755f","8a977c","fcc0d2","ffffff"],
+    "frutiger":   ["cde7b0","a3bfa8","E4DFC8","222823","08090a"],
+    "dark":   ["020202", "222222","312d2e","dabaff","ffffff"],
+    "flag": ["2d3142","4f5d75","bfc0c0","ef8354","ffffff"]
+}
+
+function toggleTheme() {
+    current_theme += 1
+    current_theme = current_theme % Object.keys(palettes).length;
+    let theme = palettes[Object.keys(palettes)[current_theme]];
+    var r = document.querySelector(':root');
+    r.style.setProperty('--bg', theme[0])
+    r.style.setProperty('--primary', theme[1])
+    r.style.setProperty('--secondary', theme[2])
+    r.style.setProperty('--highlight', theme[3])
+    r.style.setProperty('--text-color', theme[4])
+    document.getElementById("current-theme").innerText = Object.keys(palettes)[current_theme]
+}
+
+function copyText(){
+    var copyText = document.getElementById("select-a-word");
+    // Select the text field
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(copyText.value);
+}
+// function toggleTheme() {
+//     if (localStorage.getItem('theme') === 'theme-dark') {
+//         setTheme('theme-light');
+//     } else {
+//         setTheme('theme-dark');
+//     }
+// }
+// Local event listeners
+
 document.getElementById("read-button").addEventListener("click", () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         console.log("Button Clicked");
@@ -30,28 +72,14 @@ document.getElementById("bold-button").addEventListener("click", () => {
     document.getElementById("bold-word").value = ""
 })
 
-chrome.runtime.onMessage.addListener(({ name, data }) => {
-    if (name === 'summarize-sentence') {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            const tab = tabs[0];
-            function parseSentence() {
-                var selection = window.getSelection().toString();
-                console.log(selection);
-                return selection;
-            }
-            chrome.scripting.executeScript({
-                target: { tabId: tab.id },
-                func: parseSentence,
-                //        files: ['contentScript.js'],  // To call external file instead
-            }).then(selectedText => {
-                console.log('Injected a function!');
-                console.log(selectedText)
-                document.getElementById("select-a-word").innerText = data.value;
-            });
-        
-        });
-    }
-});
+
+document.getElementById("change-theme-button").addEventListener("click", () => {
+   toggleTheme()
+})
+
+document.getElementById("copy-button").addEventListener("click", () => {
+    copyText()
+ })
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -85,6 +113,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
+
+//Chrome functions
+
+chrome.runtime.onMessage.addListener(({ name, data }) => {
+    if (name === 'summarize-sentence') {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            const tab = tabs[0];
+            function parseSentence() {
+                var selection = window.getSelection().toString();
+                console.log(selection);
+                return selection;
+            }
+            chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                func: parseSentence,
+                //        files: ['contentScript.js'],  // To call external file instead
+            }).then(selectedText => {
+                console.log('Injected a function!');
+                console.log(selectedText)
+                document.getElementById("select-a-word").value = data.value;
+            });
+        
+        });
+    }
+});
+
 
 
 console.log("loaded")
