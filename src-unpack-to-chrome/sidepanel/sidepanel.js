@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const fonts = document.getElementById('input-font');
     
         function changingFont (font) {
+            alert('Font change invoked');
             console.log('Current font is: ' + font);
             console.log(fontstyle.value);
             console.log(document.getElementById('output-text'));
@@ -61,10 +62,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     
         fonts.addEventListener('change', (e) => { 
-            console.log('Font change invoked');
-            console.log(`e.target.value = ${e.target.value}`); 
-            selectedFont =  e.target.value;
-            console.log(selectedFont);
+        console.log('Font change invoked');
+        console.log(`e.target.value = ${e.target.value}`); 
+        selectedFont =  e.target.value;
+        console.log(selectedFont);
         const tab = tabs[0];
 
         console.log("Before  Script ");

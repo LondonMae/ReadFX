@@ -21,7 +21,6 @@ def index(request):
 @csrf_exempt
 def get_wiki_summary(request):
     if request.method == 'POST':
-        print("Hello")
         data = json.loads(request.body.decode('utf-8'))
         print(data)
 
