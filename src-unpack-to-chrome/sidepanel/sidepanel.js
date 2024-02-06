@@ -31,13 +31,24 @@ function copyText(){
     // Copy the text inside the text field
     navigator.clipboard.writeText(copyText.value);
 }
-// function toggleTheme() {
-//     if (localStorage.getItem('theme') === 'theme-dark') {
-//         setTheme('theme-light');
-//     } else {
-//         setTheme('theme-dark');
-//     }
-// }
+
+function saveText(){
+    chrome.runtime.sendMessage({
+        name: 'save',
+        data: document.getElementById("select-a-word").value
+    })
+    
+}
+
+
+function saveNotebook(){
+    chrome.runtime.sendMessage({
+        name: 'write_notebook',
+        data: document.getElementById("notebook").value
+    })
+    
+}
+
 // Local event listeners
 
 document.getElementById("read-button").addEventListener("click", () => {
@@ -79,6 +90,15 @@ document.getElementById("change-theme-button").addEventListener("click", () => {
 
 document.getElementById("copy-button").addEventListener("click", () => {
     copyText()
+ })
+
+document.getElementById("save-button").addEventListener("click", () => {
+    saveText()
+ })
+
+ 
+document.getElementById("save-notebook-button").addEventListener("click", () => {
+    saveNotebook()
  })
 
 
@@ -137,9 +157,10 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
         
         });
     }
+    if (name === 'display-notes'){
+        document.getElementById("notebook").value = data
+    }
 });
-
-
 
 console.log("loaded")
 chrome.runtime.sendMessage({

@@ -18,7 +18,7 @@
     "side_panel": {
         "default_path" :"sidepanel/sidepanel.html"
     } ,
-    "permissions": ["activeTab", "sidePanel", "contextMenus", "scripting", "tabs", "notifications", "scripting"],
+    "permissions": ["activeTab", "sidePanel", "contextMenus", "scripting", "tabs", "notifications", "scripting", "storage"],
     "host_permissions": [
         "http://*/*",
         "https://*/*",

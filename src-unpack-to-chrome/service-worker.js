@@ -56,7 +56,13 @@ chrome.contextMenus.onClicked.addListener(async(data, tab) => {
 
 });
 
-function bold_text(word){
+
+function bold_text(word, wordlist){
+  // catch errors
+  if(word.length < 2){
+    return
+  }
+
   //text_elements = document.getElementsByTagName('p') + document.getElementsByTagName('span')
   text_elements = [
     document.getElementsByTagName('p'), 
@@ -66,15 +72,30 @@ function bold_text(word){
     document.getElementsByTagName('h4'), 
     document.getElementsByTagName('h5'),
     document.getElementsByTagName('span')
+    //document.getElementsByTagName('div')
   ]
   re = "(" + word + ")"
-  re = new RegExp(re)
+  re = new RegExp(re, 'gi')
   for(ele of text_elements){
     for(p of ele){
-        p.innerHTML = p.innerHTML.replace(re, "<b>$1</b>")
+        p.innerHTML = p.innerHTML.replaceAll(re, "<b>$1</b>")
     }
   }
+  // if (wordlist == undefined){
+  //   wordlist = [word]
+  // }
+  // for(let w in wordlist){
+  //   re = "(" + w + ")"
+  //   re = new RegExp(re, 'gi')
+  //   for(ele of text_elements){
+  //     for(p of ele){
+  //         p.innerHTML = p.innerHTML.replaceAll(re, "<b>$1</b>")
+  //     }
+  //   }
+  // }
 }
+
+
 
 chrome.runtime.onMessage.addListener(({ name, data }) => {
   if (name === 'loaded') {
@@ -88,11 +109,32 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
       chrome.scripting.executeScript({
         target: { tabId: tabs[0].id },
         func: bold_text,
-        args: [ data.value], //please change this to reflect the words given by the model
+        args: [data.value], //please change this to reflect the words given by the model
       });
-    });
-    
+    }); 
+  }
+  if (name === 'save') {
+    addToNotes(data);
+  }
+  if (name === 'write-notebook') {
+    writeNotes(data);
   }
 });
 
 
+function addToNotes(text){
+  chrome.storage.local.get(["notes"]).then((result)=>{
+    console.log(result.notes)
+    updated_notes = result.notes + text
+    chrome.storage.local.set({notes: updated_notes})
+    
+    chrome.runtime.sendMessage({name: 'display-notes', data: updated_notes})
+  })
+}
+
+
+function writeNotes(text){
+  chrome.storage.local.remove(["notes"]).then(result=>console.log(result))
+  console.log(text)
+  chrome.storage.local.set({notes: text})
+}
