@@ -23,7 +23,8 @@
 
       <h1>Notes</h1>
       <hr />
-      <p id="select-a-word">Summarized Text</p>
+      <textarea id="select-a-word">Summarized Text</textarea>
+      <button class="tool-button" id="copy-button">Copy</button>
       <div>
         <h2 id="definition-word"></h2>
         <p id="definition-text"></p>
@@ -33,18 +34,14 @@
     <div id="ToolsFx">
       <h1>Tools</h1>
       <hr />
-      <p id="select-a-word">Text analysis tools</p>
-      <div>
-        <h2 id="definition-word"></h2>
-        <p id="definition-text"></p>
-      </div>
-
+      <div>Text analysis tools</p>
       <div id="buttons-container">
         <button class="tool-button" id="bold-button">Bold Keywords</button>
         <input id="bold-word" value="bold me">
-        <button class="tool-button" id="space-out-button">Space out
-          Sentences</button>
+        <button class="tool-button" id="space-out-button">Space out Sentences</button>
         <button class="tool-button" id="change-font-button">Change Font</button>
+        <button class="tool-button" id="change-theme-button">Change Theme</button>
+        <div id="current-theme"> default </div>
       </div>
 
     </div>

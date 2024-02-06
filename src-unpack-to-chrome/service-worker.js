@@ -88,7 +88,7 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
       chrome.scripting.executeScript({
         target: { tabId: tabs[0].id },
         func: bold_text,
-        args: [ data.value],
+        args: [ data.value], //please change this to reflect the words given by the model
       });
     });
     
