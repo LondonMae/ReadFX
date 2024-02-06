@@ -7,7 +7,7 @@
   <body>
     <button class="read-button" id="read-button">READ</button>
 
-    <div id="NotesFx">
+    <div id="NotesFx"  class="parent_block">
 
       <div> <h3>Style of the Text Changes with the drop down</h3> </div>
       <div id="output-text">
@@ -25,25 +25,33 @@
       <hr />
       <textarea id="select-a-word">Summarized Text</textarea>
       <button class="tool-button" id="copy-button">Copy</button>
+      <button class="tool-button" id="save-button">Save to notebook!</button>
       <div>
         <h2 id="definition-word"></h2>
         <p id="definition-text"></p>
       </div>
     </div>
 
-    <div id="ToolsFx">
+    <div id="ToolsFx" class="parent_block">
       <h1>Tools</h1>
       <hr />
       <div>Text analysis tools</p>
-      <div id="buttons-container">
-        <button class="tool-button" id="bold-button">Bold Keywords</button>
-        <input id="bold-word" value="bold me">
-        <button class="tool-button" id="space-out-button">Space out Sentences</button>
-        <button class="tool-button" id="change-font-button">Change Font</button>
-        <button class="tool-button" id="change-theme-button">Change Theme</button>
-        <div id="current-theme"> default </div>
+        <div id="buttons-container">
+          <button class="tool-button" id="bold-button">Bold Keywords</button>
+          <input id="bold-word" value="bold me">
+          <button class="tool-button" id="space-out-button">Space out Sentences</button>
+          <button class="tool-button" id="change-font-button">Change Font</button>
+          <button class="tool-button" id="change-theme-button">Change Theme</button>
+          <div id="current-theme"> default </div>
+        </div>
       </div>
+    </div>
 
+    <div id="HistoryFx"  class="parent_block">
+      <h1>My Notebook</h1>
+      <hr />
+      <textarea id="notebook">your notes!</textarea>
+      <button class="tool-button" id="save-notebook-button">Save</button>
     </div>
 
     <script src="sidepanel.js"></script>
