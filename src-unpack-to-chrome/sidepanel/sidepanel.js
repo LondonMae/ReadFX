@@ -51,32 +51,23 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
 document.addEventListener('DOMContentLoaded', function() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const fonts = document.getElementById('input-font');
+        const tab = tabs[0];
+        console.log(tab);
     
         function changingFont (font) {
-            // alert('Font change invoked');
-            console.log('Current font is: ' + font);
-            // var page = chrome.extension.getBackgroundPage();
-            // console.log(page.document.getElementById('output-text')+"in background");
-            console.log(document.getElementById('output-text')+" in panel");
-            page.document.getElementById('output-text').style.fontFamily = font;
-            return;
+            return  font;
         }
     
         fonts.addEventListener('change', (e) => { 
-        console.log('Font change invoked');
-        console.log(`e.target.value = ${e.target.value}`); 
         selectedFont =  e.target.value;
         console.log(selectedFont);
-        const tab = tabs[0];
 
-        console.log("Before  Script ");
         chrome.scripting.executeScript({
             target: { tabId: tab.id },
             func: changingFont,
             args: [selectedFont],
-            }).then(() => console.log('Middle of Script')).catch(error=> console.log(error));
+            }).then((font) => {document.getElementById("output-text").style.font=font});
         });
-        console.log("After  Script ");
         });
 });
 
