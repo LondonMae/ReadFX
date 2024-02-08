@@ -53,11 +53,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const fonts = document.getElementById('input-font');
     
         function changingFont (font) {
-            alert('Font change invoked');
+            // alert('Font change invoked');
             console.log('Current font is: ' + font);
-            console.log(fontstyle.value);
-            console.log(document.getElementById('output-text'));
-            document.getElementById('output-text').className = 'text-center ' + font;
+            // var page = chrome.extension.getBackgroundPage();
+            // console.log(page.document.getElementById('output-text')+"in background");
+            console.log(document.getElementById('output-text')+" in panel");
+            page.document.getElementById('output-text').style.fontFamily = font;
             return;
         }
     
