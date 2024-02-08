@@ -5,11 +5,11 @@ document.getElementById("read-button").addEventListener("click", () => {
         function getParas() {
             var paragraphs = document.getElementsByTagName("p");
             var textCollection = [];
-        
+
             for (var i = 0; i < paragraphs.length; i++) {
                 textCollection.push(paragraphs[i].textContent);
             }
-        
+
             console.log(textCollection);
         };
 
@@ -42,33 +42,38 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
                 console.log(selectedText)
                 document.getElementById("select-a-word").innerText = data.value;
             });
-        
+
         });
     }
 });
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const fonts = document.getElementById('input-font');
+        const fonts = document.getElementById('input-font');
         const tab = tabs[0];
-        console.log(tab);
-    
-        function changingFont (font) {
-            return  font;
-        }
-    
-        fonts.addEventListener('change', (e) => { 
-        selectedFont =  e.target.value;
-        console.log(selectedFont);
 
-        chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            func: changingFont,
-            args: [selectedFont],
-            }).then((font) => {document.getElementById("output-text").style.font=font});
+        function changingFont(font) {
+            return font;
+        }
+
+        fonts.addEventListener('change', (e) => {
+            selectedFont = e.target.value;
+
+            chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                func: changingFont,
+                args: [selectedFont],
+            }).then((result) => {
+                const selectedFont = result[0].result;
+                document.getElementById("output-text").style.fontFamily = selectedFont;
+                fonts.addEventListener('change', changeFontListener);
+
+            });
+        fonts.removeEventListener('change', changeFontListener);
         });
-        });
+        fonts.addEventListener('change', changeFontListener);
+    });
 });
 
 console.log("loaded")
