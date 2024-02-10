@@ -1,17 +1,17 @@
-import flask
+from flask import Flask, jsonify, request
 import torch
 from transformers import BartTokenizerFast, T5ForConditionalGeneration, BartForConditionalGeneration, BartTokenizer, BartConfig
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
-app = flask.Flask(__name__)
+app = Flask(__name__)
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 print(device)
 def test(data):
     # ARTICLE = topic
     ARTICLE = data
-
+    
     tokenizer=BartTokenizer.from_pretrained('facebook/bart-large-cnn')
     model=BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
 
@@ -23,16 +23,25 @@ def test(data):
 
     # Decoding and printing the summary
     summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
+    print ("test")
+    print(summary)
     return summary
 
 
 
-@app.get("/<name>")
-def hello(name):
+@app.route("/api/get_wiki_summary/", methods = ["POST"])
+def hello():
     """Return a friendly HTTP greeting."""
-
-    who = test(name)
-    return who
+    content = request.get_json()
+        # who = "London"
+        # print(content)
+        # print("hello")
+    summary = test(content)
+    data = {
+    "summary": summary,
+    "raw": "Successful"
+    }
+    return jsonify(data)
 
 
 if __name__ == "__main__":
