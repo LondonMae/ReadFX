@@ -1,48 +1,64 @@
-from flask import Flask, jsonify, request
-import torch
-from transformers import BartTokenizerFast, T5ForConditionalGeneration, BartForConditionalGeneration, BartTokenizer, BartConfig
+from flask import Flask, jsonify, request # BACKEND FRAMEWORK
+import torch # for gpu training
+from transformers import BartTokenizerFast, T5ForConditionalGeneration, BartForConditionalGeneration, BartTokenizer, BartConfig #for summarization
+from rake_nltk import Rake # to identify keywords
 
-# If `entrypoint` is not defined in app.yaml, App Engine will look for an app
-# called `app` in `main.py`.
 app = Flask(__name__)
-
+# configure gpu device if available
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 print(device)
-def test(data):
-    # ARTICLE = topic
+
+
+def summarize(data):
     ARTICLE = data
-    
-    tokenizer=BartTokenizer.from_pretrained('facebook/bart-large-cnn')
-    model=BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
+
+    # tokenize the highlighted text
+    # https://huggingface.co/docs/transformers/v4.37.2/en/model_doc/bart#transformers.BartTokenizer
+    tokenizer=BartTokenizer.from_pretrained('facebook/bart-large')
+    # Conditional generation is best for summarization
+    model=BartForConditionalGeneration.from_pretrained('facebook/bart-large')
 
     # Transmitting the encoded inputs to the model.generate() function
     inputs = tokenizer.batch_encode_plus([ARTICLE],return_tensors='pt', return_length=True).to(device)
+    # length of tokens, not chars
     length = inputs['length']
 
+    # simple bounds checking
+    if length < 20:
+        return "This text is too short to summarize"
+    elif lengt > 1024:
+        return "This text is too long to summarize"
+
+    # prediction forward pass
     summary_ids =  model.generate(inputs['input_ids'], num_beams=4, min_length=int(length*.1), max_length=int(length)).to(device)
 
-    # Decoding and printing the summary
+    # Decoding summary
     summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
-    print ("test")
-    print(summary)
     return summary
 
-
+def keywords(text):
+    r = Rake()
+    r.extract_keywords_from_text(text)
+    b=r.get_ranked_phrases_with_scores()
+    print(len(b))
 
 @app.route("/api/get_wiki_summary/", methods = ["POST"])
-def hello():
+def api():
     """Return a friendly HTTP greeting."""
+    # post request with JSON data format
     content = request.get_json()
-        # who = "London"
-        # print(content)
-        # print("hello")
-    summary = test(content)
+
+    # get summary if available
+    summary = summarize(content)
+
+    # json-ifyable format
     data = {
     "summary": summary,
     "raw": "Successful"
     }
-    return jsonify(data)
 
+    # return data
+    return jsonify(data)
 
 if __name__ == "__main__":
     # Used when running locally only. When deploying to Google App
