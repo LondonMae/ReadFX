@@ -48,7 +48,7 @@ chrome.contextMenus.onClicked.addListener(async(data, tab) => {
   const response =  await sendDataToServer(tabdata);
   console.log("Back at client")
   console.log(response["summary"])
-  
+
   chrome.runtime.sendMessage({
     name: 'summarize-sentence',
     data: { value: response["summary"] }
@@ -65,11 +65,11 @@ function bold_text(word, wordlist){
 
   //text_elements = document.getElementsByTagName('p') + document.getElementsByTagName('span')
   text_elements = [
-    document.getElementsByTagName('p'), 
-    document.getElementsByTagName('h1'), 
-    document.getElementsByTagName('h2'), 
-    document.getElementsByTagName('h3'), 
-    document.getElementsByTagName('h4'), 
+    document.getElementsByTagName('p'),
+    document.getElementsByTagName('h1'),
+    document.getElementsByTagName('h2'),
+    document.getElementsByTagName('h3'),
+    document.getElementsByTagName('h4'),
     document.getElementsByTagName('h5'),
     document.getElementsByTagName('span')
     //document.getElementsByTagName('div')
@@ -111,7 +111,7 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
         func: bold_text,
         args: [data.value], //please change this to reflect the words given by the model
       });
-    }); 
+    });
   }
   if (name === 'save') {
     addToNotes(data);
@@ -127,7 +127,7 @@ function addToNotes(text){
     console.log(result.notes)
     updated_notes = result.notes + text
     chrome.storage.local.set({notes: updated_notes})
-    
+
     chrome.runtime.sendMessage({name: 'display-notes', data: updated_notes})
   })
 }
