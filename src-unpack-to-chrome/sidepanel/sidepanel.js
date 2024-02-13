@@ -37,7 +37,7 @@ function saveText(){
         name: 'save',
         data: document.getElementById("select-a-word").value
     })
-    
+
 }
 
 
@@ -46,7 +46,7 @@ function saveNotebook(){
         name: 'write_notebook',
         data: document.getElementById("notebook").value
     })
-    
+
 }
 
 // Local event listeners
@@ -58,11 +58,11 @@ document.getElementById("read-button").addEventListener("click", () => {
         function getParas() {
             var paragraphs = document.getElementsByTagName("p");
             var textCollection = [];
-        
+
             for (var i = 0; i < paragraphs.length; i++) {
                 textCollection.push(paragraphs[i].textContent);
             }
-        
+
             console.log(textCollection);
         };
 
@@ -79,7 +79,7 @@ document.getElementById("bold-button").addEventListener("click", () => {
         name: 'bold_text',
         data: { value: document.getElementById("bold-word").value }
     })
-    
+
     document.getElementById("bold-word").value = ""
 })
 
@@ -96,7 +96,7 @@ document.getElementById("save-button").addEventListener("click", () => {
     saveText()
  })
 
- 
+
 document.getElementById("save-notebook-button").addEventListener("click", () => {
     saveNotebook()
  })
@@ -115,9 +115,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    fonts.addEventListener('change', (e) => { 
+    fonts.addEventListener('change', (e) => {
         console.log('Font change invoked');
-        console.log(`e.target.value = ${e.target.value}`); 
+        console.log(`e.target.value = ${e.target.value}`);
         selectedFont =  e.target.value;
         console.log(selectedFont);
     const tab = tabs[0];
@@ -154,7 +154,7 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
                 console.log(selectedText)
                 document.getElementById("select-a-word").value = data.value;
             });
-        
+
         });
     }
     if (name === 'display-notes'){
