@@ -26,7 +26,7 @@ def summarize(data):
     # simple bounds checking
     if length < 20:
         return "This text is too short to summarize"
-    elif lengt > 1024:
+    elif length > 1024:
         return "This text is too long to summarize"
 
     # prediction forward pass
@@ -40,20 +40,49 @@ def keywords(text):
     r = Rake()
     r.extract_keywords_from_text(text)
     b=r.get_ranked_phrases_with_scores()
-    print(len(b))
+    return_string = ""
+
+    words = set()
+    for score in b:
+        if score[0] > 1.5:
+            if score[1] not in words:
+                words.add(score[1])
+                return_string += score[1] + "/"
+
+    print(return_string)
+    return return_string
 
 @app.route("/api/get_wiki_summary/", methods = ["POST"])
 def api():
     """Return a friendly HTTP greeting."""
     # post request with JSON data format
     content = request.get_json()
-
+    print(content)
     # get summary if available
     summary = summarize(content)
 
     # json-ifyable format
     data = {
     "summary": summary,
+    "raw": "Successful"
+    }
+
+    print("returning")
+    # return data
+    return jsonify(data)
+
+@app.route("/api/get_wiki_keywords/", methods = ["POST"])
+def get_keywords():
+    """Return a friendly HTTP greeting."""
+    # post request with JSON data format
+    content = request.get_json()
+
+    # get summary if available
+    keyword = keywords(content)
+
+    # json-ifyable format
+    data = {
+    "summary": keyword,
     "raw": "Successful"
     }
 
