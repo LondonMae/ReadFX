@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 args: [selectedFont],
             }).then((result) => {
                 const selectedFont = result[0].result;
-                document.getElementById("output-text").style.fontFamily = selectedFont;
+                document.getElementById("select-a-word").style.fontFamily = selectedFont;
                 fonts.addEventListener('change', changeFontListener);
 
             });
@@ -75,6 +75,38 @@ document.addEventListener('DOMContentLoaded', function () {
         fonts.addEventListener('change', changeFontListener);
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const fontSize = document.getElementById('input-font-size');
+        const tab = tabs[0];
+
+        function changingFontSize(fontSize) {
+            return fontSize;
+        }
+
+        fontSize.addEventListener('change', (e) => {
+            selectedFontSize = e.target.value;
+
+            chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                func: changingFontSize,
+                args: [selectedFontSize],
+            }).then((result) => {
+                const selectedFontSize = result[0].result;
+                document.getElementById("select-a-word").style.fontSize = selectedFontSize;
+                fonts.addEventListener('change', changeFontSizeListener);
+
+            });
+            fontSize.removeEventListener('change', changeFontSizeListener);
+        });
+        fontSize.addEventListener('change', changeFontSizeListener);
+    });
+})
+
+
+
+
 
 console.log("loaded")
 chrome.runtime.sendMessage({

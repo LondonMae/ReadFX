@@ -22,6 +22,18 @@ body {
     margin-bottom: 20px;
 }
 
+.text_container {
+    display: flex;
+  }
+  
+.input {
+border-radius: 10px;
+padding: 5px;
+margin-right: 10px;
+background-color: rgb(80, 129, 80);
+color: white;
+border: 1px solid white; /* Add border to make it visible */
+}
 
 
 #NotesFx{
@@ -63,6 +75,7 @@ body {
     cursor: pointer;
     border-radius: 10px; /* Rounded borders */
 }
+
 
 
 .tool-button:hover {background-color: #225524}
