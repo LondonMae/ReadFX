@@ -141,6 +141,38 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 })
 
+// Changes Spacing size
+document.addEventListener('DOMContentLoaded', function () {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const spacingSize = document.getElementById('input-spacing-size');
+        const tab = tabs[0];
+
+        function changingSpacingSize(spacingSize) {
+            return spacingSize;
+        }
+
+        spacingSize.addEventListener('change', (e) => {
+            selectedSpacingSize = e.target.value;
+
+            chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                func: changingSpacingSize,
+                args: [selectedSpacingSize],
+            }).then((result) => {
+                const selectedSpacingSize = result[0].result;
+                document.getElementById("select-a-word").style.wordSpacing = selectedSpacingSize;
+                spacingSize.addEventListener('change', changeSpacingSizeListener);
+
+            });
+            spacingSize.removeEventListener('change', changeSpacingSizeListener);
+        });
+        spacingSize.addEventListener('change', changeSpacingSizeListener);
+    });
+})
+
+
+
+
 
 console.log("loaded")
 chrome.runtime.sendMessage({
