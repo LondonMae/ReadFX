@@ -1,13 +1,13 @@
 # Welcome to the ReadFX repository
 
 The following documentation will walk you through how use/develop various parts of the chrome extension
-1. [Chrome extension and developer mode](#Chrome-extension-and-developer-mode)
+1. [go to](#Chrome-extension-and-developer-mode) Chrome extension and developer mode
 
-2. Backend/API usage (Flask)
+2. [go to](#backend/flask) Backend/API usage (Flask)
 
-3. HuggingFace Models
+3. [go to](#large-language-models) HuggingFace Models
 
-4. Examples
+4. [go to](#examples) Examples
 
 ## Chrome extension and developer mode
 Use this console to debug the service worker
