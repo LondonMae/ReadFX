@@ -118,8 +118,8 @@ function bold_text(word, wordlist){
 
 function get_highlights(highlights){
   highlights.forEach((h)=>{
+    console.log(h.url, window.location.href)
     if(h.url == window.location.href){
-      console.log("")
       let range = document.createRange()
       let ele = document.querySelector(h.query)
       console.log(ele)
@@ -174,7 +174,7 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
     console.log("show highlights")
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
       chrome.storage.local.get(["highlights"]).then((result)=>{
-        console.log(result.highlights)
+        //sconsole.log(result.highlights)
         
         chrome.scripting.executeScript({
           target: { tabId: tabs[0].id },

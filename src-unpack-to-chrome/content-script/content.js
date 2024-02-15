@@ -128,9 +128,13 @@ function highlight_all(){
   highlight_text_node(anchor, startindex, -1)
   highlight_text_node(extent, 0, endindex)
 
-
-  range.setStartAfter(range.startContainer.nextSibling)
-  range.setEndBefore(range.endContainer.previousSibling)
+  if(range.startContainer.nextSibling == undefined){
+    range.setStartAfter(range.startContainer.parentElement.nextElementSibling)    
+    range.setStartAfter(range.startContainer.parentElement.nextElementSibling)    
+  }else{
+    range.setStartAfter(range.startContainer.nextSibling)
+    range.setEndBefore(range.endContainer.previousSibling)
+  }
   fullnodes = range.extractContents().querySelectorAll('*');
   head = fullnodes.item(0).cloneNode();
   tail = fullnodes.item(fullnodes.length - 1).cloneNode();
