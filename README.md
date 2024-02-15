@@ -13,7 +13,6 @@ The following documentation will walk you through how use/develop various parts 
 [see](https://developer.chrome.com/docs/extensions) Chrome for developers documentations
 
 To load chrome extension in developer mode, go to __manage extensions__ in chrome browser, click __load unpacked__, and select the __src-unpack-to-chrome__ folder in this repository 
-![Alt text](imgs/unpack.png)
 
 To open the sidepanel, right click on a webpage and select the __summarize__ option
 
@@ -24,7 +23,7 @@ to test flask developement backend, run ```python3 backend/main.py```. See docum
 
 We have a production server on Google Cloud. While still in the developement process, we have shut down our virtual machine to save money :)
 
-Eventually, we will need to deploy with Gunicorn. See documentation [here](https://flask.palletsprojects.com/en/3.0.x/deploying/gunicorn/))
+Eventually, we will need to deploy with Gunicorn. See documentation [here](https://flask.palletsprojects.com/en/3.0.x/deploying/gunicorn/)
 
 ### API usage
 When the server is running, you can make post requests to the server. Our application currently supports two API calls, (1) Summary and (2) Keywords.
