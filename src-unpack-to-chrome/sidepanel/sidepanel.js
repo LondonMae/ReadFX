@@ -41,7 +41,13 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
                 console.log('Injected a function!');
                 console.log(selectedText);
                 document.getElementById("select-a-word").innerText = data.value;
-                add();
+
+                // add();
+
+                // Temp Fix
+                if (!data.value.startsWith("summarizing")) {
+                    add();
+                }
 
             });
 
