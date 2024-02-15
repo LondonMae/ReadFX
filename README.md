@@ -1,7 +1,7 @@
 # Welcome to the ReadFX repository
 
 The following documentation will walk you through how use/develop various parts of the chrome extension
-1. Chrome extension and developer mode
+1. [Chrome extension and developer mode](#Chrome-extension-and-developer-mode)
 
 2. Backend/API usage (Flask)
 
