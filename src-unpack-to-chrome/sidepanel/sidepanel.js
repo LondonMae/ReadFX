@@ -41,6 +41,16 @@ function saveText(){
 }
 
 
+function showHighlights(){
+    console.log("show highlights")
+    chrome.runtime.sendMessage({
+        name: 'show_highlights',
+        data: {}
+    })
+    
+}
+
+
 function saveNotebook(){
     chrome.runtime.sendMessage({
         name: 'write_notebook',
@@ -83,6 +93,9 @@ document.getElementById("bold-button").addEventListener("click", () => {
     document.getElementById("bold-word").value = ""
 })
 
+document.getElementById("highlight-button").addEventListener("click", () => {
+    showHighlights()
+ })
 
 document.getElementById("change-theme-button").addEventListener("click", () => {
    toggleTheme()

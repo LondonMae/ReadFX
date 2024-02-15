@@ -29,31 +29,52 @@ chrome.runtime.onInstalled.addListener(() => {
     title: 'Summarize in side panel',
     contexts: ['all']
   });
+  chrome.contextMenus.create({
+    id: 'highlight',
+    title: 'Highlight sentence',
+    contexts: ['all']
+  });
+});
+
+chrome.action.onClicked.addListener((tab) => {
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ["content.js"]
+  });
 });
 
 let tabdata = ""
 //When the context menu is invoked
 chrome.contextMenus.onClicked.addListener(async(data, tab) => {
-  //first open the side panel, wait for promise
-  const opened = await chrome.sidePanel.open({ windowId: tab.windowId });
-  tabdata = stripHTML(data.selectionText);
+  console.log(data, tab)
+  if(data.menuItemId == "highlight"){
+    console.log(data)
+    chrome.runtime.sendMessage({
+      name: 'highlight',
+      data: { value: "hightlighting: " + tabdata }
+    });
 
-  chrome.runtime.sendMessage({
-    name: 'summarize-sentence',
-    data: { value: "summarizing: " + tabdata }
-  });
+  }else if (data.menuItemId == "summarize-sentence"){
+    //first open the side panel, wait for promise
+    const opened = await chrome.sidePanel.open({ windowId: tab.windowId });
+    tabdata = stripHTML(data.selectionText);
 
-  console.log(typeof tabdata)
+    chrome.runtime.sendMessage({
+      name: 'summarize-sentence',
+      data: { value: "summarizing: " + tabdata }
+    });
 
-  const response =  await sendDataToServer(tabdata);
-  console.log("Back at client")
-  console.log(response["summary"])
-  
-  chrome.runtime.sendMessage({
-    name: 'summarize-sentence',
-    data: { value: response["summary"] }
-  });
+    console.log(typeof tabdata)
 
+    const response =  await sendDataToServer(tabdata);
+    console.log("Back at client")
+    console.log(response["summary"])
+    
+    chrome.runtime.sendMessage({
+      name: 'summarize-sentence',
+      data: { value: response["summary"] }
+    });
+  }
 });
 
 
@@ -95,6 +116,32 @@ function bold_text(word, wordlist){
   // }
 }
 
+function get_highlights(highlights){
+  highlights.forEach((h)=>{
+    if(h.url == window.location.href){
+      console.log("")
+      let range = document.createRange()
+      let ele = document.querySelector(h.query)
+      console.log(ele)
+      console.log(h.headindex, h.tailindex)
+      range.setStart(ele.childNodes[0], h.headindex)
+      range.setEnd(ele.childNodes[0], h.tailindex)
+      
+
+      selection = window.getSelection()
+      selection.addRange(range)
+      txt = range.cloneContents().childNodes[0].data
+
+      console.log(txt)
+
+      re = "(" + txt + ")"
+      re = new RegExp(re)
+      highlight.query = jsPath(ele) 
+      ele.innerHTML = ele.innerHTML.replace(re, "<mark>$1</mark>")
+    }
+  })
+}
+
 
 
 chrome.runtime.onMessage.addListener(({ name, data }) => {
@@ -119,6 +166,25 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
   if (name === 'write-notebook') {
     writeNotes(data);
   }
+  if(name === 'highlight_text') {
+    console.log(data)
+    saveHighlight(data)
+  }
+  if(name === 'show_highlights'){
+    console.log("show highlights")
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+      chrome.storage.local.get(["highlights"]).then((result)=>{
+        console.log(result.highlights)
+        
+        chrome.scripting.executeScript({
+          target: { tabId: tabs[0].id },
+          func: get_highlights,
+          args: [result.highlights], //please change this to reflect the words given by the model
+        });
+
+      });
+    }); 
+  }
 });
 
 
@@ -138,3 +204,28 @@ function writeNotes(text){
   console.log(text)
   chrome.storage.local.set({notes: text})
 }
+
+function saveHighlight(highlight){
+  chrome.storage.local.get(["highlights"]).then((result)=>{
+    console.log(result.highlights)
+    new_highlights = result.highlights
+    new_highlights.push(highlight)
+    chrome.storage.local.set({highlights: new_highlights})
+  })
+}
+
+
+// function getHighlight(){
+//   chrome.storage.local.get(["highlights"]).then((result)=>{
+//     console.log(result.highlights)
+//     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+//       const tab = tabs[0];
+//       chrome.scripting.executeScript({
+//           target: { tabId: tab.id },
+//           func: show_highlights(result.highlights),
+//       }).then(selectedText => {
+//           console.log('Injected a function!');
+//       });
+//     })
+//   })
+// }

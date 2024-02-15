@@ -15,6 +15,13 @@
     "background": {
         "service_worker": "service-worker.js"
       },
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "css": ["content-script/style.css"],
+            "js": ["content-script/content.js", "content-script/path.js"]
+        }
+    ],
     "side_panel": {
         "default_path" :"sidepanel/sidepanel.html"
     } ,
