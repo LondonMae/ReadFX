@@ -13,12 +13,23 @@
         }
     },
     "background": {
-        "service_worker": "service-worker.js"
+        "service_worker": "service-worker.js",
+        "type": "module"
       },
     "side_panel": {
         "default_path" :"sidepanel/sidepanel.html"
     } ,
-    "permissions": ["activeTab", "sidePanel", "contextMenus", "scripting", "tabs", "notifications"],
+    "content_scripts": [
+        {
+        "matches": [
+            "http://*/*",
+            "https://*/*"
+            ],
+        "js": ["content.js"],
+        "run_at": "document_end"    // Pay attention to this line
+        }
+    ],
+    "permissions": ["activeTab", "sidePanel", "contextMenus", "scripting", "tabs", "notifications", "scripting", "storage"],
     "host_permissions": [
         "http://*/*",
         "https://*/*",
@@ -26,4 +37,3 @@
       ]
 
     }
-

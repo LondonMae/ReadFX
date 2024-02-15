@@ -1,13 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
 
-body {
-    background-color: #57614e;
+:root {
+    --font: "Inter";
+    --bg: #57614e;
+    --primary: #6a755f;
+    --secondary: #8a977c;
+    --highlight: #c59ca8;
+    --text-color: #ffffff;
+    --b-radius: 0.5rem;
 }
 
+*{
+    font-family: var(--font);
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text-color);
+}
+
+hr{
+    border: 1px solid var(--highlight);
+    color: var(--highlight);
+}
 
 .read-button {
-    background-color: #5d735e;
+    color: var(--highlight);
+    background-color: var(--primary);
     border: none;
-    color: white;
     padding-left: 150px;
     padding-right: 150px;
     padding-top: 10px;
@@ -18,30 +38,29 @@ body {
     font-size: 16px;
     margin: 0 auto; /* Center the button horizontally */
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: var(--b-radius);
     margin-bottom: 20px;
 }
 
+textarea{
+    color: var(--text-color);
+    background-color: var(--secondary);
+    width:100%;
+    scrollbar-color: var(--bg);
+    border-radius:  var(--b-radius);
+    border: 0;
+    padding:1em;
+}
+#select-a-word{
+    height:10em;
+}
 
-
-#NotesFx{
+.parent_block{
     margin-bottom: 40px;
-}
-
-#NotesFx , #ToolsFx{
-    background-color: #6a755f; 
-    border-radius: 10px;
+    background-color: var(--primary); 
+    border-radius:  var(--b-radius);
     padding: 20px 50px 50px 15px; /* top, right, bottom, left */
-  }
-
-#NotesFx p, #ToolsFx p, #NotesFx h1, #ToolsFx h1 {
-    color: white; /* Set the text color to white for both <p> and <h1> elements */
 }
-
-#NotesFx h1, #ToolsFx h1 {
-    font-size: large;
-}
-
 
 #buttons-container {
     display: flex;
@@ -51,9 +70,9 @@ body {
 }
 
 .tool-button {
-    background-color: #5d735e; /* Green background color */
+    background-color: var(--highlight); /* Green background color */
     border: none;
-    color: white; /* Text color */
+    color: var(--text-color); /* Text color */
     padding: 10px 20px; /* Padding for the buttons */
     text-align: center;
     text-decoration: none;
@@ -61,7 +80,7 @@ body {
     font-size: 16px;
     margin: 5px 0;
     cursor: pointer;
-    border-radius: 10px; /* Rounded borders */
+    border-radius:  var(--b-radius); /* Rounded borders */
 }
 
 
