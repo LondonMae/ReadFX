@@ -66,3 +66,20 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
     console.log("loaded")
   }
 });
+
+function add() {
+  // Create new elements
+  var newParagraph = document.createElement("p");
+
+  // Set content for new elements
+  var definitionText = document.getElementById("select-a-word").innerText;
+  newParagraph.textContent = definitionText;
+  // newParagraph.style.border = "1px solid black";
+  newParagraph.style.padding = "10px";
+  newParagraph.style.backgroundColor = "8a9481";
+  newParagraph.style.borderRadius = "10px";
+
+  // Append the new elements to the desired location
+  var container = document.getElementById("NotesFx");
+  container.appendChild(newParagraph);
+}
