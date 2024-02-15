@@ -1,9 +1,8 @@
+# Welcome to the ReadFX repository
 
+### The following documentation will walk you through how use/develop various parts of the chrome extension
 
-# nlp-prototype directory
-
-### Usage
-
+## Tools
 
 1. Go to the chrome extension page, select load unpacked and choose the src-unpack-to-chrome
 ![Alt text](imgs/unpack.png)
