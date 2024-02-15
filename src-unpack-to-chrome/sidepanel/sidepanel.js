@@ -73,12 +73,25 @@ function add() {
     var container = document.getElementById("HistoryFx");
 
     // Add to top
-    var historyDataDiv = document.getElementById('HistoryData');
+    var historyDataDiv = document.getElementById('HistorySpacer');
     container.insertBefore(newParagraph, historyDataDiv);
 
 }
 
+// Function to clear all entries
+function clearEntries() {
+    var container = document.getElementById("HistoryFx");
+    var historyHeader = document.getElementById("History").outerHTML;
+    var historySpacer = document.getElementById("HistorySpacer").outerHTML;
+    container.innerHTML = ""; // Removes all child nodes
+    container.innerHTML = historyHeader + "<hr />" + historySpacer;
+}
 
+// Add event listener to the document
+document.addEventListener("DOMContentLoaded", function() {
+    var clearButton = document.getElementById("clearButton");
+    clearButton.addEventListener("click", clearEntries);
+});
 
 
 

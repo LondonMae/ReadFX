@@ -4,7 +4,7 @@ body {
 }
 
 
-.read-button {
+.read-button, #clearButton {
     background-color: #5d735e;
     border: none;
     color: white;
@@ -57,6 +57,7 @@ border: 1px solid white; /* Add border to make it visible */
 #space {
     height: 20px; /* Adjust the height as needed */
 }
+
 
 
 #buttons-container {
