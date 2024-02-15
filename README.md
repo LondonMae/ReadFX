@@ -10,7 +10,10 @@ The following documentation will walk you through how use/develop various parts 
 4. [go to](#examples) Examples
 
 ## Chrome extension and developer mode
-To load chrome extension in developer mode, go to **manage extensions** in chrome browser, click **load unpacked**, and select the **src-unpack-to-chrome** folder in this repository 
+[Chrome for developers documentations] (https://developer.chrome.com/docs/extensions)
+
+To load chrome extension in developer mode, go to __manage extensions__ in chrome browser, click __load unpacked__, and select the __src-unpack-to-chrome__ folder in this repository 
+
 
 
 Use this console to debug the service worker
