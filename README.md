@@ -36,5 +36,13 @@ to test django developement backend (no longer supported/upkept), run ```python3
 
 ## Large Language Models
 
+You can run tests locally in the banchmark folder. Our API currently deployed BART finetuned for conditional generate to summarize text, rake-nltk to select keywords from text, and Gensim to support topic extraction. 
+
+#### BART
+Bart takes a significant amount of time to load. We are hoping to include GPU instances on our cloud machine to speed up the predication process. However, if this is either computationally or monetarily expensive, we will consider using __extractive__ summarization. These techniques are lightweight, as they construct summaries by aggregating the most important sentences rather than constructing new ones using large neural netwroks/transformer models. We will address the tradeoffs and look at the performance decline of extractive models. 
+
+#### Rake-nltk
+Rake is for rapid keyword extraction. This is a lightweight package that returns the most relevant keywords and their respective score. Javascript has an implementation, but we are currently running this algorithm in the cloud through our API
+
 ## Examples
 
