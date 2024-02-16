@@ -23,7 +23,6 @@ def summarize(data):
     # length of tokens, not chars
     length = inputs['length']
 
-    print("here")
     # simple bounds checking
     if length < 20:
         return "This text is too short to summarize"

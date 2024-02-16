@@ -19,5 +19,5 @@ print(len(b))
 
 n=0
 for i in range(len(b)):
-    if b[i][0] > 0:
+    if b[i][0] > .5 and b[i][1] in text:
         print(b[i])

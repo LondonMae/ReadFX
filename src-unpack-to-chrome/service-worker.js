@@ -124,7 +124,6 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
 
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
     var response = await chrome.tabs.sendMessage(tab.id, "get_document");
-    console.log("here")
     response = stripHTML(response)
     response =  await sendDataToServer(response, "keywords");
 
