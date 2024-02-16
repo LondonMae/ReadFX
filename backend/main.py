@@ -23,6 +23,7 @@ def summarize(data):
     # length of tokens, not chars
     length = inputs['length']
 
+    print("here")
     # simple bounds checking
     if length < 20:
         return "This text is too short to summarize"
@@ -30,7 +31,7 @@ def summarize(data):
         return "This text is too long to summarize"
 
     # prediction forward pass
-    summary_ids =  model.generate(inputs['input_ids'], num_beams=4, min_length=int(length*.1), max_length=int(length)).to(device)
+    summary_ids =  model.generate(inputs['input_ids'], num_beams=4, min_length=int(length*.1), max_length=int(length*.5)).to(device)
 
     # Decoding summary
     summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
@@ -67,7 +68,7 @@ def api():
     "raw": "Successful"
     }
 
-    print("returning")
+    print(summary)
     # return data
     return jsonify(data)
 

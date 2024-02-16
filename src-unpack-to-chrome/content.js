@@ -5,6 +5,7 @@ for (t of test) {
 }
 console.log(doc)
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
+  console.log("hey")
   if (msg == 'get_document') {
     sendResponse(doc)
   }
