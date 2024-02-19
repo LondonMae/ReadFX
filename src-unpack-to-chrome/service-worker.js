@@ -172,18 +172,20 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
   }
   if(name === 'show_highlights'){
     console.log("show highlights")
-    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-      chrome.storage.local.get(["highlights"]).then((result)=>{
-        //sconsole.log(result.highlights)
-        
-        chrome.scripting.executeScript({
-          target: { tabId: tabs[0].id },
-          func: get_highlights,
-          args: [result.highlights], //please change this to reflect the words given by the model
-        });
+   
 
-      });
-    }); 
+    // chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+    //   chrome.storage.local.get(["highlights"]).then((result)=>{
+    //     //sconsole.log(result.highlights)
+        
+    //     chrome.scripting.executeScript({
+    //       target: { tabId: tabs[0].id },
+    //       func: get_highlights,
+    //       args: [result.highlights], //please change this to reflect the words given by the model
+    //     });
+
+    //   });
+    // }); 
   }
 });
 
@@ -213,19 +215,3 @@ function saveHighlight(highlight){
     chrome.storage.local.set({highlights: new_highlights})
   })
 }
-
-
-// function getHighlight(){
-//   chrome.storage.local.get(["highlights"]).then((result)=>{
-//     console.log(result.highlights)
-//     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-//       const tab = tabs[0];
-//       chrome.scripting.executeScript({
-//           target: { tabId: tab.id },
-//           func: show_highlights(result.highlights),
-//       }).then(selectedText => {
-//           console.log('Injected a function!');
-//       });
-//     })
-//   })
-// }

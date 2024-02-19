@@ -43,10 +43,16 @@ function saveText(){
 
 function showHighlights(){
     console.log("show highlights")
-    chrome.runtime.sendMessage({
-        name: 'show_highlights',
-        data: {}
-    })
+    // chrome.runtime.sendMessage({
+    //     name: 'show_highlights',
+    //     data: {}
+    // })
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        // Send a message to the content script in the active tab
+        chrome.storage.local.get(["highlights"]).then((result)=>{
+            chrome.tabs.sendMessage(tabs[0].id, { name: 'show_highlights', data: result.highlights});
+        })
+    });
     
 }
 
