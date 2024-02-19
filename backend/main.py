@@ -2,6 +2,14 @@ from flask import Flask, jsonify, request # BACKEND FRAMEWORK
 import torch # for gpu training
 from transformers import BartTokenizerFast, T5ForConditionalGeneration, BartForConditionalGeneration, BartTokenizer, BartConfig #for summarization
 from rake_nltk import Rake # to identify keywords
+from keyphrase_vectorizers import KeyphraseCountVectorizer
+from keybert import KeyBERT
+
+# tokenize the highlighted text
+# https://huggingface.co/docs/transformers/v4.37.2/en/model_doc/bart#transformers.BartTokenizer
+tokenizer=BartTokenizer.from_pretrained('facebook/bart-large-cnn')
+# Conditional generation is best for summarization
+model=BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
 
 app = Flask(__name__)
 # configure gpu device if available
@@ -11,12 +19,6 @@ print(device)
 
 def summarize(data):
     ARTICLE = data
-
-    # tokenize the highlighted text
-    # https://huggingface.co/docs/transformers/v4.37.2/en/model_doc/bart#transformers.BartTokenizer
-    tokenizer=BartTokenizer.from_pretrained('facebook/bart-large')
-    # Conditional generation is best for summarization
-    model=BartForConditionalGeneration.from_pretrained('facebook/bart-large')
 
     # Transmitting the encoded inputs to the model.generate() function
     inputs = tokenizer.batch_encode_plus([ARTICLE],return_tensors='pt', return_length=True).to(device)
