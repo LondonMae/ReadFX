@@ -151,6 +151,10 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
     console.log("show highlights")
     construct_range(data)
   }
+  if(name === 'jump_to_highlights'){
+    console.log("jump to highlights")
+    jump_to_highlights(data)
+  }
 })
 
 
@@ -337,7 +341,11 @@ function highlight_all(){
   range.insertNode(parentnode)
 }
 
-
+function jump_to_highlights(h){
+  let headele = document.querySelector(h.headnode)
+  window.open(h.url, "_blank")
+  headele.scrollIntoView()
+}
 
 function construct_range(highlights){
   highlights.forEach((h)=>{
