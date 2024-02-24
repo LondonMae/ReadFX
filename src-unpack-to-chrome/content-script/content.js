@@ -1,3 +1,7 @@
+// TODO: highlight all text before anything 
+
+let highlight_applied = false;
+// set this to true before applying the newest highlight
 
 // let text = "";
 // let element;
@@ -149,6 +153,7 @@ window.addEventListener("keydown", (e)=>{
 chrome.runtime.onMessage.addListener(({ name, data }) => {
   if(name === 'show_highlights'){
     console.log("show highlights")
+    highlight_applied = true
     construct_range(data)
   }
   if(name === 'jump_to_highlights'){
@@ -157,17 +162,42 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
   }
 })
 
+async function add_new_highlight(e){
+  if(!highlight_applied){
+    await chrome.runtime.sendMessage(()=>{
+      
+    })
+  }
+  const regex = new RegExp(/%(\d)/, 'g')
+  element = window.getSelection().focusNode.parentNode;  
+  
+  let popup = document.createElement("div");
+  popup.innerHTML = "Highlight <br>"
+  for(let i = 0; i < 4; i++){
+      popup.innerHTML += color_block.replaceAll(regex, "color" + i)
+  }
+  popup.style.top = e.clientY + "px";
+  popup.style.left = e.clientX + "px";
+  popup.classList.add("readfxpopup")
+  document.body.appendChild(popup)
+
+  let selection = window.getSelection()
+  let range = selection.getRangeAt(0)
+
+  highlight = save_range(range)
+  
+}
 
 
 window.addEventListener("mouseup", (e)=>{
-    const regex = new RegExp(/%(\d)/, 'g')
+  
     if(e.target.classList[0] == "color_label"){
       
       chrome.runtime.sendMessage({
         name: 'highlight_text',
         data: highlight
       })
-    
+
       construct_range([highlight])
     }
 
@@ -175,24 +205,11 @@ window.addEventListener("mouseup", (e)=>{
         document.getElementsByClassName('readfxpopup')[0].remove()
     }
     if (window.getSelection().toString() != "") {
-
-        element = window.getSelection().focusNode.parentNode;  
-
-        
-        let popup = document.createElement("div");
-        popup.innerHTML = "Highlight <br>"
-        for(let i = 0; i < 4; i++){
-            popup.innerHTML += color_block.replaceAll(regex, "color" + i)
+        if(!highlight_applied){
+          alert("enable show all highlights first")
+          return
         }
-        popup.style.top = e.clientY + "px";
-        popup.style.left = e.clientX + "px";
-        popup.classList.add("readfxpopup")
-        document.body.appendChild(popup)
-
-        let selection = window.getSelection()
-        let range = selection.getRangeAt(0)
-        
-        highlight = save_range(range)
+        add_new_highlight(e)
     } 
     // else if (document.selection && document.selection.type != "Control") {
     //     text = document.selection;
@@ -215,7 +232,7 @@ function highlight_text_node(n, start, end){
       ttext = "";
     }
     console.log("node: " + text)
-    node.innerHTML = htext +  "<mark>" + text + "</mark>" + ttext
+    node.innerHTML = htext +  "<highlight-tag>" + text + "</highlight-tag>" + ttext
     return
   }
   
@@ -243,7 +260,7 @@ function highlight_text_node(n, start, end){
     //console.log(eleindex)
 
     let headElement = document.createTextNode(htext);
-    let markElement = document.createElement('mark');
+    let markElement = document.createElement('highlight-tag');
     let tailElement = document.createTextNode(ttext);
 
     markElement.classList.add("highlight_text")
@@ -358,8 +375,6 @@ function construct_range(highlights){
       console.log(headele)
       console.log(h.headindex, h.tailindex)
       if (h.headtype == 3){
-
-
         try {
           range.setStart(headele.childNodes[h.nodeindex], h.headindex)
         } catch (e) {

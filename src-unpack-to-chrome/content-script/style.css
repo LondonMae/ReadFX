@@ -1,13 +1,17 @@
+:root{
+  --highlight-color:#ffff00;
+
+}
 .readfxpopup{
     position:fixed;
     background: #eeeeee;
+    color: #333333;
     box-shadow: 0.1em 0.1em 0.2em 0em rgba(0,0,0,0.2);
     padding: 1em;
     z-index: 1000000;
     border-radius:0.5em;
     display:flex;
 }
-
 
 label{
   padding:1em;
@@ -26,4 +30,8 @@ input[type=radio]:active + label {
 
 label:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+highlight-tag{
+  background-color: var(--highlight-color);
 }

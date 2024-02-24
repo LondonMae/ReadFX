@@ -215,3 +215,7 @@ function saveHighlight(highlight){
     chrome.storage.local.set({highlights: new_highlights})
   })
 }
+
+function clear_all_highlights(){
+  chrome.storage.local.set({highlights:[]})
+}
