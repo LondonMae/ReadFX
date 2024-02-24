@@ -162,10 +162,11 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
   }
 })
 
+
 async function add_new_highlight(e){
   if(!highlight_applied){
     await chrome.runtime.sendMessage(()=>{
-      
+
     })
   }
   const regex = new RegExp(/%(\d)/, 'g')

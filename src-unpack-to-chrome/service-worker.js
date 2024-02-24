@@ -1,5 +1,13 @@
-async function sendDataToServer(selectedText) {
-  const serverEndpoint = 'http://127.0.0.1:8000/api/get_wiki_summary/';
+async function sendDataToServer(selectedText, test) {
+  var serverEndpoint = ""
+  console.log(test)
+  if (test == "summarize") {
+       serverEndpoint = 'http://127.0.0.1:8000/api/get_wiki_summary/';
+  }
+  else if (test == "keywords") {
+       serverEndpoint = 'http://127.0.0.1:8000/api/get_wiki_keywords/';
+  }
+
   console.log(selectedText);
   const response = await fetch(serverEndpoint, {
     method: 'POST',
@@ -66,7 +74,7 @@ chrome.contextMenus.onClicked.addListener(async(data, tab) => {
 
     console.log(typeof tabdata)
 
-    const response =  await sendDataToServer(tabdata);
+    const response =  await sendDataToServer(tabdata, "summarize");
     console.log("Back at client")
     console.log(response["summary"])
     
@@ -78,42 +86,49 @@ chrome.contextMenus.onClicked.addListener(async(data, tab) => {
 });
 
 
-function bold_text(word, wordlist){
-  // catch errors
-  if(word.length < 2){
+async function bold_text(word, wordlist){
+
+
+  words = word.split("/")
+  if (words.length < 2) {
     return
   }
+  // catch errors
 
   //text_elements = document.getElementsByTagName('p') + document.getElementsByTagName('span')
   text_elements = [
-    document.getElementsByTagName('p'), 
-    document.getElementsByTagName('h1'), 
-    document.getElementsByTagName('h2'), 
-    document.getElementsByTagName('h3'), 
-    document.getElementsByTagName('h4'), 
-    document.getElementsByTagName('h5'),
-    document.getElementsByTagName('span')
+    document.getElementsByTagName('p'),
+    // document.getElementsByTagName('h1'),
+    // document.getElementsByTagName('h2'),
+    // document.getElementsByTagName('h3'),
+    // document.getElementsByTagName('h4'),
+    // document.getElementsByTagName('h5'),
+    // document.getElementsByTagName('span')
     //document.getElementsByTagName('div')
   ]
-  re = "(" + word + ")"
-  re = new RegExp(re, 'gi')
-  for(ele of text_elements){
-    for(p of ele){
-        p.innerHTML = p.innerHTML.replaceAll(re, "<b>$1</b>")
+
+  console.log(text_elements[0].length)
+  for (var i = 0; i < words.length && i < 500; i ++) {
+    console.log(words[i])
+    if (words[i] == "") {
+      continue
     }
+    try {
+      re = "(" + words[i] + ")"
+      re = new RegExp(re, 'gi')
+      for(ele of text_elements){
+        for(p of ele){
+
+            p.innerHTML = p.innerHTML.replaceAll(re, "<b>$1</b>")
+        }
+      }
+    }
+    catch(error) {
+      continue
+    }
+
+
   }
-  // if (wordlist == undefined){
-  //   wordlist = [word]
-  // }
-  // for(let w in wordlist){
-  //   re = "(" + w + ")"
-  //   re = new RegExp(re, 'gi')
-  //   for(ele of text_elements){
-  //     for(p of ele){
-  //         p.innerHTML = p.innerHTML.replaceAll(re, "<b>$1</b>")
-  //     }
-  //   }
-  // }
 }
 
 function get_highlights(highlights){
@@ -144,7 +159,7 @@ function get_highlights(highlights){
 
 
 
-chrome.runtime.onMessage.addListener(({ name, data }) => {
+chrome.runtime.onMessage.addListener(async({ name, data }) => {
   if (name === 'loaded') {
     chrome.runtime.sendMessage({
       name: 'summarize-sentence',
@@ -152,13 +167,19 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
     });
   }
   if (name === 'bold_text') {
+
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    var response = await chrome.tabs.sendMessage(tab.id, "get_document");
+    response = stripHTML(response)
+    response =  await sendDataToServer(response, "keywords");
+
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
       chrome.scripting.executeScript({
         target: { tabId: tabs[0].id },
         func: bold_text,
-        args: [data.value], //please change this to reflect the words given by the model
+        args: [response.summary],
       });
-    }); 
+    });
   }
   if (name === 'save') {
     addToNotes(data);
@@ -195,7 +216,7 @@ function addToNotes(text){
     console.log(result.notes)
     updated_notes = result.notes + text
     chrome.storage.local.set({notes: updated_notes})
-    
+
     chrome.runtime.sendMessage({name: 'display-notes', data: updated_notes})
   })
 }
