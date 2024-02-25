@@ -27,15 +27,13 @@ def summarize(data):
 
     # simple bounds checking
     if length < 20:
-        return "This text is too short to summarize"
+        summary = "This text is too short to summarize"
     elif length > 1024:
-        return "This text is too long to summarize"
-
-    # prediction forward pass
-    summary_ids =  model.generate(inputs['input_ids'], num_beams=4, min_length=int(length*.1), max_length=int(length*.5)).to(device)
-
-    # Decoding summary
-    summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
+        summary = "This text is too long to summarize"
+    else:
+        summary_ids =  model.generate(inputs['input_ids'], num_beams=4, min_length=int(length*.1), max_length=int(length*.5)).to(device)
+        # Decoding summary
+        summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
     return summary
 
 def keywords(text):
@@ -46,7 +44,7 @@ def keywords(text):
 
     words = set()
     for score in b:
-        if score[0] > 1.5:
+        if score[0] > 6.0:
             if score[1] not in words:
                 words.add(score[1])
                 return_string += score[1] + "/"
