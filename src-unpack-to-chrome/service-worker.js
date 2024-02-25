@@ -43,9 +43,8 @@ let tabdata = ""
 //When the context menu is invoked
 chrome.contextMenus.onClicked.addListener(async(data, tab) => {
   //first open the side panel, wait for promise
-  const opened = await chrome.sidePanel.open({ windowId: tab.windowId });
+  await chrome.sidePanel.open({ windowId: tab.windowId });
   tabdata = stripHTML(data.selectionText);
-
 
   chrome.runtime.sendMessage({
     name: 'summarize-sentence',
@@ -66,60 +65,17 @@ chrome.contextMenus.onClicked.addListener(async(data, tab) => {
 });
 
 
-async function bold_text(word, wordlist){
-
-
-  words = word.split("/")
-  if (words.length < 2) {
-    return
-  }
-  // catch errors
-
-  //text_elements = document.getElementsByTagName('p') + document.getElementsByTagName('span')
-  text_elements = [
-    document.getElementsByTagName('p'),
-    // document.getElementsByTagName('h1'),
-    // document.getElementsByTagName('h2'),
-    // document.getElementsByTagName('h3'),
-    // document.getElementsByTagName('h4'),
-    // document.getElementsByTagName('h5'),
-    // document.getElementsByTagName('span')
-    //document.getElementsByTagName('div')
-  ]
-
-  console.log(text_elements[0].length)
-  for (var i = 0; i < words.length && i < 500; i ++) {
-    console.log(words[i])
-    if (words[i] == "") {
-      continue
-    }
-    try {
-      re = "(" + words[i] + ")"
-      re = new RegExp(re, 'gi')
-      for(ele of text_elements){
-        for(p of ele){
-
-            p.innerHTML = p.innerHTML.replaceAll(re, "<b>$1</b>")
-        }
-      }
-    }
-    catch(error) {
-      continue
-    }
-
-
-  }
-}
 
 
 
 chrome.runtime.onMessage.addListener(async({ name, data }) => {
-  if (name === 'loaded') {
-    chrome.runtime.sendMessage({
-      name: 'summarize-sentence',
-      data: { value: "summarizing: " + tabdata }
-    });
-  }
+  // if (name === 'loaded') {
+  //   chrome.runtime.sendMessage({
+  //     name: 'summarize-sentence',
+  //     data: { value: "summarizing: " + tabdata }
+  //   });
+  // }
+
   if (name === 'bold_text') {
 
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
@@ -127,13 +83,14 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
     response = stripHTML(response)
     response =  await sendDataToServer(response, "keywords");
 
-    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-      chrome.scripting.executeScript({
-        target: { tabId: tabs[0].id },
-        func: bold_text,
-        args: [response.summary],
-      });
-    });
+    // chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+    //   chrome.scripting.executeScript({
+    //     target: { tabId: tabs[0].id },
+    //     func: bold_text,
+    //     args: [response.summary],
+    //   });
+    // });
+    var response = await chrome.tabs.sendMessage(tab.id, ["extract keywords", response.summary]);
   }
   if (name === 'save') {
     addToNotes(data);
