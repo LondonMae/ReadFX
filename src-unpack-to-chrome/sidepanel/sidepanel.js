@@ -61,22 +61,27 @@ function showHighlights(){
         // Send a message to the content script in the active tab
         chrome.storage.local.get(["highlights"]).then((result)=>{
             chrome.tabs.sendMessage(tabs[0].id, { name: 'show_highlights', data: result.highlights});
-
-            result.highlights.map((h)=>{
-                let link_ele = document.createElement('div');
-                const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
-                link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<br>" + h.text;
-                link_ele.classList.add('highlight-link');
-                link_ele.addEventListener('click', ()=>{
-                    jump_to_highlight(h)
-                })
-                document.getElementById("highlight-links").appendChild(link_ele)
-
-            })
         })
     });
 }
 
+function listHighlights(){
+
+    chrome.storage.local.get(["highlights"]).then((result)=>{
+
+        result.highlights.map((h)=>{
+            let link_ele = document.createElement('div');
+            const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
+            link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<br>" + h.text;
+            link_ele.classList.add('highlight-link');
+            link_ele.addEventListener('click', ()=>{
+                jump_to_highlight(h)
+            })
+            document.getElementById("highlight-links").appendChild(link_ele)
+
+        })
+    })
+}
 
 function saveNotebook(){
     chrome.runtime.sendMessage({
@@ -122,6 +127,10 @@ document.getElementById("bold-button").addEventListener("click", () => {
 
 document.getElementById("highlight-button").addEventListener("click", () => {
     showHighlights()
+ })
+
+ document.getElementById("list-highlights-button").addEventListener("click", () => {
+    listHighlights()
  })
 
 document.getElementById("change-theme-button").addEventListener("click", () => {
