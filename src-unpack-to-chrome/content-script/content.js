@@ -207,7 +207,7 @@ window.addEventListener("mouseup", (e)=>{
     }
     if (window.getSelection().toString() != "") {
         if(!highlight_applied){
-          alert("enable show all highlights first")
+          console.log("enable show highlights first")
           return
         }
         add_new_highlight(e)
@@ -359,9 +359,10 @@ function highlight_all(){
   range.insertNode(parentnode)
 }
 
-function jump_to_highlights(h){
+async function jump_to_highlights(h){
   let headele = document.querySelector(h.headnode)
-  window.open(h.url, "_blank")
+  construct_range([h])
+  //await window.open(h.url, "_blank")
   headele.scrollIntoView()
 }
 
@@ -369,6 +370,7 @@ function construct_range(highlights){
   highlights.forEach((h)=>{
     console.log(h.url, window.location.href)
     if(h.url == window.location.href){
+      console.log(h.url)
       let range = document.createRange()
       let headele = document.querySelector(h.headnode)
       let tailele = document.querySelector(h.tailnode)
@@ -380,6 +382,7 @@ function construct_range(highlights){
           range.setStart(headele.childNodes[h.nodeindex], h.headindex)
         } catch (e) {
           console.log(headele)
+          console.log(h)
           console.error(e);
         }
 

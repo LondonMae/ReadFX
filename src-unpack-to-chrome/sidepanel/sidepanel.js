@@ -39,7 +39,19 @@ function saveText(){
     })
 
 }
-
+async function jump_to_highlight(h){
+    console.log(h);
+    let newtab = await chrome.tabs.create({url: h.url});
+    console.log(newtab)
+    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+        // make sure the status is 'complete' and it's the right tab
+        console.log(tabId)
+        console.log(newtab.id)    
+        if (tabId == newtab.id && changeInfo.status == 'complete') {
+            let response = chrome.tabs.sendMessage(newtab.id, { name: 'jump_to_highlights', data: h});
+        }
+    });
+}
 
 function showHighlights(){
     console.log("show highlights")
@@ -47,6 +59,18 @@ function showHighlights(){
         // Send a message to the content script in the active tab
         chrome.storage.local.get(["highlights"]).then((result)=>{
             chrome.tabs.sendMessage(tabs[0].id, { name: 'show_highlights', data: result.highlights});
+
+            result.highlights.map((h)=>{
+                let link_ele = document.createElement('div');
+                const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
+                link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<br>" + h.text;
+                link_ele.classList.add('highlight-link');
+                link_ele.addEventListener('click', ()=>{
+                    jump_to_highlight(h)
+                })
+                document.getElementById("highlight-links").appendChild(link_ele)
+
+            })
         })
     });
 }

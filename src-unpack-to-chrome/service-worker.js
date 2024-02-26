@@ -214,7 +214,7 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
 function addToNotes(text){
   chrome.storage.local.get(["notes"]).then((result)=>{
     console.log(result.notes)
-    updated_notes = result.notes + text
+    let updated_notes = result.notes + text
     chrome.storage.local.set({notes: updated_notes})
 
     chrome.runtime.sendMessage({name: 'display-notes', data: updated_notes})
@@ -231,7 +231,7 @@ function writeNotes(text){
 function saveHighlight(highlight){
   chrome.storage.local.get(["highlights"]).then((result)=>{
     console.log(result.highlights)
-    new_highlights = result.highlights
+    let new_highlights = result.highlights
     new_highlights.push(highlight)
     chrome.storage.local.set({highlights: new_highlights})
   })
