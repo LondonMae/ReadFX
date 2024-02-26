@@ -183,7 +183,7 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
 
         });
         chrome.runtime.sendMessage({
-            name: 'loaded2',
+            name: 'init-sp',
             data: { value: "loaded2" }
         });
     }
