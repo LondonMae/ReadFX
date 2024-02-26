@@ -3,10 +3,6 @@
 let highlight_applied = false;
 // set this to true before applying the newest highlight
 
-// let text = "";
-// let element;
-// let selection; 
-
 let highlight = {
   "url":"https",
   "scroll": 0,
@@ -16,132 +12,12 @@ let highlight = {
 
 let pageHighlights = []
 
-// let template = `
-// <div>
-// Highlight
-// </div>
-// `
 let color_block = `
   <input id="%1" type="radio" name="choice" value="%2">     
   <label for="%1" class="color_label">
     %3
   </label>
 `
-
-
-// function getCharOffset(textNode, offset) {
-//   const parentRect = textNode.parentElement.getBoundingClientRect()
-//   const range = document.createRange()
-//   range.setStart(textNode, offset)
-//   range.setEnd(textNode, offset + 1)
-//   const charRect = range.getBoundingClientRect()
-//   return {
-//     top: charRect.top - parentRect.top,
-//     left: charRect.left - parentRect.left
-//   }
-// }
-
-
-// function getElementIndex(parent, node){
-//   let eleindex = 0;
-//   parent.childNodes.forEach((n,i)=>{
-//     if (n.isSameNode(node)) eleindex = i
-//   })
-//   return eleindex;
-// }
-
-
-
-// function getHTMLOfSelection () {
-//     var range;
-//     if (document.selection && document.selection.createRange) {
-//       range = document.selection.createRange();
-//       return range.htmlText;
-//     }
-//     else if (window.getSelection) {
-//       var selection = window.getSelection();
-//       if (selection.rangeCount > 0) {
-//         range = selection.getRangeAt(0);
-//         var clonedSelection = range.cloneContents();
-//         var div = document.createElement('div');
-//         div.appendChild(clonedSelection);
-//         return div.innerHTML;
-//       }
-//       else {
-//         return '';
-//       }
-//     }
-//     else {
-//       return '';
-//     }
-//   }
-
-//   function highlight_text(txt, ele){
-//     // if already marked, remove
-//     re = new RegExp(/\<mark\>|\<\/mark\>/g)
-//     selection = selection.replace(re, "")
-
-//     console.log(txt)
-
-//     re = "(" + txt + ")"
-//     re = new RegExp(re)
-//     highlight.query = jsPath(ele) 
-//     ele.innerHTML = ele.innerHTML.replace(re, "<mark>$1</mark>")
-//     highlight.scroll = window.scrollY
-//     highlight.url = window.location.href
-//     pageHighlights.push(highlight)
-//     console.log(highlight)
-
-//     chrome.runtime.sendMessage({
-//       name: 'highlight_text',
-//       data: highlight
-//     })
-  
-// }
-
-// window.addEventListener("keydown", (e)=>{
-//     if (document.getElementsByClassName('readfxpopup').length > 0){
-//         document.getElementsByClassName('readfxpopup')[0].remove()
-//     }
-// })
-
-
-// window.addEventListener("mouseup", (e)=>{
-//     const regex = new RegExp(/%(\d)/, 'g')
-//     if(e.target.classList[0] == "color_label"){
-//         highlight_text(text, element)
-//     }
-
-//     if (document.getElementsByClassName('readfxpopup').length > 0){
-//         document.getElementsByClassName('readfxpopup')[0].remove()
-//     }
-//     if (window.getSelection().toString() != "") {
-
-//         element = window.getSelection().focusNode.parentNode;  
-
-        
-//         let popup = document.createElement("div");
-//         popup.innerHTML = "Highlight <br>"
-//         for(let i = 0; i < 4; i++){
-//             popup.innerHTML += color_block.replaceAll(regex, "color" + i)
-//         }
-//         popup.style.top = e.clientY + "px";
-//         popup.style.left = e.clientX + "px";
-//         popup.classList.add("readfxpopup")
-//         document.body.appendChild(popup)
-//         text = window.getSelection().toString();
-
-//         highlight.headindex = window.getSelection().anchorOffset
-//         highlight.tailindex = window.getSelection().focusOffset
-//         selection = getHTMLOfSelection();
-
-//     } 
-//     // else if (document.selection && document.selection.type != "Control") {
-//     //     text = document.selection;
-//     // }
-//     return text;
-// })
-
 
 window.addEventListener("keydown", (e)=>{
     if (document.getElementsByClassName('readfxpopup').length > 0){
