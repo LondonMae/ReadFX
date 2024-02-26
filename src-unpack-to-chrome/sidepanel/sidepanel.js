@@ -1,5 +1,7 @@
 // Static functions
 
+chrome.runtime.connect({ name: 'mySidepanel' });
+
 let current_theme = 0;
 const palettes = {
     "purpl":    ["51344d","6f5060","a78682","e7ebc5","ffffff"],
@@ -179,6 +181,30 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
         console.log("summarized text gotten")
         document.getElementById("select-a-word").value = data.value;
 
+        console.log("hi bestie")
+        // chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        //     const tab = tabs[0];
+        //     function parseSentence() {
+        //         var selection = window.getSelection().toString();
+        //         console.log(selection);
+        //         return selection;
+        //     }
+        //     chrome.scripting.executeScript({
+        //         target: { tabId: tab.id },
+        //         func: parseSentence,
+        //         //        files: ['contentScript.js'],  // To call external file instead
+        //     }).then(selectedText => {
+        //         console.log('Injected a function!');
+        //         console.log(selectedText)
+        //         document.getElementById("select-a-word").value = data.value;
+        //     });
+
+        // });
+
+    }
+
+    if (name === 'summarize-sentence2') {
+        console.log("hi bestie")
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             const tab = tabs[0];
             function parseSentence() {
@@ -196,6 +222,10 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
                 document.getElementById("select-a-word").value = data.value;
             });
 
+        });
+        chrome.runtime.sendMessage({
+            name: 'loaded2',
+            data: { value: "loaded2" }
         });
     }
     if (name === 'display-notes'){

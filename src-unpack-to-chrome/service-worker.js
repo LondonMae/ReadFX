@@ -22,6 +22,8 @@ async function sendDataToServer(selectedText, test) {
   return data
 }
 
+
+
 function stripHTML(x){
     x = x.replace(/[^\x00-\x7F]/g, "")
     x = x.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "\n").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "\n")
@@ -52,6 +54,11 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 let tabdata = ""
+
+let loaded = false;
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 //When the context menu is invoked
 chrome.contextMenus.onClicked.addListener(async(data, tab) => {
   console.log(data, tab)
@@ -67,12 +74,13 @@ chrome.contextMenus.onClicked.addListener(async(data, tab) => {
     await chrome.sidePanel.open({ windowId: tab.windowId });
     tabdata = stripHTML(data.selectionText);
 
-    chrome.runtime.sendMessage({
-      name: 'summarize-sentence',
-      data: { value: "summarizing: " + tabdata }
-    });
+    if (loaded == true){
+      chrome.runtime.sendMessage({
+        name: 'summarize-sentence2',
+        data: { value: "summarizing: " + tabdata }
+      });
 
-    console.log(tabdata)
+    }
 
     const response =  await sendDataToServer(tabdata, "summarize");
     console.log("Back at client")
@@ -117,12 +125,27 @@ function get_highlights(highlights){
 
 
 chrome.runtime.onMessage.addListener(async({ name, data }) => {
-  // if (name === 'loaded') {
-  //   chrome.runtime.sendMessage({
-  //     name: 'summarize-sentence',
-  //     data: { value: "summarizing: " + tabdata }
-  //   });
-  // }
+  if (name === 'loaded') {
+    chrome.runtime.sendMessage({
+      name: 'summarize-sentence2',
+      data: { value: "summarizing: " + tabdata }
+    });
+    loaded = true;
+  }
+
+  if (name == "loaded2") {
+  console.log(typeof tabdata)
+  const temp = "summarize"
+  const response =  await sendDataToServer(tabdata, temp);
+  console.log("Back at client")
+  console.log(response["summary"])
+
+  // await sleep(3000)
+  chrome.runtime.sendMessage({
+    name: 'summarize-sentence',
+    data: { value: response["summary"] }
+  });
+}
 
   if (name === 'bold_text') {
 
@@ -199,3 +222,10 @@ function saveHighlight(highlight){
 function clear_all_highlights(){
   chrome.storage.local.set({highlights:[]})
 }
+chrome.runtime.onConnect.addListener(function (port) {
+  if (port.name === 'mySidepanel') {
+    port.onDisconnect.addListener(async () => {
+      loaded = false
+    });
+  }
+});
