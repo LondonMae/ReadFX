@@ -1,6 +1,6 @@
 var doc = ""
 var test = [document.getElementsByTagName('p'),
-document.getElementsByTagName('span')
+// document.getElementsByTagName('span')
 ]
 // test.append(document.getElementsByTagName('span'))
 for (thing of test) {
@@ -51,7 +51,7 @@ async function bold_text(word, text_elements) {
             continue
           }
         }
-        await sleep(200)
+        await sleep(100)
       }
 
 }
