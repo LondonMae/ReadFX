@@ -176,6 +176,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 chrome.runtime.onMessage.addListener(({ name, data }) => {
     if (name === 'summarize-sentence') {
+        console.log("summarized text gotten")
+        document.getElementById("select-a-word").value = data.value;
+
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             const tab = tabs[0];
             function parseSentence() {

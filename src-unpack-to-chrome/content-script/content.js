@@ -41,9 +41,9 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
 
 async function add_new_highlight(e){
   if(!highlight_applied){
-    await chrome.runtime.sendMessage(()=>{
+    // await chrome.runtime.sendMessage(()=>{
 
-    })
+    // })
   }
   const regex = new RegExp(/%(\d)/, 'g')
   element = window.getSelection().focusNode.parentNode;  
@@ -84,7 +84,7 @@ window.addEventListener("mouseup", (e)=>{
     if (window.getSelection().toString() != "") {
         if(!highlight_applied){
           console.log("enable show highlights first")
-          return
+          //return
         }
         add_new_highlight(e)
     } 
