@@ -7,6 +7,7 @@
     --secondary: #8a977c;
     --highlight: #c59ca8;
     --text-color: #ffffff;
+    --text-color-h: #ffffff; 
     --b-radius: 0.5rem;
 }
 
@@ -73,7 +74,7 @@ textarea{
 .tool-button {
     background-color: var(--highlight); /* Green background color */
     border: none;
-    color: var(--text-color); /* Text color */
+    color: var(--text-color-h); /* Text color */
     padding: 10px 20px; /* Padding for the buttons */
     text-align: center;
     text-decoration: none;
@@ -93,7 +94,7 @@ textarea{
     height:3em;
     overflow:hidden;
     border-radius: var(--b-radius);
-    background:var(--secondary);
+    background-color:var(--secondary);
     margin:1em;
     box-shadow: 0 3px 2px 0 rgba(0,0,0,0.02);
 }

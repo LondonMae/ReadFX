@@ -4,11 +4,11 @@ chrome.runtime.connect({ name: 'mySidepanel' });
 
 let current_theme = 0;
 const palettes = {
-    "purpl":    ["51344d","6f5060","a78682","e7ebc5","ffffff"],
-    "default": ["57614e","6a755f","8a977c","fcc0d2","ffffff"],
-    "frutiger":   ["cde7b0","a3bfa8","E4DFC8","222823","08090a"],
-    "dark":   ["020202", "222222","312d2e","dabaff","ffffff"],
-    "flag": ["2d3142","4f5d75","bfc0c0","ef8354","ffffff"]
+    "purpl":    ["51344d","6f5060","a78682","e7ebc5","ffffff", "000000"],
+    "default": ["57614e","6a755f","8a977c","c59ca8","ffffff", "ffffff"],
+    "frutiger":   ["cde7b0","a3bfa8","E4DFC8","222823","08090a", "ffffff"],
+    "dark":   ["020202", "222222","312d2e","dabaff","ffffff", "000000"],
+    "flag": ["2d3142","4f5d75","bfc0c0","ef8354","ffffff", "ffffff"]
 }
 
 function toggleTheme() {
@@ -21,6 +21,7 @@ function toggleTheme() {
     r.style.setProperty('--secondary', theme[2])
     r.style.setProperty('--highlight', theme[3])
     r.style.setProperty('--text-color', theme[4])
+    r.style.setProperty('--text-color-h', theme[5])
     document.getElementById("current-theme").innerText = Object.keys(palettes)[current_theme]
 }
 
