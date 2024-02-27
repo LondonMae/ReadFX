@@ -7,11 +7,13 @@
     --secondary: #8a977c;
     --highlight: #c59ca8;
     --text-color: #ffffff;
+    --text-color-h: #ffffff; 
     --b-radius: 0.5rem;
 }
 
 *{
     font-family: var(--font);
+    transition: 0.1s ease-out;
 }
 
 body {
@@ -72,7 +74,7 @@ textarea{
 .tool-button {
     background-color: var(--highlight); /* Green background color */
     border: none;
-    color: var(--text-color); /* Text color */
+    color: var(--text-color-h); /* Text color */
     padding: 10px 20px; /* Padding for the buttons */
     text-align: center;
     text-decoration: none;
@@ -83,6 +85,25 @@ textarea{
     border-radius:  var(--b-radius); /* Rounded borders */
 }
 
+#highlight-links{
+
+}
+
+.highlight-link {
+    padding:1em;
+    height:3em;
+    overflow:hidden;
+    border-radius: var(--b-radius);
+    background-color:var(--secondary);
+    margin:1em;
+    box-shadow: 0 3px 2px 0 rgba(0,0,0,0.02);
+}
+
+.highlight-link:hover{
+    cursor: pointer;
+    transform:translate(0,-2px) scale(1.04);
+    box-shadow: 0 5px 5px 0 rgba(0,0,0,0.02);
+}
 
 
 
