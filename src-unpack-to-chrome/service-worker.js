@@ -1,14 +1,22 @@
+// global vars
+let tabdata = "" // selected text
+let loaded = false; // is side panel loaded?
+
+
+// requests to Flask server
 async function sendDataToServer(selectedText, test) {
-  var serverEndpoint = ""
-  console.log(test)
+  var serverEndpoint = "http://127.0.0.1:8000/api/"
+
+  // summarize text
   if (test == "summarize") {
-       serverEndpoint = 'http://127.0.0.1:8000/api/get_wiki_summary/';
+       serverEndpoint += 'get_wiki_summary/';
   }
+  // extract keywords
   else if (test == "keywords") {
-       serverEndpoint = 'http://127.0.0.1:8000/api/get_wiki_keywords/';
+       serverEndpoint += 'get_wiki_keywords/';
   }
 
-  console.log(selectedText);
+  // POST request data as JSON
   const response = await fetch(serverEndpoint, {
     method: 'POST',
     headers: {
@@ -17,13 +25,17 @@ async function sendDataToServer(selectedText, test) {
     body: JSON.stringify(selectedText),
   });
 
+  // wait to return until data recieved
   var data = await response.json();
-  console.log(data)
   return data
 }
 
+// helper function
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-
+// regex formatting
 function stripHTML(x){
     x = x.replace(/[^\x00-\x7F]/g, "")
     x = x.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "\n").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "\n")
@@ -33,6 +45,7 @@ function stripHTML(x){
     return x
 }
 
+// this creates a menu option to summarize text
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: 'summarize-sentence',
@@ -53,17 +66,9 @@ chrome.action.onClicked.addListener((tab) => {
   });
 });
 
-let tabdata = ""
-
-let loaded = false;
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 //When the context menu is invoked
 chrome.contextMenus.onClicked.addListener(async(data, tab) => {
-  console.log(data, tab)
   if(data.menuItemId == "highlight"){
-    console.log(data)
     chrome.runtime.sendMessage({
       name: 'highlight',
       data: { value: "hightlighting: " + tabdata }
@@ -71,9 +76,10 @@ chrome.contextMenus.onClicked.addListener(async(data, tab) => {
 
   }else if (data.menuItemId == "summarize-sentence"){
     //first open the side panel, wait for promise
-    await chrome.sidePanel.open({ windowId: tab.windowId });
+    chrome.sidePanel.open({ windowId: tab.windowId });
     tabdata = stripHTML(data.selectionText);
-
+    
+    // send selected text to sidepanel if loaded
     if (loaded == true){
       chrome.runtime.sendMessage({
         name: 'summarize-sentence2',
@@ -123,49 +129,45 @@ function get_highlights(highlights){
 }
 
 
-
+// listen for messages from other files
 chrome.runtime.onMessage.addListener(async({ name, data }) => {
+  // when sidepanel loaded, send selected text data
   if (name === 'loaded') {
     chrome.runtime.sendMessage({
       name: 'summarize-sentence2',
       data: { value: "summarizing: " + tabdata }
     });
+    // mark loaded flag
     loaded = true;
   }
 
-  if (name == "loaded2") {
-  console.log(typeof tabdata)
-  const temp = "summarize"
-  const response =  await sendDataToServer(tabdata, temp);
-  console.log("Back at client")
-  console.log(response["summary"])
+  // when initial text loaded in sidepanel
+  if (name == "init-sp") {
+    let requestTy = "summarize"
+    let response =  await sendDataToServer(tabdata, requestTy);
+    console.log("Back at client")
 
-  // await sleep(3000)
-  chrome.runtime.sendMessage({
-    name: 'summarize-sentence',
-    data: { value: response["summary"] }
-  });
-}
+    // send summary to sidepanel
+    chrome.runtime.sendMessage({
+      name: 'summarize-sentence',
+      data: { value: response["summary"] }
+    });
+  }
 
+  // bold keywords
   if (name === 'bold_text') {
 
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
     var response = await chrome.tabs.sendMessage(tab.id, "get_document");
     response = stripHTML(response)
     response =  await sendDataToServer(response, "keywords");
-
-    // chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-    //   chrome.scripting.executeScript({
-    //     target: { tabId: tabs[0].id },
-    //     func: bold_text,
-    //     args: [response.summary],
-    //   });
-    // });
     var response = await chrome.tabs.sendMessage(tab.id, ["extract keywords", response.summary]);
   }
+
   if (name === 'save') {
     addToNotes(data);
   }
+
   if (name === 'write-notebook') {
     writeNotes(data);
   }
@@ -222,6 +224,7 @@ function saveHighlight(highlight){
 function clear_all_highlights(){
   chrome.storage.local.set({highlights:[]})
 }
+// when sidepanel closed set flag to false
 chrome.runtime.onConnect.addListener(function (port) {
   if (port.name === 'mySidepanel') {
     port.onDisconnect.addListener(async () => {

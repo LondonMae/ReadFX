@@ -25,6 +25,8 @@ We have a production server on Google Cloud. While still in the developement pro
 
 Eventually, we will need to deploy with Gunicorn. See documentation [here](https://flask.palletsprojects.com/en/3.0.x/deploying/gunicorn/)
 
+to run gunicorn use ```gunicorn -b 127.0.0.1:8000 backend/main:app```
+
 ### API usage
 When the server is running, you can make post requests to the server. Our application currently supports two API calls, (1) Summary and (2) Keywords.
 1. To summarize data, send a json object as a POST request to http://localhost:8000/api/get_wiki_summary.
