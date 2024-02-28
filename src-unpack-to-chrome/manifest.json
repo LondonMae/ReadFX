@@ -31,6 +31,6 @@
         "http://*/*",
         "https://*/*",
         "file://*/*"
-      ]
-
+      ],
+    "options_page": "notes/notes.html"
     }
