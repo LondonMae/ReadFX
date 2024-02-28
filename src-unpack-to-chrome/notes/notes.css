@@ -20,8 +20,6 @@
 body {
     background-color: var(--bg);
     color: var(--text-color);
-    display:flex;
-    justify-content:center;
 }
 
 .notes_title{
@@ -40,11 +38,11 @@ body {
     color: var(--text-color);
     font-size: 1em;
     background-color: var(--secondary);
-    height:100%;
-    width: 100%;
+    min-height:10em;
     scrollbar-color: var(--bg);
     border-radius:  var(--b-radius);
-    overflow:auto;
+    overflow-y:auto;
+    word-wrap:break-word;
     resize:none;
     border: none;
     outline: none;
@@ -56,8 +54,7 @@ body {
     border-radius:  var(--b-radius);
     padding: 0 1em 0 1em; /* top, right, bottom, left */
     max-width:40em;
-    display:flex;
-    flex-direction:column;
+    margin:auto;
 }
 
 .tool-button {

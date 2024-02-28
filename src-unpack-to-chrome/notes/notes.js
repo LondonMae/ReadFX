@@ -1,6 +1,6 @@
 // Saves options to chrome.storage
 const saveOptions = () => {
-  const notes = document.getElementsByClassName('notes_body')[0].value;
+  const notes = document.getElementsByClassName('notes_body')[0].innerText;
 
   chrome.storage.local.set(
     { notes: notes},
@@ -20,7 +20,10 @@ const saveOptions = () => {
 const restoreOptions = () => {
   chrome.storage.local.get(["notes"]).then(
     (items) => {
-        document.getElementsByClassName('notes_body')[0].value = items.notes
+        const regex = /.*/m;
+        m = regex.exec(items.notes)
+        document.getElementsByClassName('notes_title')[0].value = m
+        document.getElementsByClassName('notes_body')[0].innerText = items.notes
     }
   );
 };
