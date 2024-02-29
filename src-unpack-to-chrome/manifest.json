@@ -20,7 +20,8 @@
         {
             "matches": ["*://*/*"],
             "css": ["content-script/style.css"],
-            "js": ["content-script/content.js", "content-script/path.js"]
+            "js": ["content-script/highlight.js", "content-script/content.js", "content-script/path.js"],
+            "run_at": "document_end"  
         }
     ],
     "side_panel": {
