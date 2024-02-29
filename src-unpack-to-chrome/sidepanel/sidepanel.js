@@ -42,6 +42,19 @@ function saveText(){
     })
 
 }
+
+
+async function open_notes(){
+    let newtab = await chrome.tabs.create({url: "chrome-extension://mjcpkcdfdbkepngmafjhgcfffnhhkejm/notes/notes.html"});
+    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+        // make sure the status is 'complete' and it's the right tab
+        if (tabId == newtab.id && changeInfo.status == 'complete') {
+            let response = chrome.tabs.sendMessage(newtab.id, { name: 'open_notes'});
+        }
+    });
+}
+
+
 async function jump_to_highlight(h){
     console.log(h);
     let newtab = await chrome.tabs.create({url: h.url});
@@ -149,7 +162,11 @@ document.getElementById("save-button").addEventListener("click", () => {
 
 document.getElementById("save-notebook-button").addEventListener("click", () => {
     saveNotebook()
- })
+})
+
+document.getElementById("open-notes").addEventListener("click", ()=>{
+    open_notes()
+})
 
 
 document.addEventListener('DOMContentLoaded', function() {

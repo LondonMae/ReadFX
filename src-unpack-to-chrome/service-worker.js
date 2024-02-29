@@ -139,6 +139,12 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
     });
     // mark loaded flag
     loaded = true;
+
+  chrome.storage.local.get(["notes"]).then((result)=>{
+    let updated_notes = result.notes
+
+    chrome.runtime.sendMessage({name: 'display-notes', data: updated_notes})
+  })
   }
 
   // when initial text loaded in sidepanel
