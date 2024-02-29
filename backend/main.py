@@ -4,6 +4,7 @@ from transformers import BartTokenizerFast, T5ForConditionalGeneration, BartForC
 from rake_nltk import Rake # to identify keywords
 from keyphrase_vectorizers import KeyphraseCountVectorizer
 from keybert import KeyBERT
+import nltk
 
 # tokenize the highlighted text
 # https://huggingface.co/docs/transformers/v4.37.2/en/model_doc/bart#transformers.BartTokenizer
@@ -16,6 +17,10 @@ app = Flask(__name__)
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 print(device)
 
+def keyword_init():
+    nltk.download('stopwords')
+    nltk.download('punkt')
+    print("download word db")
 
 def summarize(data):
     ARTICLE = data
@@ -93,4 +98,5 @@ if __name__ == "__main__":
     # Used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This
     # can be configured by adding an `entrypoint` to app.yaml.
+    keyword_init()
     app.run(host = "0.0.0.0", port=8000, debug=True)
