@@ -13,13 +13,52 @@
 
 *{
     font-family: var(--font);
-    transition: 0.1s ease-out;
+    transition: 0.5s cubic-bezier(.13,.99,.13,.99);
     font-size: 24px;
+}
+
+html{
+    padding:0px;
 }
 
 body {
     background-color: var(--bg);
     color: var(--text-color);
+    display: flex;
+    flex-direction: row;
+    margin: 0px;
+}
+
+.sidebar{
+    background-color: var(--primary);
+    padding:0.2em 0.5em 0.2em 0.5em;
+    margin-right:0.5em;
+    width: fit-content;
+}
+
+.notelink{
+    background: var(--secondary);
+    padding:0.5em 0.5em 0.5em 0.5em;
+    margin:0.4em 0 0.4em 0;
+    border-radius: 0.5em;
+    text-align: center;
+    text-overflow: ellipsis;
+}
+
+.notelink:hover{
+    filter: brightness(1.1);
+    cursor:pointer;
+    transform: translate(0,-3px);
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,0.02);
+}
+
+.sidebar-open{
+    min-width: 10em;
+    width:fit-content;
+}
+.sidebar-closed{
+    min-width: 0px;
+    width: 2em;
 }
 
 .notes_title{
@@ -55,6 +94,7 @@ body {
     padding: 0 1em 0 1em; /* top, right, bottom, left */
     max-width:40em;
     margin:auto;
+    margin-top: 1em;
 }
 
 .tool-button {
