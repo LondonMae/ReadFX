@@ -5,15 +5,15 @@ let loaded = false; // is side panel loaded?
 
 // requests to Flask server
 async function sendDataToServer(selectedText, test) {
-  var serverEndpoint = "http://127.0.0.1:8000/api/"
+  var serverEndpoint = "http://127.0.0.1:8000/v0/"
 
   // summarize text
   if (test == "summarize") {
-       serverEndpoint += 'get_wiki_summary/';
+       serverEndpoint += 'summary';
   }
   // extract keywords
   else if (test == "keywords") {
-       serverEndpoint += 'get_wiki_keywords/';
+       serverEndpoint += 'keywords';
   }
 
   // POST request data as JSON
@@ -37,11 +37,15 @@ function sleep(ms) {
 
 // regex formatting
 function stripHTML(x){
-    x = x.replace(/[^\x00-\x7F]/g, "")
+    x = x.replace(/[^\x00-\x7F]/g, " ")
     x = x.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "\n").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "\n")
     var t = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gi;
-    x = x.replace(t, "")
+    x = x.replace(t, " ")
     x = x.replace(t, '<a href="$&">$&</a>')
+    x = x.replace(/\s*\(.*?\)\s*/g, " ")
+    x = x.replace(/\s*\[.*?\]\s*/g, " ")
+    x = x.replace(/-/g, " ")
+    console.log(x)
     return x
 }
 

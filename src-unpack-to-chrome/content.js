@@ -1,13 +1,17 @@
 var doc = ""
 var test = [document.getElementsByTagName('p'),
-// document.getElementsByTagName('span')
+document.getElementsByTagName('blockquote')
 ]
+
+// console.log(test[1].length);
 // test.append(document.getElementsByTagName('span'))
 for (thing of test) {
   for (t of thing) {
-    doc += t.innerText
+    doc += t.innerText + "\n"
   }
 }
+
+
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -15,25 +19,11 @@ function sleep(ms) {
 
 async function bold_text(word, text_elements) {
 
-  words = word.split("/")
+  words = word.split(".")
   if (words.length < 2) {
     return
   }
-  // catch errors
 
-  //text_elements = document.getElementsByTagName('p') + document.getElementsByTagName('span')
-  // text_elements = [
-  //   document.getElementsByTagName('p'),
-  //   // document.getElementsByTagName('h1'),
-  //   // document.getElementsByTagName('h2'),
-  //   // document.getElementsByTagName('h3'),
-  //   // document.getElementsByTagName('h4'),
-  //   // document.getElementsByTagName('h5'),
-  //   // document.getElementsByTagName('span')
-  //   //document.getElementsByTagName('div')
-  // ]
-
-  // console.log(wordlist.length)
 
       for (ele of text_elements) {
         for(p of ele){
