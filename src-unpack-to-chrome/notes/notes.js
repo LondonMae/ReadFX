@@ -22,6 +22,7 @@ const saveOptions = () => {
       }, 750);
     })
   });
+  update_noteslist()
 };
 
 // Switch notes
@@ -45,14 +46,14 @@ let note_tab_temp = `
 const deletenote = (title)=>{
   console.log("delete"+ title )
   chrome.storage.local.get("notes").then(
-    (items) => {
+  (items) => {
       let selected_note = items["notes"][title];
+      console.log(items)
       delete items["notes"][title]
-      chrome.storage.local.set("notes": items)
+      chrome.storage.local.set({notes: items["notes"]} )
       update_noteslist()
     }
   );
-
 }
 
 const update_noteslist = ()=>{
