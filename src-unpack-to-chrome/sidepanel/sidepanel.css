@@ -106,6 +106,13 @@ textarea{
 }
 
 
+.delete-button{
+    background: var(--highlight);
+    border:none;
+    border-radius: 0.2em;
+    width:1em;
+    color: var(--text-color);
+}
 
 
 

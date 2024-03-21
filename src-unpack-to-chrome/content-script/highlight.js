@@ -243,9 +243,10 @@ async function jump_to_highlights(h){
 }
 
 function construct_range(highlights){
-  highlights.forEach((h)=>{
+  highlights[window.location.href.hashCode()].forEach((h)=>{
+  //highlights.forEach((h)=>{
     console.log(h.url, window.location.href)
-    if(h.url == window.location.href){
+    //if(h.url == window.location.href){
       console.log(h.url)
       let range = document.createRange()
       let headele = document.querySelector(h.headnode)
@@ -278,7 +279,7 @@ function construct_range(highlights){
       }    
       selection.addRange(range)
       highlight_all()  
-    }
+  //  }
     
     
   })
