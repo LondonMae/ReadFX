@@ -1,5 +1,8 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
+import NotesField from './components/NotesField.vue'
+import Editor from 'primevue/editor';
+
 </script>
 
 <template>
@@ -7,11 +10,11 @@ import HelloWorld from './components/HelloWorld.vue'
     <a href="https://vitejs.dev" target="_blank">
       <img src="./assets/logo.png" class="logo" alt="Readfx logo" />
     </a>
-    <!-- <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a> -->
   </div>
   <HelloWorld msg="Component base" />
+  <NotesField msg="Notes base" />
+  <Editor v-model="value" editorStyle="height: 320px" />
+
 </template>
 
 <style scoped>

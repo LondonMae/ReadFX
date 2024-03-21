@@ -8,7 +8,7 @@ export default defineConfig({
     vue(),
     VitePWA({
       manifest: {
-        name: "Vite + Vue PWA project",
+        name: "Readfx PWA app",
         short_name: "Vue PWA",
         theme_color: "#ffffff",
         start_url: "/",
@@ -16,7 +16,7 @@ export default defineConfig({
         background_color: "#ffffff",
         icons: [
           {
-              "src": "vite.svg",
+              "src": "logo.png",
               "sizes": "any",
               "type": "image/svg+xml",
               "purpose": "maskable any"

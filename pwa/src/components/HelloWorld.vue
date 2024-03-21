@@ -22,7 +22,7 @@ const count = ref(0)
   <p>
     
     <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >Source-vue</a
+      >Source</a
     > Readfx: readabilty companion app
   </p>
   <!-- <p>
