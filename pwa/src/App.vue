@@ -2,6 +2,10 @@
 import HelloWorld from './components/HelloWorld.vue'
 import NotesField from './components/NotesField.vue'
 import Editor from 'primevue/editor';
+// import SelectButton from 'primevue/selectbutton';
+
+
+
 
 </script>
 
@@ -11,9 +15,14 @@ import Editor from 'primevue/editor';
       <img src="./assets/logo.png" class="logo" alt="Readfx logo" />
     </a>
   </div>
+  <b>Added items options</b>
+  <SelectButton v-model="value" :options="options" optionLabel="name" multiple aria-labelledby="multiple" />
   <HelloWorld msg="Component base" />
   <NotesField msg="Notes base" />
   <Editor v-model="value" editorStyle="height: 320px" />
+
+
+
 
 </template>
 
@@ -24,6 +33,7 @@ import Editor from 'primevue/editor';
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }

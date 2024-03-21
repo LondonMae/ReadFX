@@ -1,3 +1,5 @@
+import {Button} from 'primevue/button';
+
 <!-- <script setup>
 import { ref } from 'vue'
 
@@ -19,18 +21,18 @@ const count = ref(0)
     </p>
   </div> -->
 
+
+
   <p>
-    
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >Source</a
-    > Readfx: readabilty companion app
+    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank">Source</a> Readfx: readabilty companion app
+    <button type="button" onclick="alert('Hello world!')">Sync Notes!</button>
+
+    <!-- <button class="btn">
+      <template>Save</template>
+    </button> -->
+
+
   </p>
-  <!-- <p>
-    Install
-    <a href="https://github.com/vuejs/language-tools" target="_blank">Volar</a>
-    in your IDE for a better DX
-  </p> -->
-  <p class="read-the-docs">Click on the Readfx logos to learn more</p>
 </template>
 
 <style scoped>
