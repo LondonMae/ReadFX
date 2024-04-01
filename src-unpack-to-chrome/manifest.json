@@ -19,6 +19,7 @@
     "content_scripts": [
         {
             "matches": ["*://*/*"],
+            "exclude_matches": ["https://docs.google.com/*", "*://google.com/*"],
             "css": ["content-script/style.css"],
             "js": ["content-script/highlight.js", "content-script/content.js", "content-script/path.js"],
             "run_at": "document_end"  
