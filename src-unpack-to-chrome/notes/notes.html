@@ -5,8 +5,14 @@
   </head>
 
   <body>
+    <div class="sidebar sidebar-open">
+      <button class="tool-button" id="toggle-button"><</button>
+      <button class="tool-button" id="add-note-button">+</button>
+      <div id="notes-container"></div>
+
+    </div>
     <div class="parent_block">
-        <textarea class="notes_title">Notes</textarea>
+        <div class="notes_title" contenteditable>Notes</div>
         <div class="notes_body" contentEditable>Summarized Text</div>
         <div class="button_container">
             <button class="tool-button" id="copy-button">Copy</button>

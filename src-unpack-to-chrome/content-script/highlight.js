@@ -25,6 +25,17 @@ window.addEventListener("keydown", (e)=>{
     }
 })
 
+String.prototype.hashCode = function() {
+  var hash = 0,
+    i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr = this.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return Math.abs(hash).toString(16);
+}
 
 chrome.runtime.onMessage.addListener(({ name, data }) => {
   if(name === 'show_highlights'){
@@ -74,8 +85,11 @@ window.addEventListener("mouseup", (e)=>{
         name: 'highlight_text',
         data: highlight
       })
-
-      construct_range([highlight])
+      
+      let key = window.location.href.hashCode()
+      let data = {}
+      data[key] = [highlight]
+      construct_range(data)
     }
 
     if (document.getElementsByClassName('readfxpopup').length > 0){
@@ -171,7 +185,7 @@ function save_range(range){
         nodeindex = i  
       }
     }
-    highlight.nodeindex = nodeindex
+    highlight.hnodeindex = nodeindex
     highlight.text = range.startContainer.data.substring(highlight.headindex)
   }
   if (highlight.tailtype == 3){
@@ -182,7 +196,7 @@ function save_range(range){
         nodeindex = i  
       }
     }
-    highlight.nodeindex = nodeindex
+    highlight.tnodeindex = nodeindex
     highlight.tailnode = jsPath(range.endContainer.parentElement)
   }
     
@@ -216,36 +230,41 @@ function highlight_all(){
   highlight_text_node(anchor, startindex, -1)
   highlight_text_node(extent, 0, endindex)
 
-  if(range.startContainer.nextSibling == null){
-    range.setStartAfter(range.startContainer.parentElement.nextElementSibling)    
-    range.setEndBefore(range.endContainer.parentElement.previousElementSibling)    
-  }else{
-    range.setStartAfter(range.startContainer.nextSibling)
-    range.setEndBefore(range.endContainer.previousSibling)
-  }
-  fullnodes = range.extractContents().querySelectorAll('*');
+  range.setStart(range.startContainer, range.startOffset + 2)
+  
+  fullnodes = range.extractContents().childNodes
   head = fullnodes.item(0).cloneNode();
   tail = fullnodes.item(fullnodes.length - 1).cloneNode();
   parentnode = document.createDocumentFragment();
-  for (let i = 0; i < fullnodes.length; i++){
-    fullnodes.item(i).innerHTML = "<mark>" + fullnodes.item(i).innerHTML + "</mark>"
+  let i = 0;
+  while (fullnodes.length > i){
+    if(fullnodes.item(i).innerHTML == undefined){
+      let hi = document.createElement("highlight-tag")
+      hi.innerHTML = fullnodes.item(i).data
+      parentnode.appendChild(hi)
+      i++
+      continue
+    }
+    fullnodes.item(i).innerHTML = "<highlight-tag>" + fullnodes.item(i).innerHTML + " </highlight-tag>"
     console.log(fullnodes.item(i))
-    parentnode.appendChild(fullnodes.item(i))    
+    parentnode.appendChild(fullnodes.item(i))
   }
   range.insertNode(parentnode)
 }
 
 async function jump_to_highlights(h){
   let headele = document.querySelector(h.headnode)
-  construct_range([h])
+  // let data = {}
+  // data[h.url.hashCode()] = [h]
+  // construct_range(data)
   //await window.open(h.url, "_blank")
   headele.scrollIntoView()
 }
 
 function construct_range(highlights){
-  highlights.forEach((h)=>{
+  console.log(highlights)
+  for(let h of highlights[window.location.href.hashCode()]){
     console.log(h.url, window.location.href)
-    if(h.url == window.location.href){
       console.log(h.url)
       let range = document.createRange()
       let headele = document.querySelector(h.headnode)
@@ -255,7 +274,7 @@ function construct_range(highlights){
       console.log(h.headindex, h.tailindex)
       if (h.headtype == 3){
         try {
-          range.setStart(headele.childNodes[h.nodeindex], h.headindex)
+          range.setStart(headele.childNodes[h.hnodeindex], h.headindex)
         } catch (e) {
           console.log(headele)
           console.log(h)
@@ -267,7 +286,12 @@ function construct_range(highlights){
         range.setStart(headele, h.headindex)
       }
       if (h.tailtype == 3){
-        range.setEnd(tailele.childNodes[h.nodeindex], h.tailindex)
+        try {
+          range.setEnd(tailele.childNodes[h.tnodeindex], h.tailindex)
+        }
+        catch(e){
+
+        }
       }else{
       range.setEnd(tailele, h.tailindex)
 
@@ -278,9 +302,14 @@ function construct_range(highlights){
       }    
       selection.addRange(range)
       highlight_all()  
-    }
+  //  }
     
     
-  })
+  }
 }
 
+
+function changeHighlightColor(){
+    var r = document.querySelector(':root');
+    r.style.setProperty('--highlight-color', "#0000ff")
+}

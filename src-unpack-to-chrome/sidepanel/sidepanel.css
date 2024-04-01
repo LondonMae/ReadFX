@@ -12,7 +12,7 @@
 }
 
 *{
-    font-family: var(--font);
+    font-family: var(--font) sans-serif;
     transition: 0.1s ease-out;
 }
 
@@ -85,6 +85,13 @@ textarea{
     border-radius:  var(--b-radius); /* Rounded borders */
 }
 
+.tool-button:hover{
+    cursor: pointer;
+    transform:translate(0,-2px) scale(1.04);
+    box-shadow: 0 5px 5px 0 rgba(0,0,0,0.02);
+}
+
+
 #highlight-links{
 
 }
@@ -106,6 +113,13 @@ textarea{
 }
 
 
+.delete-button{
+    background: var(--highlight);
+    border:none;
+    border-radius: 0.2em;
+    width:1em;
+    color: var(--text-color);
+}
 
 
 

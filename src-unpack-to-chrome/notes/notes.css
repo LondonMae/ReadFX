@@ -12,14 +12,72 @@
 }
 
 *{
-    font-family: var(--font);
-    transition: 0.1s ease-out;
+    font-family: var(--font) "Gloock" sans-serif;
+    transition: 0.5s cubic-bezier(.13,.99,.13,.99);
     font-size: 24px;
+}
+
+html{
+    padding:0px;
 }
 
 body {
     background-color: var(--bg);
     color: var(--text-color);
+    display: flex;
+    flex-direction: row;
+    margin: 0px;
+}
+
+.sidebar{
+    background-color: var(--primary);
+    padding:0.2em 0.5em 0.2em 0.5em;
+    margin-right:0px;
+    width: fit-content;
+}
+
+.notelink{
+    background: var(--secondary);
+    padding:0.5em 0.5em 0.5em 0.5em;
+    margin:0.4em 0 0.4em 0;
+    border-radius: 0.5em;
+    text-align: center;
+    text-overflow: ellipsis;
+    display: flex;
+    justify-content: space-between;
+}
+
+.notelink:hover{
+    filter: brightness(1.1);
+    cursor:pointer;
+    transform: translate(0,-3px);
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,0.02);
+}
+
+.sidebar-open{
+    min-width: 10em;
+    width:fit-content;
+}
+.sidebar-closed{
+    min-width: 0px;
+    width: 2em;
+}
+
+.notelink{
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.delete-button{
+    background: var(--highlight);
+    border:none;
+    border-radius: 0.2em;
+    width:1em;
+    color: var(--text-color);
+}
+
+.delete-button:hover{
+    border-radius: 1em;
 }
 
 .notes_title{
@@ -54,7 +112,9 @@ body {
     border-radius:  var(--b-radius);
     padding: 0 1em 0 1em; /* top, right, bottom, left */
     max-width:40em;
-    margin:auto;
+    width: 90%;
+    margin:1em;
+    margin-top: 1em;
 }
 
 .tool-button {
@@ -70,6 +130,11 @@ body {
     cursor: pointer;
     border-radius:  var(--b-radius); /* Rounded borders */
 }
+
+.tool-button:hover{
+    filter: brightness(1.1);
+}
+
 .highlight-link {
     padding:1em;
     height:3em;
@@ -86,6 +151,21 @@ body {
     box-shadow: 0 5px 5px 0 rgba(0,0,0,0.02);
 }
 
+
+.link{
+    background: var(--secondary);
+    border-radius: 0.25em;
+    display: flex;
+    padding: 0.4em;
+    box-shadow: 0 0.5em 1.5em rgba(20,40,10,0.4);
+    width:max-content;
+}
+
+.link:hover{
+    filter: brightness(1.1);
+    background: var(--highlight);
+    cursor: pointer;
+}
 
 
 
