@@ -85,6 +85,13 @@ textarea{
     border-radius:  var(--b-radius); /* Rounded borders */
 }
 
+.tool-button:hover{
+    cursor: pointer;
+    transform:translate(0,-2px) scale(1.04);
+    box-shadow: 0 5px 5px 0 rgba(0,0,0,0.02);
+}
+
+
 #highlight-links{
 
 }

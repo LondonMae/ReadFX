@@ -1,5 +1,6 @@
 :root{
   --highlight-color:#ffff00;
+  --hightlight-text: black;
 
 }
 .readfxpopup{
@@ -32,6 +33,11 @@ label:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
-highlight-tag{
+highlight-tag {
+  color: var(--highlight-text);
+  background-color: var(--highlight-color);
+}
+highlight-tag > *{
+  color: var(--highlight-text);
   background-color: var(--highlight-color);
 }
