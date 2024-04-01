@@ -2,6 +2,18 @@
 let tabdata = "" // selected text
 let loaded = false; // is side panel loaded?
 
+String.prototype.hashCode = function() {
+  var hash = 0,
+    i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr = this.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return Math.abs(hash).toString(16);
+}
+
 
 // requests to Flask server
 async function sendDataToServer(selectedText, test) {
@@ -224,15 +236,18 @@ function writeNotes(text){
 
 function saveHighlight(highlight){
   chrome.storage.local.get(["highlights"]).then((result)=>{
-    console.log(result.highlights)
     let new_highlights = result.highlights
-    new_highlights.push(highlight)
+    let key = highlight.url.hashCode();
+    console.log(key);
+    if (new_highlights[key] == undefined) {new_highlights[key] = []}
+    new_highlights[key].push(highlight);
+
     chrome.storage.local.set({highlights: new_highlights})
   })
 }
 
 function clear_all_highlights(){
-  chrome.storage.local.set({highlights:[]})
+  chrome.storage.local.set({highlights:{}})
 }
 // when sidepanel closed set flag to false
 chrome.runtime.onConnect.addListener(function (port) {
