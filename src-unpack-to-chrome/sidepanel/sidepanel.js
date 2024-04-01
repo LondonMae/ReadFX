@@ -4,11 +4,11 @@ chrome.runtime.connect({ name: 'mySidepanel' });
 
 let current_theme = 0;
 const palettes = {
-    "purpl":    ["51344d","6f5060","a78682","e7ebc5","ffffff"],
-    "default": ["57614e","6a755f","8a977c","fcc0d2","ffffff"],
-    "frutiger":   ["cde7b0","a3bfa8","E4DFC8","222823","08090a"],
-    "dark":   ["020202", "222222","312d2e","dabaff","ffffff"],
-    "flag": ["2d3142","4f5d75","bfc0c0","ef8354","ffffff"]
+    "purpl":    ["51344d","6f5060","a78682","e7ebc5","ffffff", "000000"],
+    "default": ["57614e","6a755f","8a977c","c59ca8","ffffff", "ffffff"],
+    "frutiger":   ["cde7b0","a3bfa8","E4DFC8","222823","08090a", "ffffff"],
+    "dark":   ["020202", "222222","312d2e","dabaff","ffffff", "000000"],
+    "flag": ["2d3142","4f5d75","bfc0c0","ef8354","ffffff", "ffffff"]
 }
 
 function toggleTheme() {
@@ -21,6 +21,7 @@ function toggleTheme() {
     r.style.setProperty('--secondary', theme[2])
     r.style.setProperty('--highlight', theme[3])
     r.style.setProperty('--text-color', theme[4])
+    r.style.setProperty('--text-color-h', theme[5])
     document.getElementById("current-theme").innerText = Object.keys(palettes)[current_theme]
 }
 
@@ -42,6 +43,59 @@ function saveText(){
 
 }
 
+
+async function open_notes(){
+    let newtab = await chrome.tabs.create({url: "chrome-extension://mjcpkcdfdbkepngmafjhgcfffnhhkejm/notes/notes.html"});
+    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+        // make sure the status is 'complete' and it's the right tab
+        if (tabId == newtab.id && changeInfo.status == 'complete') {
+            let response = chrome.tabs.sendMessage(newtab.id, { name: 'open_notes'});
+        }
+    });
+}
+
+
+async function jump_to_highlight(h){
+    console.log(h);
+    let newtab = await chrome.tabs.create({url: h.url});
+    console.log(newtab)
+    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+        // make sure the status is 'complete' and it's the right tab
+        console.log(tabId)
+        console.log(newtab.id)    
+        if (tabId == newtab.id && changeInfo.status == 'complete') {
+            let response = chrome.tabs.sendMessage(newtab.id, { name: 'jump_to_highlights', data: h});
+        }
+    });
+}
+
+function showHighlights(){
+    console.log("show highlights")
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        // Send a message to the content script in the active tab
+        chrome.storage.local.get(["highlights"]).then((result)=>{
+            chrome.tabs.sendMessage(tabs[0].id, { name: 'show_highlights', data: result.highlights});
+        })
+    });
+}
+
+function listHighlights(){
+
+    chrome.storage.local.get(["highlights"]).then((result)=>{
+
+        result.highlights.map((h)=>{
+            let link_ele = document.createElement('div');
+            const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
+            link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<br>" + h.text;
+            link_ele.classList.add('highlight-link');
+            link_ele.addEventListener('click', ()=>{
+                jump_to_highlight(h)
+            })
+            document.getElementById("highlight-links").appendChild(link_ele)
+
+        })
+    })
+}
 
 function saveNotebook(){
     chrome.runtime.sendMessage({
@@ -85,6 +139,13 @@ document.getElementById("bold-button").addEventListener("click", () => {
     document.getElementById("bold-word").value = ""
 })
 
+document.getElementById("highlight-button").addEventListener("click", () => {
+    showHighlights()
+ })
+
+ document.getElementById("list-highlights-button").addEventListener("click", () => {
+    listHighlights()
+ })
 
 document.getElementById("change-theme-button").addEventListener("click", () => {
    toggleTheme()
@@ -101,7 +162,11 @@ document.getElementById("save-button").addEventListener("click", () => {
 
 document.getElementById("save-notebook-button").addEventListener("click", () => {
     saveNotebook()
- })
+})
+
+document.getElementById("open-notes").addEventListener("click", ()=>{
+    open_notes()
+})
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -140,25 +205,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
 chrome.runtime.onMessage.addListener(({ name, data }) => {
     if (name === 'summarize-sentence') {
-        console.log("hi bestie")
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            const tab = tabs[0];
-            function parseSentence() {
-                var selection = window.getSelection().toString();
-                console.log(selection);
-                return selection;
-            }
-            chrome.scripting.executeScript({
-                target: { tabId: tab.id },
-                func: parseSentence,
-                //        files: ['contentScript.js'],  // To call external file instead
-            }).then(selectedText => {
-                console.log('Injected a function!');
-                console.log(selectedText)
-                document.getElementById("select-a-word").value = data.value;
-            });
+        console.log("summarized text gotten")
+        document.getElementById("select-a-word").value = data.value;
 
-        });
+        console.log("hi bestie")
+        // chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        //     const tab = tabs[0];
+        //     function parseSentence() {
+        //         var selection = window.getSelection().toString();
+        //         console.log(selection);
+        //         return selection;
+        //     }
+        //     chrome.scripting.executeScript({
+        //         target: { tabId: tab.id },
+        //         func: parseSentence,
+        //         //        files: ['contentScript.js'],  // To call external file instead
+        //     }).then(selectedText => {
+        //         console.log('Injected a function!');
+        //         console.log(selectedText)
+        //         document.getElementById("select-a-word").value = data.value;
+        //     });
+
+        // });
 
     }
 

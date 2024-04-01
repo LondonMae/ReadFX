@@ -14,6 +14,7 @@
 *{
     font-family: var(--font);
     transition: 0.1s ease-out;
+    font-size: 24px;
 }
 
 body {
@@ -21,74 +22,54 @@ body {
     color: var(--text-color);
 }
 
-hr{
-    border: 1px solid var(--highlight);
-    color: var(--highlight);
-}
-
-.read-button {
-    color: var(--highlight);
-    background-color: var(--primary);
-    border: none;
-    padding-left: 150px;
-    padding-right: 150px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    text-align: center;
-    text-decoration: none;
-    display: block; /* Change display to block */
-    font-size: 16px;
-    margin: 0 auto; /* Center the button horizontally */
-    cursor: pointer;
-    border-radius: var(--b-radius);
-    margin-bottom: 20px;
-}
-
-textarea{
+.notes_title{
+    font-weight:600;
+    font-size:3em;
     color: var(--text-color);
+    background-color: var(--primary);
+    overflow:hidden;
+    resize:none;
+    border: none;
+    outline: none;
+    padding:1em 0 0 0 ;
+}
+
+.notes_body{
+    color: var(--text-color);
+    font-size: 1em;
     background-color: var(--secondary);
-    width:100%;
+    min-height:10em;
     scrollbar-color: var(--bg);
     border-radius:  var(--b-radius);
-    border: 0;
+    overflow-y:auto;
+    word-wrap:break-word;
+    resize:none;
+    border: none;
+    outline: none;
     padding:1em;
-}
-#select-a-word{
-    height:10em;
 }
 
 .parent_block{
-    margin-bottom: 40px;
     background-color: var(--primary); 
     border-radius:  var(--b-radius);
-    padding: 20px 50px 50px 15px; /* top, right, bottom, left */
-}
-
-#buttons-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 20px;
+    padding: 0 1em 0 1em; /* top, right, bottom, left */
+    max-width:40em;
+    margin:auto;
 }
 
 .tool-button {
     background-color: var(--highlight); /* Green background color */
     border: none;
     color: var(--text-color-h); /* Text color */
-    padding: 10px 20px; /* Padding for the buttons */
+    padding: 0.75em 1em;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    margin: 5px 0;
+    font-size: 0.75em;
+    margin: 0.5em 0;
     cursor: pointer;
     border-radius:  var(--b-radius); /* Rounded borders */
 }
-
-#highlight-links{
-
-}
-
 .highlight-link {
     padding:1em;
     height:3em;
