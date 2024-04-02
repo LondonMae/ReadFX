@@ -15,7 +15,7 @@ import Editor from 'primevue/editor';
       <img src="./assets/logo.png" class="logo" alt="Readfx logo" />
     </a>
   </div>
-  <b>Added items options</b>
+  <!-- <b>Added items options</b> -->
   <SelectButton v-model="value" :options="options" optionLabel="name" multiple aria-labelledby="multiple" />
   <HelloWorld msg="Component base" />
   <NotesField msg="Notes base" />
