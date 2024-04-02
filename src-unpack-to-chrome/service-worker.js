@@ -94,7 +94,7 @@ chrome.contextMenus.onClicked.addListener(async(data, tab) => {
     //first open the side panel, wait for promise
     chrome.sidePanel.open({ windowId: tab.windowId });
     tabdata = stripHTML(data.selectionText);
-    
+
     // send selected text to sidepanel if loaded
     if (loaded == true){
       chrome.runtime.sendMessage({
@@ -128,7 +128,7 @@ function get_highlights(highlights){
       console.log(h.headindex, h.tailindex)
       range.setStart(ele.childNodes[0], h.headindex)
       range.setEnd(ele.childNodes[0], h.tailindex)
-      
+
 
       selection = window.getSelection()
       selection.addRange(range)
@@ -138,7 +138,7 @@ function get_highlights(highlights){
 
       re = "(" + txt + ")"
       re = new RegExp(re)
-      highlight.query = jsPath(ele) 
+      highlight.query = jsPath(ele)
       ele.innerHTML = ele.innerHTML.replace(re, "<mark>$1</mark>")
     }
   })
@@ -199,12 +199,12 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
   }
   if(name === 'show_highlights'){
     console.log("show highlights")
-   
+
 
     // chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     //   chrome.storage.local.get(["highlights"]).then((result)=>{
     //     //sconsole.log(result.highlights)
-        
+
     //     chrome.scripting.executeScript({
     //       target: { tabId: tabs[0].id },
     //       func: get_highlights,
@@ -212,7 +212,7 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
     //     });
 
     //   });
-    // }); 
+    // });
   }
 });
 

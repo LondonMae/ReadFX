@@ -21,7 +21,7 @@ function sleep(ms) {
 
 async function bold_text(word, text_elements) {
 
-  words = word.split(".")
+  words = word.split("/")
   if (words.length < 2) {
     return
   }

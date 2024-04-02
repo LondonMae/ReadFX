@@ -6,6 +6,9 @@ from rake_nltk import Rake # to identify keywords
 from keybert import KeyBERT
 import nltk
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 # tokenize the highlighted text
 # https://huggingface.co/docs/transformers/v4.37.2/en/model_doc/bart#transformers.BartTokenizer
 tokenizer=BartTokenizer.from_pretrained('facebook/bart-large-cnn')

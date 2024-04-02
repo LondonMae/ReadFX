@@ -5,28 +5,16 @@
   </head>
 
   <body>
+    <div id = "bg"></div>
     <button class="read-button" id="read-button">READ</button>
 
     <div id="NotesFx"  class="parent_block">
 
-      <div> <h3>Style of the Text Changes with the drop down</h3> </div>
-      <div id="output-text">
-        Hi Guys, Welcome to Javascript Program
-      </div>
-      <div>
-        <select id="input-font" class="input" >
-          <option value="Times-new-roman">Times New Roman</option>
-          <option value="Berlin-sans-fb">Berlin Sans FB</option>
-          <option value="bold" class="bolder">Tebal</option>
-        </select>
-      </div>
 
-      <h1>Notes</h1>
-      <hr />
-      <textarea id="select-a-word">Summarized Text</textarea>
-      <button class="tool-button" id="copy-button">Copy</button>
-      <button class="tool-button" id="save-button">Save to notebook!</button>
-      <button class="tool-button" id="open-notes">Open Notes!</button>
+      <h1>Summarize</h1>
+      <textarea id="select-a-word">Highlight text on the page to use the summarization tool. Your summary will appear here.</textarea>
+      <button class="tool-button" id="copy-button">copy</button>
+      <button class="tool-button" id="save-button">save to notebook</button>
       <div>
         <h2 id="definition-word"></h2>
         <p id="definition-text"></p>
@@ -35,14 +23,20 @@
 
     <div id="ToolsFx" class="parent_block">
       <h1>Tools</h1>
-      <hr />
+
       <div>Text analysis tools</p>
         <div id="buttons-container">
           <button class="tool-button" id="bold-button">Bold Keywords</button>
-          <input id="bold-word" value="bold me">
-          <button class="tool-button" id="space-out-button">Space out Sentences</button>
           <button class="tool-button" id="change-font-button">Change Font</button>
+          <div>
+            <select id="input-font" class="input" >
+              <option value="Times-new-roman">Times New Roman</option>
+              <option value="Berlin-sans-fb">Berlin Sans FB</option>
+              <option value="bold" class="bolder">Tebal</option>
+            </select>
+          </div>
           <button class="tool-button" id="highlight-button">Show Highlights</button>
+            <button class="tool-button" id="space-out-button">Space out Sentences</button>
           <button class="tool-button" id="change-theme-button">Change Theme</button>
           <div id="current-theme"> default </div>
         </div>
@@ -54,10 +48,11 @@
       <hr />
       <textarea id="notebook">your notes!</textarea>
       <button class="tool-button" id="save-notebook-button">Save</button>
+      <button class="tool-button" id="open-notes">Open Notes!</button>
 
     </div>
 
-    
+
     <div id="LinksFx"  class="parent_block">
       <h1>Links</h1>
       <hr />
