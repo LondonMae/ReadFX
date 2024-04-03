@@ -2,11 +2,11 @@
 
 let current_theme = 0;
 const palettes = {
-    "purpl":    ["51344d","6f5060","a78682","e7ebc5","ffffff"],
-    "default": ["57614e","6a755f","8a977c","fcc0d2","ffffff"],
-    "frutiger":   ["cde7b0","a3bfa8","E4DFC8","222823","08090a"],
-    "dark":   ["020202", "222222","312d2e","dabaff","ffffff"],
-    "flag": ["2d3142","4f5d75","bfc0c0","ef8354","ffffff"]
+    "purpl": ["51344d", "6f5060", "a78682", "e7ebc5", "ffffff"],
+    "default": ["57614e", "6a755f", "8a977c", "fcc0d2", "ffffff"],
+    "frutiger": ["cde7b0", "a3bfa8", "E4DFC8", "222823", "08090a"],
+    "dark": ["020202", "222222", "312d2e", "dabaff", "ffffff"],
+    "flag": ["2d3142", "4f5d75", "bfc0c0", "ef8354", "ffffff"]
 }
 
 function toggleTheme() {
@@ -22,7 +22,7 @@ function toggleTheme() {
     document.getElementById("current-theme").innerText = Object.keys(palettes)[current_theme]
 }
 
-function copyText(){
+function copyText() {
     var copyText = document.getElementById("select-a-word");
     // Select the text field
     copyText.select();
@@ -32,7 +32,7 @@ function copyText(){
     navigator.clipboard.writeText(copyText.value);
 }
 
-function saveText(){
+function saveText() {
     chrome.runtime.sendMessage({
         name: 'save',
         data: document.getElementById("select-a-word").value
@@ -40,8 +40,7 @@ function saveText(){
 
 }
 
-
-function saveNotebook(){
+function saveNotebook() {
     chrome.runtime.sendMessage({
         name: 'write_notebook',
         data: document.getElementById("notebook").value
@@ -50,6 +49,20 @@ function saveNotebook(){
 }
 
 // Local event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    var openReadingModeButton = document.getElementById('open-reading-mode-button');
+    openReadingModeButton.addEventListener('click', function() {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            var activeTab = tabs[0];
+            var url = activeTab.url;
+
+            // Open a new tab with the bare HTML version of the URL
+            var newUrl = 'view-source:' + url;
+            chrome.tabs.create({url: newUrl});
+        });
+    });
+});
+
 
 document.getElementById("read-button").addEventListener("click", () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -74,65 +87,65 @@ document.getElementById("read-button").addEventListener("click", () => {
     });
 });
 
-document.getElementById("bold-button").addEventListener("click", () => {
-    chrome.runtime.sendMessage({
-        name: 'bold_text',
-        data: { value: document.getElementById("bold-word").value }
+    document.getElementById("bold-button").addEventListener("click", () => {
+        chrome.runtime.sendMessage({
+            name: 'bold_text',
+            data: { value: document.getElementById("bold-word").value }
+        })
+
+        document.getElementById("bold-word").value = ""
     })
 
-    document.getElementById("bold-word").value = ""
-})
+
+    document.getElementById("change-theme-button").addEventListener("click", () => {
+        toggleTheme()
+    })
+
+    document.getElementById("copy-button").addEventListener("click", () => {
+        copyText()
+    })
+
+    document.getElementById("save-button").addEventListener("click", () => {
+        saveText()
+    })
 
 
-document.getElementById("change-theme-button").addEventListener("click", () => {
-   toggleTheme()
-})
-
-document.getElementById("copy-button").addEventListener("click", () => {
-    copyText()
- })
-
-document.getElementById("save-button").addEventListener("click", () => {
-    saveText()
- })
+    document.getElementById("save-notebook-button").addEventListener("click", () => {
+        saveNotebook()
+    })
 
 
-document.getElementById("save-notebook-button").addEventListener("click", () => {
-    saveNotebook()
- })
 
-
-document.addEventListener('DOMContentLoaded', function() {
 
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const fonts = document.getElementById('input-font');
+        const fonts = document.getElementById('input-font');
 
-    function changingFont (font) {
-        console.log('Current font is: ' + font);
-        console.log(fontstyle.value);
-        console.log(document.getElementById('output-text'));
-        document.getElementById('output-text').className = 'text-center ' + font;
-        return;
-    }
+        function changingFont(font) {
+            console.log('Current font is: ' + font);
+            console.log(fontstyle.value);
+            console.log(document.getElementById('output-text'));
+            document.getElementById('output-text').className = 'text-center ' + font;
+            return;
+        }
 
-    fonts.addEventListener('change', (e) => {
-        console.log('Font change invoked');
-        console.log(`e.target.value = ${e.target.value}`);
-        selectedFont =  e.target.value;
-        console.log(selectedFont);
-    const tab = tabs[0];
+        fonts.addEventListener('change', (e) => {
+            console.log('Font change invoked');
+            console.log(`e.target.value = ${e.target.value}`);
+            selectedFont = e.target.value;
+            console.log(selectedFont);
+            const tab = tabs[0];
 
-    console.log("Before  Script ");
-    chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: changingFont,
-        args: [selectedFont],
-        }).then(() => console.log('Middle of Script')).catch(error=> console.log(error));
+            console.log("Before  Script ");
+            chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                func: changingFont,
+                args: [selectedFont],
+            }).then(() => console.log('Middle of Script')).catch(error => console.log(error));
+        });
+        console.log("After  Script ");
     });
-    console.log("After  Script ");
-    });
 
-});
+
 
 //Chrome functions
 
@@ -157,7 +170,7 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
 
         });
     }
-    if (name === 'display-notes'){
+    if (name === 'display-notes') {
         document.getElementById("notebook").value = data
     }
 });
