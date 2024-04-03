@@ -25,7 +25,7 @@ function toggleTheme() {
     document.getElementById("current-theme").innerText = Object.keys(palettes)[current_theme]
 }
 
-function copyText(){
+function copyText() {
     var copyText = document.getElementById("select-a-word");
     // Select the text field
     copyText.select();
@@ -35,7 +35,7 @@ function copyText(){
     navigator.clipboard.writeText(copyText.value);
 }
 
-function saveText(){
+function saveText() {
     chrome.runtime.sendMessage({
         name: 'save',
         data: document.getElementById("select-a-word").value
@@ -175,6 +175,20 @@ function saveNotebook(){
 }
 
 // Local event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    var openReadingModeButton = document.getElementById('open-reading-mode-button');
+    openReadingModeButton.addEventListener('click', function() {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            var activeTab = tabs[0];
+            var url = activeTab.url;
+
+            // Open a new tab with the bare HTML version of the URL
+            var newUrl = 'view-source:' + url;
+            chrome.tabs.create({url: newUrl});
+        });
+    });
+});
+
 
 document.getElementById("read-button").addEventListener("click", () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -199,14 +213,27 @@ document.getElementById("read-button").addEventListener("click", () => {
     });
 });
 
-document.getElementById("bold-button").addEventListener("click", () => {
-    chrome.runtime.sendMessage({
-        name: 'bold_text',
-        data: { value: document.getElementById("bold-word").value }
+    document.getElementById("bold-button").addEventListener("click", () => {
+        chrome.runtime.sendMessage({
+            name: 'bold_text',
+            data: { value: document.getElementById("bold-word").value }
+        })
+
+        document.getElementById("bold-word").value = ""
     })
 
-    document.getElementById("bold-word").value = ""
-})
+
+    document.getElementById("change-theme-button").addEventListener("click", () => {
+        toggleTheme()
+    })
+
+    document.getElementById("copy-button").addEventListener("click", () => {
+        copyText()
+    })
+
+    document.getElementById("save-button").addEventListener("click", () => {
+        saveText()
+    })
 
 document.getElementById("open-pdf").addEventListener("click", () => {
     openPdf()
@@ -219,17 +246,9 @@ document.getElementById("highlight-button").addEventListener("click", () => {
     listHighlights()
  })
 
-document.getElementById("change-theme-button").addEventListener("click", () => {
-   toggleTheme()
-})
-
-document.getElementById("copy-button").addEventListener("click", () => {
-    copyText()
- })
-
-document.getElementById("save-button").addEventListener("click", () => {
-    saveText()
- })
+    document.getElementById("save-notebook-button").addEventListener("click", () => {
+        saveNotebook()
+    })
 
 
 document.getElementById("save-notebook-button").addEventListener("click", () => {
@@ -245,12 +264,10 @@ for(let i of document.getElementsByClassName("highlight_color")){
 }
 
 
-document.addEventListener('DOMContentLoaded', function() {
-
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const fonts = document.getElementById('input-font');
 
-    function changingFont (font) {
+    function changingFont(font) {
         console.log('Current font is: ' + font);
         console.log(fontstyle.value);
         console.log(document.getElementById('output-text'));
@@ -261,21 +278,21 @@ document.addEventListener('DOMContentLoaded', function() {
     fonts.addEventListener('change', (e) => {
         console.log('Font change invoked');
         console.log(`e.target.value = ${e.target.value}`);
-        selectedFont =  e.target.value;
+        selectedFont = e.target.value;
         console.log(selectedFont);
-    const tab = tabs[0];
+        const tab = tabs[0];
 
-    console.log("Before  Script ");
-    chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: changingFont,
-        args: [selectedFont],
-        }).then(() => console.log('Middle of Script')).catch(error=> console.log(error));
+        console.log("Before  Script ");
+        chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            func: changingFont,
+            args: [selectedFont],
+        }).then(() => console.log('Middle of Script')).catch(error => console.log(error));
     });
     console.log("After  Script ");
-    });
-    listHighlights()
 });
+listHighlights()
+
 
 //Chrome functions
 
@@ -331,7 +348,7 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
             data: { value: "loaded2" }
         });
     }
-    if (name === 'display-notes'){
+    if (name === 'display-notes') {
         document.getElementById("notebook").value = data
     }
 });
