@@ -8,7 +8,11 @@ const palettes = {
     "default": ["57614e","6a755f","8a977c","c59ca8","ffffff", "ffffff"],
     "frutiger":   ["cde7b0","a3bfa8","E4DFC8","222823","08090a", "ffffff"],
     "dark":   ["020202", "222222","312d2e","dabaff","ffffff", "000000"],
-    "flag": ["2d3142","4f5d75","bfc0c0","ef8354","ffffff", "ffffff"]
+    "flag": ["2d3142","4f5d75","bfc0c0","ef8354","ffffff", "ffffff"],
+    "green-blindness": ["006837", "31a354", "78c679", "c2e699", "ffffcc", "ffffff"],
+    "Protanopia": ["67000d", "a50f15", "cb181d", "ef3b2c", "fb6a4a", "ffffff"],
+    "Tritanopia": ["045a8d", "2b8cbe", "74a9cf", "bdc9e1", "f1eef6", "ffffff"],
+    "Monochromacy": ["000000", "666666", "999999", "cccccc", "ffffff", "ffffff"]
 }
 
 function toggleTheme() {
@@ -182,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var activeTab = tabs[0];
             var url = activeTab.url;
 
-            // Open a new tab with the bare HTML version of the URL
+            
             var newUrl = 'view-source:' + url;
             chrome.tabs.create({url: newUrl});
         });
