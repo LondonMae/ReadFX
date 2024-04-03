@@ -64,6 +64,7 @@ async function jump_to_highlight(h){
         console.log(tabId)
         console.log(newtab.id)    
         if (tabId == newtab.id && changeInfo.status == 'complete') {
+            showHighlights()
             let response = chrome.tabs.sendMessage(newtab.id, { name: 'jump_to_highlights', data: h});
         }
     });
@@ -79,21 +80,47 @@ function showHighlights(){
     });
 }
 
+
+function deletehighlight(title){
+  console.log("delete"+ title )
+  chrome.storage.local.get("highlights").then(
+  (items) => {
+      let selected_note = items["hightlights"][title];
+      console.log(items)
+      delete items["notes"][title]
+      chrome.storage.local.set({highlights: items["notes"]} )
+      //update_noteslist()
+    }
+  );
+}
+
 function listHighlights(){
+    let list = document.getElementById("highlight-links");
+    list.innerHTML = ""
 
     chrome.storage.local.get(["highlights"]).then((result)=>{
+        for(let w in result.highlights){
+            console.log(w);
+            for(let h of result.highlights[w]){
+                let link_ele = document.createElement('div');
+                const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
+                link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<br>" + h.text;
+                let button = document.createElement("button");
+                button.innerText = "X"
+                button.classList.add("delete-button");
+                button.addEventListener("click", ()=>{
+                    deletehighlight(h)
+                })
+                link_ele.appendChild(button);
+                link_ele.classList.add('highlight-link');
+                link_ele.addEventListener('click', ()=>{
+                    jump_to_highlight(h)
+                })
+                list.appendChild(link_ele)
 
-        result.highlights.map((h)=>{
-            let link_ele = document.createElement('div');
-            const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
-            link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<br>" + h.text;
-            link_ele.classList.add('highlight-link');
-            link_ele.addEventListener('click', ()=>{
-                jump_to_highlight(h)
-            })
-            document.getElementById("highlight-links").appendChild(link_ele)
-
-        })
+               
+            }
+        }
     })
 }
 
