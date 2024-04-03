@@ -2,3 +2,4 @@
 venv
 backend/todo_api
 backend/.DS_Store
+.DS_Store

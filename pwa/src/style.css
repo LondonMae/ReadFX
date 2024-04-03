@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #9bba9b;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -54,9 +54,6 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.card {
-  padding: 2em;
-}
 
 #app {
   max-width: 1280px;

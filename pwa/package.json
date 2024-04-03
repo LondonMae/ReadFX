@@ -6,14 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "watch": "vite build --watch",
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.4.21"
+    "primevue": "^3.50.0",
+    "vue": "^3.4.21",
+    "watch": "^1.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
-    "vite": "^5.2.0",
-    "vite-plugin-pwa": "^0.19.5"
+    "vite": "^5.2.8",
+    "vite-plugin-pwa": "^0.19.7"
   }
 }

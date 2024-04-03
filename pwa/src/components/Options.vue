@@ -26,13 +26,13 @@ const count = ref(0)
   <p>
     <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank">Source</a> Readfx: readabilty companion app
     <br>
-    <button type="button" onclick="alert('Hello world!')">Sync Notes!</button>
-    <button type="button" onclick="alert('Hello world!')">Summarize!</button>
+    <button class="button-options" onclick="alert('Hello world!')">Sync Notes!</button>
+    <button class="button-options" onclick="alert('Hello world!')">Summarize!</button>
     <br>
-    <button type="button" onclick="alert('Hello world!')">Options 1</button>
-    <button type="button" onclick="alert('Hello world!')">Options 2</button>
-    <button type="button" onclick="alert('Hello world!')">Options 3</button>
-    <button type="button" onclick="alert('Hello world!')">Options 4</button>
+    <button class="button-options" onclick="alert('Hello world!')">Options 1</button>
+    <button class="button-options" onclick="alert('Hello world!')">Options 2</button>
+    <button class="button-options" onclick="alert('Hello world!')">Options 3</button>
+    <button class="button-options" onclick="alert('Hello world!')">Options 4</button>
 
     <!-- <button class="btn">
       <template>Save</template>
@@ -43,6 +43,12 @@ const count = ref(0)
 </template>
 
 <style scoped>
+
+.button{
+  background-color: rgb(154, 208, 138);
+  margin: 5px;
+}
+
 .read-the-docs {
   color: #888;
 }
