@@ -24,15 +24,15 @@ const count = ref(0)
 
 
   <p>
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank">Source</a> Readfx: readabilty companion app
+    <a href="https://github.com/LondonMae/ReadFX" target="_blank">Readfx</a>: readabilty companion app
     <br>
-    <button class="button-options" onclick="alert('Hello world!')">Sync Notes!</button>
-    <button class="button-options" onclick="alert('Hello world!')">Summarize!</button>
+    <button class="button-options" onclick="alert('Invoked Sync Notes')">Sync Notes!</button>
+    <button class="button-options" onclick="alert('Invoke Summarize')">Summarize!</button>
     <br>
-    <button class="button-options" onclick="alert('Hello world!')">Options 1</button>
-    <button class="button-options" onclick="alert('Hello world!')">Options 2</button>
-    <button class="button-options" onclick="alert('Hello world!')">Options 3</button>
-    <button class="button-options" onclick="alert('Hello world!')">Options 4</button>
+    <button class="button-options" onclick="alert('Invoked Settings')">Settings</button>
+    <button class="button-options" onclick="alert('Invoked Reports')">Reports</button>
+    <button class="button-options" onclick="alert('Invoked Links')">Links</button>
+    <button class="button-options" onclick="alert('Invoked Booksmarks')">Bookmarks</button>
 
     <!-- <button class="btn">
       <template>Save</template>
@@ -44,7 +44,7 @@ const count = ref(0)
 
 <style scoped>
 
-.button{
+.button-options{
   background-color: rgb(154, 208, 138);
   margin: 5px;
 }

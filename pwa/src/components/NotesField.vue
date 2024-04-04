@@ -72,14 +72,17 @@ export default {
 }
 
 .editable-field {
-    margin: 10px 0;
+    margin: 20px 0;
+    color:black;
 }
 
 .editable-field input,
 .editable-field button {
     border: 1px solid #4c4c4c;
+    color: black;
     background-color: #fff;
-    padding: 4px 6px;
+    padding: 6px 6px;
+    margin:5px;
     font-size: 18px;
 }
 </style>

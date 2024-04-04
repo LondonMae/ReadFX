@@ -1,4 +1,7 @@
 <script setup>
+import 'primeicons/primeicons.css';
+// import 'primeflex/primeflex.css';
+import Button from 'primevue/button';
 import Options from './components/Options.vue'
 import NotesField from './components/NotesField.vue'
 import Editor from 'primevue/editor';
@@ -28,22 +31,23 @@ import Sidebar from 'primevue/sidebar';
     <Sidebar v-model:visible="visible" header="Sidebar">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     </Sidebar>
-    <Button icon="pi pi-arrow-right" @click="visible = true" />
+    <Button icon="pi pi-user" @click="visible = true" style="background-color: green;" />
 </div>
 
 
   
   <SelectButton v-model="value" :options="options" optionLabel="name" multiple aria-labelledby="multiple" />
   <Options msg="Component base" class="" options />
-  <NotesField msg="Notes base" class="notes" />
   <Editor v-model="value" editorStyle="height: 320px" class="editor" />
   <Export msg="Notes base" class="export" />
+  <NotesField msg="Notes base" class="notes" />
 
 
 
 </template>
 
 <style scoped>
+/* @import 'primeflex/primeflex.css'; */
 :deep(.p-editor-container .p-editor-toolbar) {
   color: rgb(75, 21, 201);
 }
