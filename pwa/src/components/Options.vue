@@ -24,12 +24,11 @@ const count = ref(0)
 
 
   <p>
-    <a href="https://github.com/LondonMae/ReadFX" target="_blank" style="color:green">Readfx</a>: readabilty companion app
     <br>
     <button class="button-options" onclick="alert('Invoked Sync Notes')">Sync Notes!</button>
     <button class="button-options" onclick="alert('Invoke Summarize')">Summarize!</button>
     <br>
-    <button class="button-options" onclick="alert('Invoked Settings')">Settings</button>
+    <!-- <button class="button-options" onclick="alert('Invoked Settings')">Settings</button> -->
     <button class="button-options" onclick="alert('Invoked Reports')">Reports</button>
     <button class="button-options" onclick="alert('Invoked Links')">Links</button>
     <button class="button-options" onclick="alert('Invoked Booksmarks')">Bookmarks</button>
