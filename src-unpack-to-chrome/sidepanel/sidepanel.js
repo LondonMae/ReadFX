@@ -70,6 +70,7 @@ async function jump_to_highlight(h){
     });
 }
 
+
 function showHighlights(){
     console.log("show highlights")
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -124,6 +125,21 @@ function listHighlights(){
     })
 }
 
+function openPdf(){
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+        let url = tabs[0].url;
+        var encodedString = encodeURIComponent(url);
+        let newtab = chrome.tabs.create({url: "localhost:8000/index.html?data=" + encodedString});
+    });
+    // chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    //     // make sure the status is 'complete' and it's the right tab
+    //     if (tabId == newtab.id && changeInfo.status == 'complete') {
+    //         let response = chrome.tabs.sendMessage(newtab.id, { name: 'open_notes'});
+    //     }
+    // });
+
+}
+
 function saveNotebook(){
     chrome.runtime.sendMessage({
         name: 'write_notebook',
@@ -166,6 +182,9 @@ document.getElementById("bold-button").addEventListener("click", () => {
     document.getElementById("bold-word").value = ""
 })
 
+document.getElementById("open-pdf").addEventListener("click", () => {
+    openPdf()
+ })
 document.getElementById("highlight-button").addEventListener("click", () => {
     showHighlights()
  })

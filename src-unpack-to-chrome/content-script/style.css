@@ -1,5 +1,5 @@
 :root{
-  --highlight-color:#ffff00;
+  --highlight-color: rgba(255,0,255,0.5);
   --hightlight-text: black;
 
 }
@@ -36,8 +36,10 @@ label:hover {
 highlight-tag {
   color: var(--highlight-text);
   background-color: var(--highlight-color);
+  mix-blend-mode: multiply;
 }
 highlight-tag > *{
   color: var(--highlight-text);
   background-color: var(--highlight-color);
+  mix-blend-mode: multiply;
 }
