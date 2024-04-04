@@ -53,6 +53,40 @@ function saveNotebook() {
 }
 
 // Local event listeners
+/*document.addEventListener('DOMContentLoaded', function() {
+    var openReadingModeButton = document.getElementById('open-reading-mode-button');
+    openReadingModeButton.addEventListener('click', function() {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            var activeTab = tabs[0];
+            var url = activeTab.url;
+
+            // Inject content script to remove event listeners, images, graphics, and hyperlinks
+            chrome.scripting.executeScript({
+                target: {tabId: activeTab.id},
+                function: () => {
+                    // Remove all event listeners from the page
+                    document.querySelectorAll('*').forEach(node => {
+                        node.removeEventListener('click', event => event.stopPropagation(), true);
+                        node.removeEventListener('mousedown', event => event.stopPropagation(), true);
+                        node.removeEventListener('mouseup', event => event.stopPropagation(), true);
+                    });
+
+                    // Remove images and graphics
+                    document.querySelectorAll('img, svg').forEach(node => node.remove());
+
+                    // Remove hyperlinks
+                    document.querySelectorAll('a').forEach(node => {
+                        const textNode = document.createTextNode(node.textContent);
+                        node.parentNode.replaceChild(textNode, node);
+                    });
+                }
+            });
+
+        
+        });
+    });
+});*/
+
 document.addEventListener('DOMContentLoaded', function() {
     var openReadingModeButton = document.getElementById('open-reading-mode-button');
     openReadingModeButton.addEventListener('click', function() {
@@ -60,12 +94,40 @@ document.addEventListener('DOMContentLoaded', function() {
             var activeTab = tabs[0];
             var url = activeTab.url;
 
-            
-            var newUrl = 'view-source:' + url;
-            chrome.tabs.create({url: newUrl});
+            // Inject content script to remove event listeners, images, graphics, hyperlinks, references, and edit buttons
+            chrome.scripting.executeScript({
+                target: {tabId: activeTab.id},
+                function: () => {
+                    // Remove all event listeners from the page
+                    document.querySelectorAll('*').forEach(node => {
+                        node.removeEventListener('click', event => event.stopPropagation(), true);
+                        node.removeEventListener('mousedown', event => event.stopPropagation(), true);
+                        node.removeEventListener('mouseup', event => event.stopPropagation(), true);
+                    });
+
+                    // Remove images and graphics
+                    document.querySelectorAll('img, svg').forEach(node => node.remove());
+
+                    // Remove hyperlinks
+                    document.querySelectorAll('a').forEach(node => {
+                        const textNode = document.createTextNode(node.textContent);
+                        node.parentNode.replaceChild(textNode, node);
+                    });
+
+                    // Remove references
+                    document.querySelectorAll('sup.reference').forEach(node => node.remove());
+
+                    // Remove edit buttons
+                    document.querySelectorAll('.mw-editsection').forEach(node => node.remove());
+                }
+            });
+
+        
         });
     });
 });
+
+
 
 
 document.getElementById("read-button").addEventListener("click", () => {

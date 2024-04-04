@@ -31,6 +31,7 @@ $(function(){
   t = document.getSelection();
   console.log(t.toString())
 
+  
 
 
     });

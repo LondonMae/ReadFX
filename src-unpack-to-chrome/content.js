@@ -3,7 +3,9 @@ var test = document.getElementsByTagName('p')
 for (t of test) {
   doc += t.innerText
 }
+
 // Listen for messages from the popup
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === 'open-reading-mode-button') {
       // Get the current page's content
