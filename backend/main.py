@@ -58,19 +58,30 @@ def get_keywords(text):
     return_string = ""
 
 
-    # tokens = nltk.tokenize.word_tokenize(text)
+    tokens = nltk.tokenize.word_tokenize(text)
+    print(len(tokens))
     #
     # stop_words = set(stopwords.words())
     # main_words = set(words.words())
     # filtered_sentence = [w for w in tokens if (not w.lower() in stop_words) and (not w.lower() in string.punctuation) and ( not w.lower() in main_words) and (len(wordnet.synsets(w.lower())) < 1)]
     # print(filtered_sentence)
 
+    val = 12.0
+    min_val = 5.0
+    if (len(tokens) > 5000):
+        val -= len(tokens)*.0006
+    else:
+        val -= len(tokens)*.0003
     chosen_words = set()
     for score in b:
-        if score[0] > 8.0:
+        # print(score)
+        if score[0] > val:
             if score[1] not in chosen_words:
                 chosen_words.add(score[1])
-                return_string += score[1] + "."
+                return_string += score[1] + "/"
+
+    if val < min_val:
+        val = min_val
 
     # for word in filtered_sentence:
     #     if word not in chosen_words:
@@ -78,7 +89,7 @@ def get_keywords(text):
     #         return_string += word + "."
 
 
-    print(return_string)
+    # print(return_string)
     return return_string
 
 @app.route("/v0/summary", methods = ["POST"])

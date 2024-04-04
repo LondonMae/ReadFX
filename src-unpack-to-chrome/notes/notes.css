@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+:root {
+    --font: "Inter";
+    --bg: #57614e;
+    --primary: #6a755f;
+    --secondary: #8a977c;
+    --highlight: #c59ca8;
+    --text-color: #ffffff;
+    --text-color-h: #ffffff;
+    --b-radius: 0.5rem;
+}
+
+*{
+    font-family: var(--font) "Gloock" sans-serif;
+    transition: 0.5s cubic-bezier(.13,.99,.13,.99);
+    font-size: 24px;
+}
+
+html{
+    padding:0px;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: row;
+    margin: 0px;
+}
+
+.sidebar{
+    background-color: var(--primary);
+    padding:0.2em 0.5em 0.2em 0.5em;
+    margin-right:0px;
+    width: fit-content;
+}
+
+.notelink{
+    background: var(--secondary);
+    padding:0.5em 0.5em 0.5em 0.5em;
+    margin:0.4em 0 0.4em 0;
+    border-radius: 0.5em;
+    text-align: center;
+    text-overflow: ellipsis;
+    display: flex;
+    justify-content: space-between;
+}
+
+.notelink:hover{
+    filter: brightness(1.1);
+    cursor:pointer;
+    transform: translate(0,-3px);
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,0.02);
+}
+
+.sidebar-open{
+    min-width: 10em;
+    width:fit-content;
+}
+.sidebar-closed{
+    min-width: 0px;
+    width: 2em;
+}
+
+.notelink{
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.delete-button{
+    background: var(--highlight);
+    border:none;
+    border-radius: 0.2em;
+    width:1em;
+    color: var(--text-color);
+}
+
+.delete-button:hover{
+    border-radius: 1em;
+}
+
+.notes_title{
+    font-weight:600;
+    font-size:3em;
+    color: var(--text-color);
+    background-color: var(--primary);
+    overflow:hidden;
+    resize:none;
+    border: none;
+    outline: none;
+    padding:1em 0 0 0 ;
+}
+
+.notes_body{
+    color: var(--text-color);
+    font-size: 1em;
+    background-color: var(--secondary);
+    min-height:10em;
+    scrollbar-color: var(--bg);
+    border-radius:  var(--b-radius);
+    overflow-y:auto;
+    word-wrap:break-word;
+    resize:none;
+    border: none;
+    outline: none;
+    padding:1em;
+}
+
+.parent_block{
+    background-color: var(--primary);
+    border-radius:  var(--b-radius);
+    padding: 0 1em 0 1em; /* top, right, bottom, left */
+    max-width:40em;
+    width: 90%;
+    margin:1em;
+    margin-top: 1em;
+}
+
+.tool-button {
+    background-color: var(--highlight); /* Green background color */
+    border: none;
+    color: var(--text-color-h); /* Text color */
+    padding: 0.75em 1em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.75em;
+    margin: 0.5em 0;
+    cursor: pointer;
+    border-radius:  var(--b-radius); /* Rounded borders */
+}
+
+.tool-button:hover{
+    filter: brightness(1.1);
+}
+
+.highlight-link {
+    padding:1em;
+    height:3em;
+    overflow:hidden;
+    border-radius: var(--b-radius);
+    background-color:var(--secondary);
+    margin:1em;
+    box-shadow: 0 3px 2px 0 rgba(0,0,0,0.02);
+}
+
+.highlight-link:hover{
+    cursor: pointer;
+    transform:translate(0,-2px) scale(1.04);
+    box-shadow: 0 5px 5px 0 rgba(0,0,0,0.02);
+}
+
+
+.link{
+    background: var(--secondary);
+    border-radius: 0.25em;
+    display: flex;
+    padding: 0.4em;
+    box-shadow: 0 0.5em 1.5em rgba(20,40,10,0.4);
+    width:max-content;
+}
+
+.link:hover{
+    filter: brightness(1.1);
+    background: var(--highlight);
+    cursor: pointer;
+}

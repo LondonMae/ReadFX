@@ -1,17 +1,15 @@
 var doc = ""
 var test = [document.getElementsByTagName('p'),
-document.getElementsByTagName('h1'),
-document.getElementsByTagName('h2'),
-document.getElementsByTagName('h3'),
-document.getElementsByTagName('blockquote')
+document.getElementsByTagName('blockquote'),
+document.getElementsByTagName('li')
 ]
 
 // console.log(test[1].length);
 // test.append(document.getElementsByTagName('span'))
 for (thing of test) {
   for (t of thing) {
-    doc += t.innerText + "\n"
-      t.style.fontFamily = "Arial";
+    if (t.innerText.length > 20)
+      doc += t.innerText + "\n"
   }
 }
 
@@ -31,16 +29,14 @@ async function bold_text(word, text_elements) {
 
       for (ele of text_elements) {
         for(p of ele){
-            console.log("hey")
             for (var i = 0; i < words.length && i < 500; i ++) {
               if (words[i] == "") {
                 continue
               }
-              console.log(words[i])
               try {
                 re = "( " + words[i] + " )"
                 re = new RegExp(re, 'gi')
-                p.innerHTML = p.innerHTML.replaceAll(re, "<strong>$1</strong>")
+                p.innerHTML = p.innerHTML.replaceAll(re, "<b style =\"color:blue;\">$1</b>")
           }
           catch(error) {
             continue

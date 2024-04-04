@@ -25,13 +25,20 @@ function toggleTheme() {
 }
 
 function copyText(){
-    var copyText = document.getElementById("select-a-word");
-    // Select the text field
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text inside the text field
-    navigator.clipboard.writeText(copyText.value);
+    var copyText = document.getElementById("select-a-word").innerText;
+    // // Select the text field
+    // copyText.select();
+    // copyText.setSelectionRange(0, 99999); // For mobile devices
+    //
+    // // Copy the text inside the text field
+    // navigator.clipboard.writeText(copyText.value);
+    navigator.clipboard.writeText(copyText).then(() => {
+  console.log('Content copied to clipboard');
+  /* Resolved - text copied to clipboard successfully */
+},() => {
+  console.error('Failed to copy');
+  /* Rejected - text failed to copy to the clipboard */
+});
 }
 
 function saveText(){
@@ -77,9 +84,10 @@ document.getElementById("read-button").addEventListener("click", () => {
 });
 
 document.getElementById("bold-button").addEventListener("click", () => {
+  console.log("bolding");
     chrome.runtime.sendMessage({
         name: 'bold_text',
-        data: { value: document.getElementById("bold-word").value }
+        data: { value: "hello" }
     })
 
     document.getElementById("bold-word").value = ""
@@ -155,7 +163,9 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
             }).then(selectedText => {
                 console.log('Injected a function!');
                 console.log(selectedText)
-                document.getElementById("select-a-word").value = data.value;
+                document.getElementById("select-a-word").style.display =  "inline-block";
+                document.getElementById("select-a-word").innerText = data.value;
+                document.getElementById("test").style.display = "none";
             });
 
         });
@@ -165,21 +175,9 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
     if (name === 'summarize-sentence2') {
         console.log("hi bestie")
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            const tab = tabs[0];
-            function parseSentence() {
-                var selection = window.getSelection().toString();
-                console.log(selection);
-                return selection;
-            }
-            chrome.scripting.executeScript({
-                target: { tabId: tab.id },
-                func: parseSentence,
-                //        files: ['contentScript.js'],  // To call external file instead
-            }).then(selectedText => {
-                console.log('Injected a function!');
-                console.log(selectedText)
-                document.getElementById("select-a-word").value = data.value;
-            });
+                  document.getElementById("select-a-word").style.display =  "none";
+                document.getElementById("test").style.display = "inline-block";
+
 
         });
         chrome.runtime.sendMessage({
@@ -197,3 +195,17 @@ chrome.runtime.sendMessage({
     name: 'loaded',
     data: { value: "loaded" }
 });
+
+document.getElementById("open-notes").addEventListener("click", ()=>{
+    open_notes()
+})
+
+async function open_notes(){
+    let newtab = await chrome.tabs.create({url: "notes/notes.html"});
+    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+        // make sure the status is 'complete' and it's the right tab
+        if (tabId == newtab.id && changeInfo.status == 'complete') {
+            let response = chrome.tabs.sendMessage(newtab.id, { name: 'open_notes'});
+        }
+    });
+}

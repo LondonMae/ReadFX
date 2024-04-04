@@ -38,13 +38,15 @@ function sleep(ms) {
 // regex formatting
 function stripHTML(x){
     x = x.replace(/[^\x00-\x7F]/g, " ")
-    x = x.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "\n").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "\n")
-    var t = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gi;
-    x = x.replace(t, " ")
-    x = x.replace(t, '<a href="$&">$&</a>')
+    // x = x.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "\n").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "\n")
+    // var t = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gi;
+    // x = x.replace(t, " ")
+    // x = x.replace(t, '<a href="$&">$&</a>')
+    x = x.replace(/[0-9]+/g, " ")
     x = x.replace(/\s*\(.*?\)\s*/g, " ")
     x = x.replace(/\s*\[.*?\]\s*/g, " ")
     x = x.replace(/-/g, " ")
+    x = x.replace(/"/g, " ")
     console.log(x)
     return x
 }
@@ -99,7 +101,7 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
 
   // bold keywords
   if (name === 'bold_text') {
-
+    console.log("here");
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
     var response = await chrome.tabs.sendMessage(tab.id, "get_document");
     response = stripHTML(response)
