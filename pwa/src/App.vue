@@ -1,13 +1,20 @@
 <script setup>
 import 'primeicons/primeicons.css';
-// import 'primeflex/primeflex.css';
-import Button from 'primevue/button';
+import 'primeflex/primeflex.css';
 import Options from './components/Options.vue'
 import NotesField from './components/NotesField.vue'
-import Editor from 'primevue/editor';
 import Export from './components/Export.vue';
-import Sidebar from 'primevue/sidebar';
-// import SelectButton from 'primevue/selectbutton';
+import Sidebar from 'primevue/sidebar'
+import Button from "primevue/button"
+import Editor from 'primevue/editor';
+import ProgressBar from 'primevue/progressbar';
+
+
+
+
+import { ref } from 'vue';
+
+const visible = ref(false);
 </script>
 
 
@@ -18,24 +25,23 @@ import Sidebar from 'primevue/sidebar';
 
 <template>
 
+  <!-- <Button icon="pi pi-user"/> -->
 
   <div>
     <a href="https://vitejs.dev" target="_blank">
       <img src="./assets/logo.png" class="logo" alt="Readfx logo" />
     </a>
   </div>
-  <!-- <b>Added items options</b> -->
+  <Sidebar v-model:visible="visible">
+    <p>Hi</p>
+  </Sidebar>
+  <Button @click="visible = true" />
+
+  <div class="card">
+        <ProgressBar :value="50"></ProgressBar>
+  </div>
 
 
-  <div class="card flex justify-content-center">
-    <Sidebar v-model:visible="visible" header="Sidebar">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </Sidebar>
-    <Button icon="pi pi-user" @click="visible = true" style="background-color: green;" />
-</div>
-
-
-  
   <SelectButton v-model="value" :options="options" optionLabel="name" multiple aria-labelledby="multiple" />
   <Options msg="Component base" class="" options />
   <Editor v-model="value" editorStyle="height: 320px" class="editor" />
@@ -88,7 +94,7 @@ import Sidebar from 'primevue/sidebar';
 </style>
 
 
-
+<!-- 
 <script>
 export default {
     data() {
@@ -98,4 +104,4 @@ export default {
     }
 }
 </script>
-
+ -->

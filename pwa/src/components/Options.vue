@@ -24,7 +24,7 @@ const count = ref(0)
 
 
   <p>
-    <a href="https://github.com/LondonMae/ReadFX" target="_blank">Readfx</a>: readabilty companion app
+    <a href="https://github.com/LondonMae/ReadFX" target="_blank" style="color:green">Readfx</a>: readabilty companion app
     <br>
     <button class="button-options" onclick="alert('Invoked Sync Notes')">Sync Notes!</button>
     <button class="button-options" onclick="alert('Invoke Summarize')">Summarize!</button>

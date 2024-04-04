@@ -12,7 +12,7 @@
   "dependencies": {
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
-    "primevue": "^3.50.0",
+    "primevue": "^3.51.0",
     "vue": "^3.4.21",
     "watch": "^1.0.2"
   },
