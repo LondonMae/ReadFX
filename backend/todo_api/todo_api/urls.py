@@ -22,5 +22,6 @@ from django.shortcuts import redirect
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/", include("todos.urls")),
-    path("", lambda request: redirect("api/", permanent=False)),  # Redirect root URL to api/
+    path("", lambda request: redirect("api/", permanent=False)), 
+
 ]

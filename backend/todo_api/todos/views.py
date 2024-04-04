@@ -12,6 +12,34 @@ from django.views.decorators.csrf import csrf_exempt
 # Importing the model
 from transformers import BartForConditionalGeneration, BartTokenizer, BartConfig
 
+
+from django.http import HttpResponse
+import requests
+from bs4 import BeautifulSoup
+import os
+
+# views.py
+def extract_content(request):
+    url = request.GET.get('url')
+    response = requests.get(url)
+    html_content = response.content
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    # Remove unwanted elements
+    for tag in soup(['img', 'sup']):
+        tag.decompose()
+
+    # Find the main content
+    main_content = soup.find('div', {'id': 'content'})
+
+    # Clean the content
+    cleaned_content = main_content.get_text()
+
+    # Return the cleaned content as JSON response
+    return JsonResponse({'cleaned_content': cleaned_content})
+
+
+
 def index(request):
     return HttpResponse("Hello World, you are at wiki index.")
 
@@ -51,3 +79,4 @@ def get_wiki_summary(request):
 
     print("Returning data")
     return JsonResponse(data)
+
