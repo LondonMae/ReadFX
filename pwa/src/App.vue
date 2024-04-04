@@ -214,22 +214,28 @@ const visible = ref(false);
                 </div>
             </template>
         </Sidebar>
-        <Button  @click="visible = true" style="background-color:green" label="Settings"/>
+        <Button  @click="visible = true" style="background-color:#619f78; color: black" label="Settings"/>
     </div
   <SelectButton v-model="value" :options="options" optionLabel="name" multiple aria-labelledby="multiple" />
   <Options msg="Component base" class="" options />
   <Editor v-model="value" editorStyle="height: 320px" class="editor" />
   <Export msg="Notes base" class="export" />
+
+
+  <div class="card flex justify-content-center">
+        <Sidebar v-model:visible="visible" header="Sidebar" class="w-full md:w-20rem lg:w-30rem">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </Sidebar>
+        <Button icon="pi pi-arrow-right" @click="visible = true" style="background-color: #619f78;"/>
+    </div>
   <NotesField msg="Notes base" class="notes" />
-
-
 
 </template>
 
 <style scoped>
 /* @import 'primeflex/primeflex.css'; */
 :deep(.p-editor-container .p-editor-toolbar) {
-  color: rgb(75, 21, 201);
+  color: #619f78;
 }
 
 

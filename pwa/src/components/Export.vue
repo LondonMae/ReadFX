@@ -6,7 +6,8 @@
 
 <style scope>
 .button{
-    background-color: rgb(158, 214, 174);
+    color:black;
+    background-color: #619f78;
     margin-top: 25px;
 }
 

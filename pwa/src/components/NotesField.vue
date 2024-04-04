@@ -27,19 +27,19 @@ export default {
             fields: [
                 {
                     id: 1,
-                    value: "Note 1  ",
+                    value: "Lorem ipsum ipsum  ",
                 },
                 {
                     id: 2,
-                    value: "Note 2  ",
+                    value: "Lorem ipsum ipsum  ",
                 },
                 {
                     id: 3,
-                    value: "Note 3  ",
+                    value: "Lorem ipsum ipsum  ",
                 },
                 {
                     id: 4,
-                    value: "Note 4  ",
+                    value: "Lorem ipsum ipsum  ",
                 },
             ],
         };
