@@ -72,7 +72,6 @@ async function jump_to_highlight(h){
 
 
 function showHighlights(){
-    console.log("show highlights")
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         // Send a message to the content script in the active tab
         chrome.storage.local.get(["highlights"]).then((result)=>{
@@ -95,7 +94,31 @@ function deletehighlight(title){
   );
 }
 
+function update_colors(e){
+    let color = e.target.value;
+    console.log(color)
+    let index = e.target.id.match('[0-9]')[0]
+  chrome.storage.local.get("colors").then(
+  (items) => {
+        items.colors[index] = color
+        chrome.storage.local.set({"colors": items.colors} )
+    }
+  );
+            
+}
+
 function listHighlights(){
+    let highlight_colors = [];
+    console.log("show highlights")
+    let colors = document.getElementsByClassName("highlight_color")
+    chrome.storage.local.get(["colors"]).then((e)=>{
+        console.log(e.colors)
+        highlight_colors = e.colors
+        for(let i = 0; i < colors.length; i++){
+            colors[i].value = e.colors[i]
+        }
+    })
+
     let list = document.getElementById("highlight-links");
     list.innerHTML = ""
 
@@ -104,12 +127,15 @@ function listHighlights(){
             console.log(w);
             for(let h of result.highlights[w]){
                 let link_ele = document.createElement('div');
+                console.log(h.color.match('[0-9]')[0])
+                link_ele.style.background = highlight_colors[h.color.match('[0-9]')[0]]
                 const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
-                link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<br>" + h.text;
+                link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<div>" + h.text + "</div>";
                 let button = document.createElement("button");
                 button.innerText = "X"
                 button.classList.add("delete-button");
-                button.addEventListener("click", ()=>{
+                button.addEventListener("click", (e)=>{
+                    console.log(e)
                     deletehighlight(h)
                 })
                 link_ele.appendChild(button);
@@ -214,6 +240,10 @@ document.getElementById("open-notes").addEventListener("click", ()=>{
     open_notes()
 })
 
+for(let i of document.getElementsByClassName("highlight_color")){
+    i.addEventListener("input", (e)=>{update_colors(e)})
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -244,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     console.log("After  Script ");
     });
-
+    listHighlights()
 });
 
 //Chrome functions

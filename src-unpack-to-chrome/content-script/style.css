@@ -1,7 +1,10 @@
 :root{
   --highlight-color: rgba(255,0,255,0.5);
   --hightlight-text: black;
-
+  --color0: rgba(0,255,0,0.5);
+  --color1: rgba(0,255,0,0.5);
+  --color2: rgba(0,255,0,0.5);
+  --color3: rgba(0,255,0,0.5);
 }
 .readfxpopup{
     position:fixed;
@@ -35,11 +38,22 @@ label:hover {
 
 highlight-tag {
   color: var(--highlight-text);
-  background-color: var(--highlight-color);
   mix-blend-mode: multiply;
 }
 highlight-tag > *{
   color: var(--highlight-text);
-  background-color: var(--highlight-color);
   mix-blend-mode: multiply;
+}
+
+.color0{
+  background: var(--color0);
+}
+.color1{
+  background: var(--color1);
+}
+.color2{
+  background: var(--color2);
+}
+.color3{
+  background: var(--color3);
 }

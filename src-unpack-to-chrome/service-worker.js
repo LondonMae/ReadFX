@@ -139,7 +139,23 @@ function get_highlights(highlights){
     }
   })
 }
-
+// new tab is opened
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab)=>{
+  chrome.storage.local.get(["highlights"], (items)=>{
+    let highlight = items.highlights[tab.url.hashCode()]
+    console.log(tab.url)
+    console.log()
+    console.log(highlight)
+    if(highlight != undefined){
+      if(tab.status == "complete"){
+        chrome.storage.local.get(["colors"], (items)=>{
+          chrome.tabs.sendMessage(tabId, { name: 'set_color', data: items.colors})
+        })
+        chrome.tabs.sendMessage(tabId, { name: 'show_highlights', data: items.highlights});
+      }
+    }
+  })  
+})
 
 // listen for messages from other files
 chrome.runtime.onMessage.addListener(async({ name, data }) => {

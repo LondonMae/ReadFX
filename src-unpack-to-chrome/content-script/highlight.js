@@ -14,7 +14,7 @@ let pageHighlights = []
 
 let color_block = `
   <input id="%1" type="radio" name="choice" value="%2">     
-  <label for="%1" class="color_label">
+  <label for="%1" class="color_label" style="background:var(--%3)">
     %3
   </label>
 `
@@ -38,6 +38,9 @@ String.prototype.hashCode = function() {
 }
 
 chrome.runtime.onMessage.addListener(({ name, data }) => {
+  if(name === 'set_color'){
+    changeHighlightColor(data)
+  }
   if(name === 'show_highlights'){
     console.log("show highlights")
     highlight_applied = true
@@ -73,14 +76,13 @@ async function add_new_highlight(e){
   let range = selection.getRangeAt(0)
 
   highlight = save_range(range)
-  
 }
 
 
 window.addEventListener("mouseup", (e)=>{
-  
     if(e.target.classList[0] == "color_label"){
-      
+      highlight.color = e.target.attributes.for.textContent
+      console.log(e)
       chrome.runtime.sendMessage({
         name: 'highlight_text',
         data: highlight
@@ -107,7 +109,7 @@ window.addEventListener("mouseup", (e)=>{
     // }
 })
 
-function highlight_text_node(n, start, end){
+function highlight_text_node(n, start, end, color){
   let node = n
   let htext, text, ttext;
 
@@ -123,7 +125,7 @@ function highlight_text_node(n, start, end){
       ttext = "";
     }
     console.log("node: " + text)
-    node.innerHTML = htext +  "<highlight-tag>" + text + "</highlight-tag>" + ttext
+    node.innerHTML = htext +  "<highlight-tag class='" + color + "'>" + text + "</highlight-tag>" + ttext
     return
   }
   
@@ -155,6 +157,7 @@ function highlight_text_node(n, start, end){
     let tailElement = document.createTextNode(ttext);
 
     markElement.classList.add("highlight_text")
+    markElement.classList.add(color)
     markElement.innerHTML = text;
 
     parent.removeChild(parent.childNodes[eleindex])
@@ -174,7 +177,7 @@ function save_range(range){
     tailtype: range.endContainer.nodeType,
     headindex: range.startOffset,
     tailindex: range.endOffset,
-    scroll: window.scrollY
+    scroll: window.scrollY,
   }
   if (highlight.headtype == 3){
     highlight.headnode = jsPath(range.startContainer.parentElement)
@@ -186,7 +189,7 @@ function save_range(range){
       }
     }
     highlight.hnodeindex = nodeindex
-    highlight.text = range.startContainer.data.substring(highlight.headindex)
+    highlight.text = range.toString()
   }
   if (highlight.tailtype == 3){
     let nodeindex = 0;
@@ -212,7 +215,7 @@ function save_range(range){
   return highlight
 }
 
-function highlight_all(){
+function highlight_all(color){
   let htmlselection = window.getSelection()
   let range = htmlselection.getRangeAt(0)
   let range_save = range.cloneRange()
@@ -224,11 +227,11 @@ function highlight_all(){
 
   // Within single element
   if(extent.isSameNode(anchor)){
-    highlight_text_node(anchor, startindex, endindex)
+    highlight_text_node(anchor, startindex, endindex, color)
     return
   }
-  highlight_text_node(anchor, startindex, -1)
-  highlight_text_node(extent, 0, endindex)
+  highlight_text_node(anchor, startindex, -1, color)
+  highlight_text_node(extent, 0, endindex, color)
 
   range.setStart(range.startContainer, range.startOffset + 2)
   
@@ -240,12 +243,14 @@ function highlight_all(){
   while (fullnodes.length > i){
     if(fullnodes.item(i).innerHTML == undefined){
       let hi = document.createElement("highlight-tag")
+      hi.classList.add("highlight_text")
+      hi.classList.add(color)
       hi.innerHTML = fullnodes.item(i).data
       parentnode.appendChild(hi)
       i++
       continue
     }
-    fullnodes.item(i).innerHTML = "<highlight-tag>" + fullnodes.item(i).innerHTML + " </highlight-tag>"
+    fullnodes.item(i).innerHTML = "<highlight-tag class='highlight_text " + color + "'>" + fullnodes.item(i).innerHTML + " </highlight-tag>"
     console.log(fullnodes.item(i))
     parentnode.appendChild(fullnodes.item(i))
   }
@@ -301,7 +306,7 @@ function construct_range(highlights){
         selection.removeAllRanges();
       }    
       selection.addRange(range)
-      highlight_all()  
+      highlight_all(h.color)  
   //  }
     
     
@@ -309,7 +314,9 @@ function construct_range(highlights){
 }
 
 
-function changeHighlightColor(){
-    var r = document.querySelector(':root');
-    r.style.setProperty('--highlight-color', "#0000ff")
+function changeHighlightColor(colors){
+  var r = document.querySelector(':root');
+  for(let i = 0; i < colors.length; i++){
+    r.style.setProperty('--color' + i, colors[i] + "80")
+  }
 }
