@@ -214,16 +214,9 @@ function saveNotebook(){
 });*/
 
 function cleanPage(){
-    let css = 
-    `
-    <style>
-    body{
-        font-family: sans-serif;
-    }
-    </style>
-    `
-    document.head.innerHTML = css
-    document.body.innerHTML = document.body.innerText
+    const instance = new Readability(document);
+    const results = instance.parse();
+    document.body.innerHTML = results.content
 }
 
 document.addEventListener('DOMContentLoaded', function() {
