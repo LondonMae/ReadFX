@@ -2,6 +2,10 @@
 let tabdata = "" // selected text
 let loaded = false; // is side panel loaded?
 
+// for testing... remove later
+chrome.storage.local.set({"notes": {}})
+chrome.storage.local.set({"highlights": {}})
+
 String.prototype.hashCode = function() {
   var hash = 0,
     i, chr;
@@ -14,18 +18,17 @@ String.prototype.hashCode = function() {
   return Math.abs(hash).toString(16);
 }
 
-
 // requests to Flask server
 async function sendDataToServer(selectedText, test) {
-  var serverEndpoint = "http://127.0.0.1:8000/api/"
+  var serverEndpoint = "http://127.0.0.1:8000/v0/"
 
   // summarize text
   if (test == "summarize") {
-       serverEndpoint += 'get_wiki_summary/';
+       serverEndpoint += 'summary';
   }
   // extract keywords
   else if (test == "keywords") {
-       serverEndpoint += 'get_wiki_keywords/';
+       serverEndpoint += 'keywords';
   }
 
   // POST request data as JSON
@@ -49,11 +52,17 @@ function sleep(ms) {
 
 // regex formatting
 function stripHTML(x){
-    x = x.replace(/[^\x00-\x7F]/g, "")
-    x = x.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "\n").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "\n")
-    var t = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gi;
-    x = x.replace(t, "")
-    x = x.replace(t, '<a href="$&">$&</a>')
+    x = x.replace(/[^\x00-\x7F]/g, " ")
+    // x = x.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "\n").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "\n")
+    // var t = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gi;
+    // x = x.replace(t, " ")
+    // x = x.replace(t, '<a href="$&">$&</a>')
+    x = x.replace(/[0-9]+/g, " ")
+    x = x.replace(/\s*\(.*?\)\s*/g, " ")
+    x = x.replace(/\s*\[.*?\]\s*/g, " ")
+    x = x.replace(/-/g, " ")
+    x = x.replace(/"/g, " ")
+    console.log(x)
     return x
 }
 
@@ -80,39 +89,28 @@ chrome.action.onClicked.addListener((tab) => {
 
 //When the context menu is invoked
 chrome.contextMenus.onClicked.addListener(async(data, tab) => {
+
   if(data.menuItemId == "highlight"){
+    console.log("highlight")
+   chrome.runtime.sendMessage({
+     name: 'highlight',
+     data: { value: "hightlighting: " + tabdata }
+   });
+ }
+
+  if (data.menuItemId == "summarize-sentence") {
+  chrome.sidePanel.open({ windowId: tab.windowId });
+  tabdata = stripHTML(data.selectionText);
+
+  // send selected text to sidepanel if loaded
+  if (loaded == true){
     chrome.runtime.sendMessage({
-      name: 'highlight',
-      data: { value: "hightlighting: " + tabdata }
+      name: 'summarize-sentence2',
+      data: { value: "summarizing: " + tabdata }
     });
-
-  }else if (data.menuItemId == "summarize-sentence"){
-    //first open the side panel, wait for promise
-    chrome.sidePanel.open({ windowId: tab.windowId });
-    tabdata = stripHTML(data.selectionText);
-    
-    // send selected text to sidepanel if loaded
-    if (loaded == true){
-      chrome.runtime.sendMessage({
-        name: 'summarize-sentence2',
-        data: { value: "summarizing: " + tabdata }
-      });
-
-    }
-
-    const response =  await sendDataToServer(tabdata, "summarize");
-    console.log("Back at client")
-    console.log(response["summary"])
-
-    chrome.runtime.sendMessage({
-      name: 'summarize-sentence',
-      data: { value: response["summary"] }
-    });
-
   }
+}
 });
-
-
 
 function get_highlights(highlights){
   highlights.forEach((h)=>{
@@ -124,7 +122,7 @@ function get_highlights(highlights){
       console.log(h.headindex, h.tailindex)
       range.setStart(ele.childNodes[0], h.headindex)
       range.setEnd(ele.childNodes[0], h.tailindex)
-      
+
 
       selection = window.getSelection()
       selection.addRange(range)
@@ -134,16 +132,18 @@ function get_highlights(highlights){
 
       re = "(" + txt + ")"
       re = new RegExp(re)
-      highlight.query = jsPath(ele) 
+      highlight.query = jsPath(ele)
       ele.innerHTML = ele.innerHTML.replace(re, "<mark>$1</mark>")
     }
   })
 }
 
-
 // listen for messages from other files
 chrome.runtime.onMessage.addListener(async({ name, data }) => {
   // when sidepanel loaded, send selected text data
+  if (name == "font") {
+    console.log("fonts")
+  }
   if (name === 'loaded') {
     chrome.runtime.sendMessage({
       name: 'summarize-sentence2',
@@ -151,12 +151,6 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
     });
     // mark loaded flag
     loaded = true;
-
-  chrome.storage.local.get(["notes"]).then((result)=>{
-    let updated_notes = result.notes
-
-    chrome.runtime.sendMessage({name: 'display-notes', data: updated_notes})
-  })
   }
 
   // when initial text loaded in sidepanel
@@ -174,7 +168,7 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
 
   // bold keywords
   if (name === 'bold_text') {
-
+    console.log("here");
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
     var response = await chrome.tabs.sendMessage(tab.id, "get_document");
     response = stripHTML(response)
@@ -186,30 +180,17 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
     addToNotes(data);
   }
 
-  if (name === 'write-notebook') {
+  if (name === 'write_notebook') {
     writeNotes(data);
   }
+
   if(name === 'highlight_text') {
-    console.log(data)
-    saveHighlight(data)
-  }
-  if(name === 'show_highlights'){
-    console.log("show highlights")
-   
-
-    // chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-    //   chrome.storage.local.get(["highlights"]).then((result)=>{
-    //     //sconsole.log(result.highlights)
-        
-    //     chrome.scripting.executeScript({
-    //       target: { tabId: tabs[0].id },
-    //       func: get_highlights,
-    //       args: [result.highlights], //please change this to reflect the words given by the model
-    //     });
-
-    //   });
-    // }); 
-  }
+  console.log(data)
+  saveHighlight(data)
+}
+if(name === 'show_highlights'){
+  console.log("show highlights")
+}
 });
 
 
@@ -225,8 +206,12 @@ function addToNotes(text){
 
 
 function writeNotes(text){
-  chrome.storage.local.remove(["notes"]).then(result=>console.log(result))
-  console.log(text)
+
+  chrome.storage.local.get({notes: text}).then(result=>console.log(result))
+    chrome.storage.local.get({notes: text}).then(result=>chrome.runtime.sendMessage({
+      name: 'test',
+      data: result
+  }))
   chrome.storage.local.set({notes: text})
 }
 
@@ -245,6 +230,7 @@ function saveHighlight(highlight){
 function clear_all_highlights(){
   chrome.storage.local.set({highlights:{}})
 }
+
 // when sidepanel closed set flag to false
 chrome.runtime.onConnect.addListener(function (port) {
   if (port.name === 'mySidepanel') {
