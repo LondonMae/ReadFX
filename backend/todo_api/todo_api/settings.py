@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1%u3s_sjz$rfpg@v5)@amk6lqt0eupksp94==0j0)db&0y0c7('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # TODO: Check if these are needed, what do allowed hosts do and will they work with a non-local server?
 ALLOWED_HOSTS = ['chrome-extension://mngofgemnfgeckocaocgajamidjobcpj','127.0.0.1','localhost','localhost:8000']
@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "corsheaders",
     "rest_framework",
-    "todos"
+    "todos",
+    "todo_api"
 ]
 
 REST_FRAMEWORK = {

@@ -229,18 +229,15 @@ textarea{
 
 
 
-#highlight-links{
-
-}
-
 .highlight-link {
-    padding:1em;
-    height:3em;
     overflow:hidden;
     border-radius: var(--b-radius);
     background-color:var(--secondary);
     margin:1em;
     box-shadow: 0 3px 2px 0 rgba(0,0,0,0.02);
+    display: grid;
+    grid-template-columns: 1em 80% auto 1em;
+    grid-template-rows:1em 20% auto 1em;
 }
 
 .highlight-link:hover{
@@ -249,13 +246,30 @@ textarea{
     box-shadow: 0 5px 5px 0 rgba(0,0,0,0.02);
 }
 
+.highlight-link>a{
+    grid-row-start:2;
+    grid-column-start:2;
+}
+
+.highlight-link>div{
+    grid-row-start:3;
+    grid-row-end: 3;
+    grid-column-start: 2;
+}
 
 .delete-button{
     background: var(--highlight);
     border:none;
     border-radius: 0.2em;
-    width:1em;
     color: var(--text-color);
+    grid-column-start: 3;
+    grid-row-start:2;
+    grid-row-end:4;
+}
+.delete-button:hover{
+    box-shadow: 0 5px 5px 0 rgba(0,0,0,0.02);
+    cursor:pointer;
+    transform:translate(0,-2px) scale(1.04);
 }
 
 
@@ -352,4 +366,24 @@ textarea{
   100% {
     transform: rotate(360deg);
   }
+}
+
+
+
+.highlight_color{
+    border:none;
+    padding:0;
+    margin:auto;
+    border-block:none;
+    border-radius:1em;
+}
+
+
+.highlight_color::-webkit-color-swatch-wrapper{
+    padding:0;
+}
+
+.highlight_color::-webkit-color-swatch{
+    border-radius:0.5em;
+    height:5em;
 }
