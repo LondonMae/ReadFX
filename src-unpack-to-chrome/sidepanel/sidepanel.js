@@ -4,13 +4,7 @@ chrome.runtime.connect({ name: 'mySidepanel' });
 
 let current_theme = 0;
 const palettes = {
-<<<<<<< HEAD
-    "purpl":    ["51344d","6f5060","a78682","e7ebc5","ffffff"],
-    "default": ["57614e","6a755f","8a977c","fcc0d2","ffffff"],
-    "frutiger":   ["cde7b0","a3bfa8","E4DFC8","222823","08090a"],
-    "dark":   ["020202", "222222","312d2e","dabaff","ffffff"],
-    "flag": ["2d3142","4f5d75","bfc0c0","ef8354","ffffff"]
-=======
+
     "purpl":    ["51344d","6f5060","a78682","e7ebc5","ffffff", "000000"],
     "default": ["57614e","6a755f","8a977c","c59ca8","ffffff", "ffffff"],
     "frutiger":   ["cde7b0","a3bfa8","E4DFC8","222823","08090a", "ffffff"],
@@ -20,7 +14,6 @@ const palettes = {
     "Protanopia": ["67000d", "a50f15", "cb181d", "ef3b2c", "fb6a4a", "ffffff"],
     "Tritanopia": ["045a8d", "2b8cbe", "74a9cf", "bdc9e1", "f1eef6", "ffffff"],
     "Monochromacy": ["000000", "666666", "999999", "cccccc", "ffffff", "ffffff"]
->>>>>>> dev
 }
 
 function toggleTheme() {
@@ -169,7 +162,7 @@ function openPdf(){
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
         let url = tabs[0].url;
         var encodedString = encodeURIComponent(url);
-        let newtab = chrome.tabs.create({url: "chrome-extension://mjcpkcdfdbkepngmafjhgcfffnhhkejm/pdf_parser/index.html?data=" + encodedString});
+        let newtab = chrome.tabs.create({url: "pdf_parser/index.html?data=" + encodedString});
     });
     // chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     //     // make sure the status is 'complete' and it's the right tab
@@ -278,6 +271,7 @@ document.getElementById("bold-button").addEventListener("click", () => {
         name: 'bold_text',
         data: { value: "hello" }
     })
+  })
 
 
     document.getElementById("change-theme-button").addEventListener("click", () => {
@@ -327,7 +321,7 @@ for(let i of document.getElementsByClassName("highlight_color")){
 
 
 
-
+    const fonts = document.getElementById("input-font")
     fonts.addEventListener('change', (e) => {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         console.log('Font change invoked');

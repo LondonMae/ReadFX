@@ -137,8 +137,7 @@ function get_highlights(highlights){
     }
   })
 }
-<<<<<<< HEAD
-=======
+
 // new tab is opened
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab)=>{
   chrome.storage.local.get(["highlights"], (items)=>{
@@ -159,9 +158,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab)=>{
         chrome.tabs.sendMessage(tabId, { name: 'show_highlights', data: items.highlights});
       }
     }
-  })  
+  })
 })
->>>>>>> dev
+
 
 // listen for messages from other files
 chrome.runtime.onMessage.addListener(async({ name, data }) => {
