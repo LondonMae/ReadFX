@@ -46,6 +46,7 @@ def get_users():
 @app.route('/notes', methods=['POST'])
 def create_notes():
     connection = create_connection()
+    print("Creating Notes")
     if connection is None:
         return jsonify({"error": "Database connection error"}), 500
     try:
