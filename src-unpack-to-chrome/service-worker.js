@@ -254,6 +254,9 @@ function writeNotes(text){
 function saveHighlight(highlight){
   chrome.storage.local.get(["highlights"]).then((result)=>{
     let new_highlights = result.highlights
+    if(Object.keys(result).length == 0){
+      chrome.storage.local.set({"highlights": {}})
+    }
     let key = highlight.url.hashCode();
     console.log(key);
     if (new_highlights[key] == undefined) {new_highlights[key] = []}

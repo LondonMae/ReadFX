@@ -11,6 +11,9 @@ const saveOptions = () => {
     title: notes_title.innerHTML
   }
   chrome.storage.local.get("notes", (n)=>{
+    if(Object.keys(n).length == 0){
+      chrome.storage.local.set({"notes": {}})
+    }
     n["notes"][notePage["title"]] = notePage
     chrome.storage.local.set({notes: n["notes"]},
     () => {
@@ -84,6 +87,13 @@ const restoreOptions = () => {
   update_noteslist()
   chrome.storage.local.get(["notes"]).then(
     (items) => {
+      if(Object.keys(items).length == 0){
+        chrome.storage.local.set({"notes": {
+          "Notes": {
+            "title": "Notes",
+            "body": "notes go here"
+          }}})
+      }
       m = items["notes"][Object.getOwnPropertyNames(items["notes"])[0]]
       console.log(m)
       document.getElementsByClassName('notes_title')[0].innerHTML = m.title;
@@ -102,6 +112,9 @@ for (let n of noteslist){
 
 let prevKeyCode = 0;
 document.addEventListener("keydown", function(e) {
+    if (document.getElementsByClassName('highlight-links').length > 0){
+        document.getElementsByClassName('highlight-links')[0].remove()
+    }
   if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
     e.preventDefault();
     saveOptions();
@@ -109,10 +122,13 @@ document.addEventListener("keydown", function(e) {
   if (e.keyCode === 191 && prevKeyCode === 191){
     let popup = document.createElement("div");
     popup.innerHTML = "Highlight <br>"
-    popup.style.top = e.clientY + "px";
-    popup.style.left = e.clientX + "px";
+    popup.style.position = "absolute"
+    let range = window.getSelection().getRangeAt(0).getBoundingClientRect()
+    popup.style.top =  range.x + "px";
+    popup.style.left = range.y + "px";
     popup.classList.add("highlight-links")
     document.body.appendChild(popup)
+    listHighlights()
   
   }
   prevKeyCode = e.keyCode
@@ -140,6 +156,29 @@ document.getElementById("add-note-button").addEventListener("click", ()=>{
 })
 
 
+function add_link(h, highlight_colors){
+  
+  let link_ele = document.createElement('div');
+  console.log(h.color.match('[0-9]')[0])
+  link_ele.style.background = highlight_colors[h.color.match('[0-9]')[0]]
+  const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
+  link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<div>" + h.text + "</div>";
+  let button = document.createElement("button");
+  button.innerText = "X"
+  button.classList.add("delete-button");
+  button.addEventListener("click", (e)=>{
+      console.log(e)
+      deletehighlight(h)
+  })
+  link_ele.appendChild(button);
+  link_ele.classList.add('highlight-link');
+  link_ele.addEventListener('click', ()=>{
+      jump_to_highlights()
+  })
+  document.getElementsByClassName("notes_body")[0].appendChild(link_ele)
+  document.getElementsByClassName("notes_body")[0].innerHTML += "<br>"
+}
+
 function listHighlights(){
     let highlight_colors = [];
     console.log("show highlights")
@@ -157,7 +196,7 @@ function listHighlights(){
         }
     })
 
-    let list = document.getElementById("highlight-links");
+    let list = document.getElementsByClassName("highlight-links")[0];
     list.innerHTML = ""
 
     chrome.storage.local.get(["highlights"]).then((result)=>{
@@ -179,10 +218,9 @@ function listHighlights(){
                 link_ele.appendChild(button);
                 link_ele.classList.add('highlight-link');
                 link_ele.addEventListener('click', ()=>{
-                    jump_to_highlight(h)
+                    add_link(h, highlight_colors)
                 })
                 list.appendChild(link_ele)
-
                
             }
         }
