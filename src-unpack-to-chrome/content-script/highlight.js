@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", function(event){
 // TODO: highlight all text before anything 
 
 let highlight_applied = false;
@@ -320,3 +321,5 @@ function changeHighlightColor(colors){
     r.style.setProperty('--color' + i, colors[i] + "80")
   }
 }
+
+})
