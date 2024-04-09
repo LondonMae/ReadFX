@@ -159,7 +159,7 @@ function openPdf(){
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
         let url = tabs[0].url;
         var encodedString = encodeURIComponent(url);
-        let newtab = chrome.tabs.create({url: "localhost:8000/index.html?data=" + encodedString});
+        let newtab = chrome.tabs.create({url: "chrome-extension://mjcpkcdfdbkepngmafjhgcfffnhhkejm/pdf_parser/index.html?data=" + encodedString});
     });
     // chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     //     // make sure the status is 'complete' and it's the right tab
