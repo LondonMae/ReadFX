@@ -135,13 +135,24 @@ body {
     filter: brightness(1.1);
 }
 
-.highlight-link {
+.highlight-links{
+    font-size: 0.5rem;
+    background:var(--highlight);
     padding:1em;
-    height:3em;
+    border-radius:1em;    
+}
+
+.highlight-link>a{
+    font-size:inherit;
+}
+
+
+.highlight-link {
+    font-size:0.5rem;
+    padding:1em;
     overflow:hidden;
     border-radius: var(--b-radius);
-    background-color:var(--secondary);
-    margin:1em;
+    margin:0em;
     box-shadow: 0 3px 2px 0 rgba(0,0,0,0.02);
 }
 
