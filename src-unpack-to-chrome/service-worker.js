@@ -142,7 +142,12 @@ function get_highlights(highlights){
 // new tab is opened
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab)=>{
   chrome.storage.local.get(["highlights"], (items)=>{
-    let highlight = items.highlights[tab.url.hashCode()]
+    let highlight;
+    try{
+      highlight = items.highlights[tab.url.hashCode()]
+    }catch{
+      return
+    }
     console.log(tab.url)
     console.log()
     console.log(highlight)

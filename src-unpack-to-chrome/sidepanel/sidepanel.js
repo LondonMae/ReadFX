@@ -112,7 +112,11 @@ function listHighlights(){
     console.log("show highlights")
     let colors = document.getElementsByClassName("highlight_color")
     chrome.storage.local.get(["colors"]).then((e)=>{
-        console.log(e.colors)
+        if(Object.keys(e).length == 0){
+          e.colors = ["#ba75ff","#00ff88","#d07676","#81c1fd"]
+          chrome.storage.local.set({"colors": e.colors})
+          highlight_colors = e.colors
+        }
         highlight_colors = e.colors
         for(let i = 0; i < colors.length; i++){
             colors[i].value = e.colors[i]

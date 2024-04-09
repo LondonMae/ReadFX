@@ -100,11 +100,22 @@ for (let n of noteslist){
 }
 
 
+let prevKeyCode = 0;
 document.addEventListener("keydown", function(e) {
   if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
     e.preventDefault();
     saveOptions();
   }
+  if (e.keyCode === 191 && prevKeyCode === 191){
+    let popup = document.createElement("div");
+    popup.innerHTML = "Highlight <br>"
+    popup.style.top = e.clientY + "px";
+    popup.style.left = e.clientX + "px";
+    popup.classList.add("highlight-links")
+    document.body.appendChild(popup)
+  
+  }
+  prevKeyCode = e.keyCode
 }, false);
 
 
@@ -127,3 +138,53 @@ document.getElementById("add-note-button").addEventListener("click", ()=>{
   notes_title.focus();
   update_noteslist();
 })
+
+
+function listHighlights(){
+    let highlight_colors = [];
+    console.log("show highlights")
+    let colors = document.getElementsByClassName("highlight_color")
+    chrome.storage.local.get(["colors"]).then((e)=>{
+        try{
+          console.log(e.colors)
+        }catch{
+          e.colors = [ "#ba75ff","#00ff88","#d07676","#81c1fd"]
+          chrome.storage.local.set({"colors": colors})
+        }
+        highlight_colors = e.colors
+        for(let i = 0; i < colors.length; i++){
+            colors[i].value = e.colors[i]
+        }
+    })
+
+    let list = document.getElementById("highlight-links");
+    list.innerHTML = ""
+
+    chrome.storage.local.get(["highlights"]).then((result)=>{
+        for(let w in result.highlights){
+            console.log(w);
+            for(let h of result.highlights[w]){
+                let link_ele = document.createElement('div');
+                console.log(h.color.match('[0-9]')[0])
+                link_ele.style.background = highlight_colors[h.color.match('[0-9]')[0]]
+                const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
+                link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<div>" + h.text + "</div>";
+                let button = document.createElement("button");
+                button.innerText = "X"
+                button.classList.add("delete-button");
+                button.addEventListener("click", (e)=>{
+                    console.log(e)
+                    deletehighlight(h)
+                })
+                link_ele.appendChild(button);
+                link_ele.classList.add('highlight-link');
+                link_ele.addEventListener('click', ()=>{
+                    jump_to_highlight(h)
+                })
+                list.appendChild(link_ele)
+
+               
+            }
+        }
+    })
+}
