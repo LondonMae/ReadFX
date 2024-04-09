@@ -193,10 +193,11 @@ document.getElementById("save-notebook-button").addEventListener("click", () => 
 
 document.addEventListener('DOMContentLoaded', function() {
 
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+
     const fonts = document.getElementById('input-font');
 
     fonts.addEventListener('change', (e) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         console.log('Font change invoked');
         console.log(`e.target.value = ${e.target.value}`);
         selectedFont =  e.target.value;
