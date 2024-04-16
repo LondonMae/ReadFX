@@ -61,7 +61,7 @@ def create_tables(connection):
         # Create Users table
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS Users (
-                user_id SERIAL PRIMARY KEY
+                user_id BIGINT PRIMARY KEY
             );
         ''')
 
@@ -69,7 +69,7 @@ def create_tables(connection):
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS Notes (
                 note_id SERIAL PRIMARY KEY,
-                user_id INT NOT NULL,
+                user_id BIGINT NOT NULL,
                 note_header TEXT,
                 note_content TEXT,
                 FOREIGN KEY (user_id) REFERENCES Users(user_id)

@@ -2,6 +2,8 @@ const notes_body = document.getElementsByClassName('notes_body')[0];
 const notes_title = document.getElementsByClassName('notes_title')[0];
 const regex = /(?<=#)[a-zA-Z0-9]+/m;
 const sidebar = document.getElementById("notes-container");
+POST_URL_NOTES = "http://127.0.0.1:5000/notes"
+GET_URL_NOTES = "http://127.0.0.1:5000/notes"
 
 const idx = lunr(function () {
   console.log("this is a notes test")
@@ -114,13 +116,43 @@ const update_noteslist = ()=>{
 }
 
 
-const sync_notes = ()=> {
+const sync_notes = (user_id)=> {
   console.log("invoke chrome storage")
-  chrome.storage.local.get(["notes"]).then((notes) => {
-  for (let n in notes["notes"]){
-    console.log(n);
-    }})
+  chrome.storage.local.get("notes").then((e)=>{
+    let notes = e.notes
+    let keys = Object.keys(notes)
+    for (let k of keys){
+        console.log(notes[k]);
+        title = notes[k]["title"];
+        body = notes[k]["body"];
+        data = {"user_id": user_id, "note_header": title, "note_content": body};
+        console.log("data is ", data)
+        postData( POST_URL_NOTES, data);
 }
+    })
+}
+
+
+
+async function postData(url = "", data = {}) {
+  // Default options are marked with *
+  const response = await fetch(url, {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, *cors, same-origin
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "same-origin", // include, *same-origin, omit
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+  });
+  return response.json(); // parses JSON response into native JavaScript objects
+}
+
+
 
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
@@ -204,7 +236,7 @@ document.getElementById("user_id").addEventListener("click",()=>{
 
   // Gernerate id which is 12 characters long
 document.getElementById("generate_id").addEventListener("click", () => {
-      var id = Math.floor(100000000000 + Math.random() * 900000000000);
+      var id = Math.floor(10000000 + Math.random() * 90000000);
       var content = document.getElementById("generated_id");
 /*       alert("invoke generated ID"); */
       content.textContent = id;
@@ -212,7 +244,9 @@ document.getElementById("generate_id").addEventListener("click", () => {
 
 // Invoke sync button
 document.getElementById("sync_button").addEventListener("click", ()=>{
-  sync_notes();
+  var user_id = document.getElementById("user_id").textContent;
+  console.log("user is is   ", user_id);
+  sync_notes(user_id);
 })
 
 
