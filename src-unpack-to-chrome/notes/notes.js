@@ -3,6 +3,33 @@ const notes_title = document.getElementsByClassName('notes_title')[0];
 const regex = /(?<=#)[a-zA-Z0-9]+/m;
 const sidebar = document.getElementById("notes-container");
 
+const idx = lunr(function () {
+  console.log("this is a notes test")
+	this.field("title")
+	this.field("description")
+
+  this.add({
+    "title": "Philosophy of Science",
+    "description": "Einstein's own philosophy of science is an original synthesis of elements drawn from sources as diverse as neo Kantianism, conventionalism, and logical empiricism. Einstein s relations with and influence on other prominent twentieth century philosophers of science, including Moritz Schlick, Hans Reichenbach, Ernst Cassirer.",
+    "author": "Albert Einstein",
+    "id": "1"
+  })
+
+  this.add({
+    "title": "Quantum Mechanics",
+    "description": "Quantum systems have bound states that are quantized to discrete values of energy, momentum, angular momentum, and other quantities. Measurements of quantum systems show characteristics of both particles and waves. Most theories in classical physics can be derived from quantum mechanics as an approximation valid at large scale.",
+    "author": "Wiki",
+    "id": "2"
+  })
+
+})
+
+console.log(idx)
+console.log(idx.search("science"))
+
+
+
+
 // Saves options to chrome.storage
 const saveOptions = () => {
   notes_body.innerHTML = notes_body.innerHTML.replaceAll(/&gt;/g, ">").replaceAll(/&lt;/g, "<")
@@ -27,6 +54,11 @@ const saveOptions = () => {
   });
   update_noteslist()
 };
+
+chrome.runtime.onMessage.addListener(({ name, data }) => {
+    if (name === 'test')
+      console.log(data)
+});
 
 // Switch notes
 const switchNotes = (title) => {
@@ -75,7 +107,7 @@ const update_noteslist = ()=>{
 //        note_tab.innerText = n;
         note_tab.addEventListener('click', () => {switchNotes(n)});
         sidebar.appendChild(note_tab);
-        
+
       }
     })
 
@@ -129,7 +161,7 @@ document.addEventListener("keydown", function(e) {
     popup.classList.add("highlight-links")
     document.body.appendChild(popup)
     listHighlights()
-  
+
   }
   prevKeyCode = e.keyCode
 }, false);
@@ -157,7 +189,7 @@ document.getElementById("add-note-button").addEventListener("click", ()=>{
 
 
 function add_link(h, highlight_colors){
-  
+
   let link_ele = document.createElement('div');
   console.log(h.color.match('[0-9]')[0])
   link_ele.style.background = highlight_colors[h.color.match('[0-9]')[0]]
@@ -221,7 +253,7 @@ function listHighlights(){
                     add_link(h, highlight_colors)
                 })
                 list.appendChild(link_ele)
-               
+
             }
         }
     })

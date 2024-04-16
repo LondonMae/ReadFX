@@ -5,28 +5,18 @@
   </head>
 
   <body>
-    <button class="read-button" id="read-button">READ</button>
+    <div id = "bg"></div>
 
     <div id="NotesFx"  class="parent_block">
 
-      <div> <h3>Style of the Text Changes with the drop down</h3> </div>
-      <div id="output-text">
-        Hi Guys, Welcome to Javascript Program
-      </div>
-      <div>
-        <select id="input-font" class="input" >
-          <option value="Times-new-roman">Times New Roman</option>
-          <option value="Berlin-sans-fb">Berlin Sans FB</option>
-          <option value="bold" class="bolder">Tebal</option>
-        </select>
-      </div>
 
-      <h1>Notes</h1>
-      <hr />
-      <textarea id="select-a-word">Summarized Text</textarea>
-      <button class="tool-button" id="copy-button">Copy</button>
-      <button class="tool-button" id="save-button">Save to notebook!</button>
-      <button class="tool-button" id="open-notes">Open Notes!</button>
+      <h1>Summarize</h1>
+      <div class = "summary">
+      <p id="select-a-word" >Highlight text on the page to use the summarization tool. Your summary will appear here.</p>
+      <div id = "test" class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+      <button class="tool-button" id="copy-button">copy</button>
+      <button class="tool-button" id="save-button">save to notebook</button>
       <div>
         <h2 id="definition-word"></h2>
         <p id="definition-text"></p>
@@ -34,34 +24,37 @@
     </div>
 
     <div id="ToolsFx" class="parent_block">
-      <h1>Tools</h1>
-      <hr />
-      <div>Text analysis tools</p>
-        <div id="buttons-container">
-          <button class="tool-button" id="open-pdf">Open PDF</button>
-          <button class="tool-button" id="bold-button">Bold Keywords</button>
-          <input id="bold-word" value="bold me">
-          <button class="tool-button" id="space-out-button">Space out Sentences</button>
-          <button class="tool-button" id="change-font-button">Change Font</button>
-          <button class="tool-button" id="highlight-button">Show Highlights</button>
-          <button class="tool-button" id="change-theme-button">Change Theme</button>
-          <div id="current-theme"> default </div>
+      <div id="buttons-container">
+            <button class="tool" id="read-button"><span>READ</span></button>
+          <button class="tool" id="bold-button"><span>Bold Keywords</span></button>
+          <button class="tool" id="change-font-button"><span>Change Font</span></button>
+          <div>
+            <select id="input-font" class="input" >
+              <option value="Times">Times New Roman</option>
+              <option value="Arial">Arial</option>
+              <option value="Helvetica" class="bolder">Helvetica</option>
+            </select>
+          </div>
+          <button class="tool" id="highlight-button"><span>Show Highlights</span></button>
+            <button class="tool" id="space-out-button"><span>Space out Sentences</span></button>
+          <button class="tool" id="change-theme-button"><span>Change Theme</span></button>
+          <button class="tool" id="open-pdf"><span>Open PDF</span></button>
+          <div id="current-theme"> (default) </div>
         </div>
       </div>
-    </div>
 
     <div id="HistoryFx"  class="parent_block">
       <h1>My Notebook</h1>
-      <hr />
       <textarea id="notebook">your notes!</textarea>
       <button class="tool-button" id="save-notebook-button">Save</button>
+      <button class="tool-button" id="open-notes">Open Notes!</button>
 
     </div>
 
-    
+
     <div id="LinksFx"  class="parent_block">
       <h1>Links</h1>
-      <hr />
+
       <input type="color" class="highlight_color" id="color0">
       <input type="color" class="highlight_color" id="color1">
       <input type="color" class="highlight_color" id="color2">
@@ -71,12 +64,7 @@
       </div>
       <button class="tool-button" id="list-highlights-button">List Links</button>
     </div>
-    
-    <div id="ReadingMode" class="parent_block">
-      <h1>Reading Mode</h1>
-      <hr />
-      <button class="tool-button" id="open-reading-mode-button">Open Reading Mode</button>
-    </div>
+
 
     <script src="sidepanel.js"></script>
   </body>

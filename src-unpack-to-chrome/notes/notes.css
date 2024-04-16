@@ -7,7 +7,7 @@
     --secondary: #8a977c;
     --highlight: #c59ca8;
     --text-color: #ffffff;
-    --text-color-h: #ffffff; 
+    --text-color-h: #ffffff;
     --b-radius: 0.5rem;
 }
 
@@ -108,7 +108,7 @@ body {
 }
 
 .parent_block{
-    background-color: var(--primary); 
+    background-color: var(--primary);
     border-radius:  var(--b-radius);
     padding: 0 1em 0 1em; /* top, right, bottom, left */
     max-width:40em;
@@ -177,8 +177,3 @@ body {
     background: var(--highlight);
     cursor: pointer;
 }
-
-
-
-
-
