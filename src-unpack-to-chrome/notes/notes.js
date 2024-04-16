@@ -113,6 +113,15 @@ const update_noteslist = ()=>{
 
 }
 
+
+const sync_notes = ()=> {
+  console.log("invoke chrome storage")
+  chrome.storage.local.get(["notes"]).then((notes) => {
+  for (let n in notes["notes"]){
+    console.log(n);
+    }})
+}
+
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
 const restoreOptions = () => {
@@ -185,6 +194,25 @@ document.getElementById("add-note-button").addEventListener("click", ()=>{
   notes_title.innerHTML = "";
   notes_title.focus();
   update_noteslist();
+})
+
+
+document.getElementById("user_id").addEventListener("click",()=>{
+  var content = document.getElementById("user_id");
+  content.textContent = "";
+})
+
+  // Gernerate id which is 12 characters long
+document.getElementById("generate_id").addEventListener("click", () => {
+      var id = Math.floor(100000000000 + Math.random() * 900000000000);
+      var content = document.getElementById("generated_id");
+/*       alert("invoke generated ID"); */
+      content.textContent = id;
+  })
+
+// Invoke sync button
+document.getElementById("sync_button").addEventListener("click", ()=>{
+  sync_notes();
 })
 
 

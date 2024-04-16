@@ -70,6 +70,7 @@ def create_tables(connection):
             CREATE TABLE IF NOT EXISTS Notes (
                 note_id SERIAL PRIMARY KEY,
                 user_id INT NOT NULL,
+                note_header TEXT,
                 note_content TEXT,
                 FOREIGN KEY (user_id) REFERENCES Users(user_id)
             );

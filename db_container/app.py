@@ -55,6 +55,7 @@ def create_notes():
         # Extract data from the request
         data = request.get_json()
         user_id = data.get('user_id')  # Assuming you pass user_id in the request
+        note_header = data.get('note_header')
         note_content = data.get('note_content')
 
         # Check if user_id exists in the table
@@ -66,9 +67,9 @@ def create_notes():
 
         # Insert the data into the Notes table
         cursor.execute('''
-            INSERT INTO Notes (user_id, note_content)
-            VALUES (%s, %s)
-        ''', (user_id, note_content))
+            INSERT INTO Notes (user_id, note_header,note_content)
+            VALUES (%s, %s, %s)
+        ''', (user_id, note_header, note_content))
 
         # Commit the transaction
         connection.commit()
