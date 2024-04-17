@@ -34,7 +34,7 @@ async function test() {
   return idx
 }
 
-idx = test()
+
 
 
 const ENTER_KEY_CODE = 13;
@@ -48,9 +48,9 @@ search_bar.addEventListener('keyup', function(e) {
 
 
 async function search_func(val) {
-  await idx;
+  idx = await test()
   await n;
-
+  console.log(n)
   var indexes;
   var res = idx.search(val)
   console.log(res)
@@ -59,7 +59,6 @@ async function search_func(val) {
     console.log(res[note]["ref"])
     new_n = res[note]["ref"]
     update_n(new_n)
-
   }
 
 
@@ -97,8 +96,8 @@ const saveOptions = () => {
       status.textContent = 'Notes saved.';
 
     })
+    update_noteslist()
   });
-  update_noteslist()
 };
 
 chrome.runtime.onMessage.addListener(({ name, data }) => {
@@ -121,7 +120,7 @@ const switchNotes = (title) => {
 
 let note_tab_temp = `
   $
-  <button class="delete-button">x</button>
+  <button class="delete-button">-</button>
 `
 
 const deletenote = (title)=>{
@@ -141,12 +140,11 @@ const update_noteslist = ()=>{
   sidebar.innerHTML = ""
   chrome.storage.local.get(["notes"]).then(
     (notes) => {
-
       for (let n in notes["notes"]){
         console.log(n)
         let note_tab = document.createElement("div");
         note_tab.innerHTML = note_tab_temp.replace('$', n);
-        note_tab.children[0].addEventListener('click', ()=>{
+        note_tab.querySelector(".delete-button").addEventListener('click', ()=>{
           deletenote(n)
         })
         note_tab.classList.add("notelink");

@@ -2,10 +2,6 @@
 let tabdata = "" // selected text
 let loaded = false; // is side panel loaded?
 
-// for testing... remove later
-chrome.storage.local.set({"notes": {}})
-chrome.storage.local.set({"highlights": {}})
-
 String.prototype.hashCode = function() {
   var hash = 0,
     i, chr;
@@ -101,9 +97,9 @@ chrome.contextMenus.onClicked.addListener(async(data, tab) => {
   if (data.menuItemId == "summarize-sentence") {
   chrome.sidePanel.open({ windowId: tab.windowId });
   tabdata = stripHTML(data.selectionText);
-
   // send selected text to sidepanel if loaded
   if (loaded == true){
+    console.log("summary");
     chrome.runtime.sendMessage({
       name: 'summarize-sentence2',
       data: { value: "summarizing: " + tabdata }
