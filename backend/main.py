@@ -5,6 +5,14 @@ from rake_nltk import Rake # to identify keywords
 import nltk
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+import json
+
+from collections import defaultdict
+from gensim import corpora
+from gensim import models
+from gensim import similarities
+
+import numpy as np
 
 
 # tokenize the highlighted text
@@ -24,6 +32,71 @@ limiter = Limiter(
 # configure gpu device if available
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 print(device)
+
+def topic_analysis(selected, data):
+    documents = data
+
+    doc = selected
+
+    # remove common words and tokenize
+    stoplist = set('for a of the and to in'.split())
+    texts = [
+        [word for word in document.lower().split() if word not in stoplist]
+        for document in documents
+    ]
+
+    # remove words that appear only once
+    frequency = defaultdict(int)
+    for text in texts:
+        for token in text:
+            frequency[token] += 1
+
+    texts = [
+        [token for token in text if frequency[token] > 1]
+        for text in texts
+    ]
+
+    dictionary = corpora.Dictionary(texts)
+    corpus = [dictionary.doc2bow(text) for text in texts]
+
+    lsi = models.LsiModel(corpus, id2word=dictionary)
+
+    vec_bow = dictionary.doc2bow(doc.lower().split())
+    print(vec_bow)
+    vec_lsi = lsi[vec_bow]  # convert the query to LSI space
+
+    index = similarities.MatrixSimilarity(lsi[corpus])  # transform corpus to LSI space and index it
+    print(index)
+
+
+    sims = index[vec_lsi]  # perform a similarity query against the corpus
+    test = list(enumerate(sims))  # print (document_number, document_similarity) 2-tuples
+
+    scores = []
+    for pos, score in test:
+        scores.append(score)
+
+    mean = np.mean(scores)
+    sd = np.std(scores)
+
+
+    ret = []
+    count = 0
+    avg = 0
+    sims = sorted(enumerate(sims), key=lambda item: -item[1])
+    for doc_position, doc_score in sims:
+        if doc_score > .3:
+            print(doc_score, documents[doc_position])
+            ret.append(doc_position)
+            count +=1
+    #
+    # print("avg score = " + str(avg/len(documents)))
+
+
+    # print("\n ", selected)
+
+    return ret
+
 
 def summarize(data):
     ARTICLE = data
@@ -91,6 +164,28 @@ def summary():
     print(summary)
     # return data
     return jsonify(data)
+
+@app.route("/v0/similarity", methods = ["POST"])
+@limiter.limit("1/5seconds")
+def similarity():
+    """Return a friendly HTTP greeting."""
+    # post request with JSON data format
+    content = request.get_json()
+
+    selected = content[0]
+    content.pop(0)
+
+    ret = topic_analysis(selected, content)
+    print(ret)
+
+
+    data = {
+    "summary": json.dumps(ret),
+    "raw": "Successful"
+    }
+
+    return data
+
 
 @app.route("/v0/keywords", methods = ["POST"])
 @limiter.limit("1/10seconds")
