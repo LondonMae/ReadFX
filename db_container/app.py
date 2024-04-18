@@ -100,7 +100,7 @@ def get_user_notes(user_id):
         ''', (user_id,))
         notes = cursor.fetchall()
 
-        notes_list = [{"id": note[0], "title": note[1], "content": note[2]} for note in notes]
+        notes_list = [{"user_id": note[1], "header": note[2], "content": note[3]} for note in notes]
         return jsonify(notes_list), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
