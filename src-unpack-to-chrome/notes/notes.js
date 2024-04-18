@@ -3,7 +3,7 @@ const notes_title = document.getElementsByClassName('notes_title')[0];
 const regex = /(?<=#)[a-zA-Z0-9]+/m;
 const sidebar = document.getElementById("notes-container");
 POST_URL_NOTES = "http://127.0.0.1:5000/notes"
-GET_URL_NOTES = "http://127.0.0.1:5000/notes"
+GET_URL_NOTES = "http://127.0.0.1:5000/users/user_id/notes"
 
 const idx = lunr(function () {
   console.log("this is a notes test")
@@ -97,6 +97,7 @@ const update_noteslist = ()=>{
   sidebar.innerHTML = ""
   chrome.storage.local.get(["notes"]).then(
     (notes) => {
+      console.log(notes)
 
       for (let n in notes["notes"]){
         console.log(n)
@@ -116,7 +117,7 @@ const update_noteslist = ()=>{
 }
 
 
-const sync_notes = (user_id)=> {
+const push_notes = (user_id)=> {
   console.log("invoke chrome storage")
   chrome.storage.local.get("notes").then((e)=>{
     let notes = e.notes
@@ -133,6 +134,21 @@ const sync_notes = (user_id)=> {
 }
 
 
+
+const pull_notes = (user_id)=> {
+  console.log("reached pull notes")
+  let url = GET_URL_NOTES.replace("user_id", user_id.toString())
+  console.log(url)
+
+  const requestOptions = {
+  method: "GET",
+  redirect: "follow"
+};
+fetch(url, requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+}
 
 async function postData(url = "", data = {}) {
   // Default options are marked with *
@@ -242,13 +258,19 @@ document.getElementById("generate_id").addEventListener("click", () => {
       content.textContent = id;
   })
 
-// Invoke sync button
-document.getElementById("sync_button").addEventListener("click", ()=>{
+// Invoke push button
+document.getElementById("push_button").addEventListener("click", ()=>{
   var user_id = document.getElementById("user_id").textContent;
   console.log("user is is   ", user_id);
-  sync_notes(user_id);
+  push_notes(user_id);
 })
 
+// Invoke pull button
+document.getElementById("pull_button").addEventListener("click", ()=>{
+  var user_id = document.getElementById("user_id").textContent;
+  console.log("user is is   ", user_id);
+  pull_notes(user_id);
+})
 
 function add_link(h, highlight_colors){
 
