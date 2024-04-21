@@ -174,6 +174,9 @@ function openPdf(){
 }
 
 function saveNotebook(){
+    let notebook_title = document.getElementById("notebook-title").value
+    let notebook_content = document.getElementById("notebook").value
+
     chrome.runtime.sendMessage({
         name: 'write_notebook',
         data: document.getElementById("notebook").value
