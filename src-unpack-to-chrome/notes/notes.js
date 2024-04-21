@@ -119,6 +119,7 @@ const restoreOptions = () => {
   update_noteslist()
   chrome.storage.local.get(["notes"]).then(
     (items) => {
+      console.log("deleteing notes")
       if(Object.keys(items).length == 0){
         chrome.storage.local.set({"notes": {
           "Notes": {

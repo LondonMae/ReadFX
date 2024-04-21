@@ -219,51 +219,48 @@ function cleanPage(){
     const instance = new Readability(document);
     const results = instance.parse();
     document.body.innerHTML = results.content
+    document.head.innerHTML = `"<link rel="stylesheet" href="` + chrome.runtime.getURL("/reading_mode/readingmode.css") + `">`
 }
+document.getElementById('read-button').addEventListener('click', function() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        var activeTab = tabs[0];
+        var url = activeTab.url;
 
-document.addEventListener('DOMContentLoaded', function() {
-    var openReadingModeButton = document.getElementById('open-reading-mode-button');
-    openReadingModeButton.addEventListener('click', function() {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            var activeTab = tabs[0];
-            var url = activeTab.url;
-
-            // Inject content script to remove event listeners, images, graphics, hyperlinks, references, and edit buttons
-            chrome.scripting.executeScript({
-                target: {tabId: activeTab.id},
-                func: cleanPage
-            });
-
-
-        });
-    });
-});
-
-
-
-
-document.getElementById("read-button").addEventListener("click", () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        console.log("Button Clicked");
-        const tab = tabs[0];
-        function getParas() {
-            var paragraphs = document.getElementsByTagName("p");
-            var textCollection = [];
-
-            for (var i = 0; i < paragraphs.length; i++) {
-                textCollection.push(paragraphs[i].textContent);
-            }
-
-            console.log(textCollection);
-        };
-
+        // Inject content script to remove event listeners, images, graphics, hyperlinks, references, and edit buttons
         chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            func: getParas,
-            //        files: ['contentScript.js'],  // To call external file instead
-        }).then(() => console.log('Injected a function!'));
+            target: {tabId: activeTab.id},
+            func: cleanPage
+        });
+
+
     });
 });
+
+
+
+
+// document.getElementById("read-button").addEventListener("click", () => {
+//     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        // console.log("Button Clicked");
+        // const tab = tabs[0];
+        // function getParas() {
+        //     var paragraphs = document.getElementsByTagName("p");
+        //     var textCollection = [];
+
+        //     for (var i = 0; i < paragraphs.length; i++) {
+        //         textCollection.push(paragraphs[i].textContent);
+        //     }
+
+        //     console.log(textCollection);
+        // };
+
+        // chrome.scripting.executeScript({
+        //     target: { tabId: tab.id },
+        //     func: getParas,
+        //     //        files: ['contentScript.js'],  // To call external file instead
+        // }).then(() => console.log('Injected a function!'));
+//     });
+// });
 
 document.getElementById("bold-button").addEventListener("click", () => {
   console.log("bolding");

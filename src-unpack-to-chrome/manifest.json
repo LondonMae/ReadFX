@@ -34,5 +34,11 @@
         "https://*/*",
         "file://*/*"
       ],
-    "options_page": "notes/notes.html"
-    }
+    "options_page": "notes/notes.html",
+    "web_accessible_resources": [
+        {
+          "resources": [ "reading_mode/readingmode.css"],
+          "matches": [ "*://*/*" ]
+        }
+      ]
+}
