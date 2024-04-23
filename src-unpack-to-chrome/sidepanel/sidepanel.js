@@ -219,6 +219,7 @@ function cleanPage(){
     const instance = new Readability(document);
     const results = instance.parse();
     document.body.innerHTML = results.content
+    document.body.contentEditable = true;
     document.head.innerHTML = `"<link rel="stylesheet" href="` + chrome.runtime.getURL("/reading_mode/readingmode.css") + `">`
 }
 document.getElementById('read-button').addEventListener('click', function() {

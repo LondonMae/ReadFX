@@ -1,5 +1,5 @@
 // TODO: highlight all text before anything 
-
+let highlight_active = false;
 let highlight_applied = false;
 // set this to true before applying the newest highlight
 
@@ -94,19 +94,16 @@ window.addEventListener("mouseup", (e)=>{
       construct_range(data)
     }
 
-    if (document.getElementsByClassName('readfxpopup').length > 0){
+    if (highlight_active && document.getElementsByClassName('readfxpopup').length > 0){
         document.getElementsByClassName('readfxpopup')[0].remove()
     }
     if (window.getSelection().toString() != "") {
-        if(!highlight_applied){
+        if(!highlight_active){
           console.log("enable show highlights first")
-          //return
+          return
         }
         add_new_highlight(e)
     } 
-    // else if (document.selection && document.selection.type != "Control") {
-    //     text = document.selection;
-    // }
 })
 
 function highlight_text_node(n, start, end, color){

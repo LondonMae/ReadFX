@@ -45,6 +45,31 @@ highlight-tag > *{
   mix-blend-mode: multiply;
 }
 
+.highlight_button>img{
+  height:2em;
+}
+.highlight_info{
+  opacity: 0;
+  top:-5em;
+  right:1em;
+  text-align: right;
+  position: absolute;
+}
+
+.highlight_button:hover > .highlight_info{
+  opacity: 1.0;
+}
+
+.highlight_button {
+  padding:0.5em;
+  background-color: rgb(75, 90, 72);
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  cursor: pointer;
+  border-radius: 1em;
+}
+
 .color0{
   background: var(--color0);
 }
