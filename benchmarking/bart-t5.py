@@ -1,24 +1,19 @@
 # demo different llm models, Bart is faster due to seq2seq encoding
 import torch
-from transformers import AutoTokenizer, T5ForConditionalGeneration, BartForConditionalGeneration, BartTokenizer, BartConfig
+from transformers import PegasusForConditionalGeneration, PegasusTokenizer, AutoTokenizer, T5ForConditionalGeneration, BartForConditionalGeneration, BartTokenizer, BartConfig
 import time # for benchmarking
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 print(device)
 
 def t5(data):
-    tokenizer=AutoTokenizer.from_pretrained('T5-base')
-    model=T5ForConditionalGeneration.from_pretrained('T5-base')
-
-    sequence = data
-
-    inputs=tokenizer.encode_plus("summarize: " + data,return_tensors='pt', return_length=True).to(device)
-    length = inputs['length']
-
-    output =  model.generate(inputs['input_ids'], min_length=int(length*.1), max_length=int(length)).to(device)
-
-    summary=tokenizer.decode(output[0], skip_special_tokens=True)
-    return summary
+    model_name = "google/pegasus-xsum"
+    tokenizer = PegasusTokenizer.from_pretrained(model_name)
+    model = PegasusForConditionalGeneration.from_pretrained(model_name).to(device)
+    batch = tokenizer([data], truncation=True, padding="longest", return_tensors="pt").to(device)
+    translated = model.generate(**batch)
+    tgt_text = tokenizer.batch_decode(translated, skip_special_tokens=True)
+    return tgt_text[0]
 
 def bart(data):
     ARTICLE = data
@@ -46,10 +41,10 @@ t1 = time.time()
 print("BART qualitative assessment: " + bart(words) + "\n")
 t2 = time.time()
 bart_sum += t2-t1
-t1 = time.time()
-print("T5 qualitative assessment: " + t5(words) + "\n")
-t2 = time.time()
-t5_sum += t2-t1
+# t1 = time.time()
+# print("T5 qualitative assessment: " + t5(words) + "\n")
+# t2 = time.time()
+# t5_sum += t2-t1
 
 print ("BART time: " + str(bart_sum))
 print ("T5 time: " + str(t5_sum))

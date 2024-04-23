@@ -1,3 +1,4 @@
 *.pyc
 venv
-*.json
+backend/todo_api
+backend/.DS_Store

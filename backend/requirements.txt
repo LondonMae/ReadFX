@@ -30,3 +30,6 @@ transformers==4.36.2
 typing_extensions==4.9.0
 urllib3==2.1.0
 wikipedia==1.4.0
+keyphrase-vectorizers
+keybert
+nltk

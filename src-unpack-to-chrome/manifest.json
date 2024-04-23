@@ -16,24 +16,29 @@
         "service_worker": "service-worker.js",
         "type": "module"
       },
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "exclude_matches": ["https://docs.google.com/*", "*://google.com/*"],
+            "css": ["content-script/style.css"],
+            "js": ["content-script/highlight.js", "content-script/content.js", "content-script/path.js", "content-script/readability.js", "content-script/overlay.js"],
+            "run_at": "document_end"
+        }
+    ],
     "side_panel": {
         "default_path" :"sidepanel/sidepanel.html"
     } ,
-    "content_scripts": [
-        {
-        "matches": [
-            "http://*/*",
-            "https://*/*"
-            ],
-        "js": ["content.js"],
-        "run_at": "document_end"    // Pay attention to this line
-        }
-    ],
     "permissions": ["activeTab", "sidePanel", "contextMenus", "scripting", "tabs", "notifications", "scripting", "storage"],
     "host_permissions": [
         "http://*/*",
         "https://*/*",
         "file://*/*"
+      ],
+    "options_page": "notes/notes.html",
+    "web_accessible_resources": [
+        {
+          "resources": [ "reading_mode/readingmode.css", "images/highlighter.png"],
+          "matches": [ "*://*/*" ]
+        }
       ]
-
-    }
+}
