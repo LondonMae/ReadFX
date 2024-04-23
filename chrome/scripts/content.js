@@ -25,21 +25,16 @@ if (document.getSelection) {
     
 
 // content.js
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.action === 'extract_text_content') {
-      var cleanedContent = document.body.innerText;
-      // Remove hyperlinks
-      cleanedContent = cleanedContent.replace(/<a\b[^>]*>(.*?)<\/a>/gi, '$1');
-      // Remove images
-      cleanedContent = cleanedContent.replace(/<img\b[^>]*>/gi, '');
-      // Remove references
-      cleanedContent = cleanedContent.replace(/\[\d+\]/g, '');
-      sendResponse({cleanedContent: cleanedContent});
-  }
-});
 chrome.scripting.executeScript({
   target: {tabId: activeTab.id},
   function: () => {
+      //  link to custom CSS file
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = chrome.runtime.getURL('src-unpack-to-chrome/content-script/reading-mode.css'); // Update path to your CSS file
+      document.head.appendChild(link);
+
       // Remove all event listeners from the page
       document.querySelectorAll('*').forEach(node => {
           node.removeEventListener('click', event => event.stopPropagation(), true);

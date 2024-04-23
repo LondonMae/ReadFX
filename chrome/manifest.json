@@ -1,29 +1,33 @@
 {
-  "name": "ReadFX",
-  "description": "testing woohoo",
-  "version": "0.1",
-  "background": {
-      "service_worker": "background.js"
-  },
-  "permissions": ["activeTab", "scripting", "storage"],
-  "host_permissions": [
-      "http://127.0.0.1:8000/",
-      "http://*/*",
-      "https://*/*"
-  ],
-  "action": {
-      "default_popup": "hello.html"
-  },
-  "content_scripts": [
-      {
-          "matches": [
-              "http://*/*",
-              "https://*/*"
-          ],
-          "js": ["scripts/content.js"],
-          "run_at": "document_end"
-      }
-  ],
-  "manifest_version": 3
-}
+    "name": "ReadFX",
+    "description": "testing woohoo",
+    "version": "0.1",
 
+    "action": {
+      "default_popup":"hello.html"
+    },
+
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {},
+
+
+    "permissions": ["activeTab", "scripting"],
+    "host_permissions": [
+      "http://127.0.0.1:8000/"
+    ],
+
+
+    "content_scripts": [
+        {
+        "matches": [
+            "http://*/*",
+            "https://*/*"
+            ],
+        "js": ["scripts/content.js"],
+        "run_at": "document_end"    
+        }
+    ],
+    "manifest_version": 3
+}

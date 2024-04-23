@@ -1,0 +1,46 @@
+/* Reset default styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #fff;
+}
+
+/* Center content */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Increase font size for easier reading */
+p {
+    font-size: 18px;
+}
+
+/* Adjust line spacing for better readability */
+p,
+ul,
+ol {
+    margin-bottom: 1em;
+}
+
+/* Change color scheme for reduced eye strain */
+body {
+    color: #000000;
+    background-color: #fff;
+}
+
+/* Different bold font for headings and subheadings */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif; /* Use Montserrat as the bold font for headings */
+}
+
+/* Bold font for subheadings */
+h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
