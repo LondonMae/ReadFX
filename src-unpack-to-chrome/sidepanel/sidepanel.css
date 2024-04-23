@@ -5,14 +5,18 @@
 :root {
 
     --font: "Lato";
-    --bg:#87c0e3;
-    --b: linear-gradient(#d3bbf2, #87c0e3, #bbe8e1);
+    --body-bg:white;
+    --bg: linear-gradient(#d3bbf2, #87c0e3, #bbe8e1);
+    --button-bg: linear-gradient(144deg, #d3bbf2, #87c0e3, #bbe8e1);
+    --select-bg: white;
     --primary: white;
     --secondary:#3c4fe0;
     --highlight: #c59ca8;
-    --text-color: grey;
+    --text-color: #3b3e4d;
     --text-color-h: linear-gradient(#d3bbf2, #87c0e3, #bbe8e1);;
     --b-radius: 0.7rem;
+    --page-font: "Times";
+    --select-text: #3b3e4d;
 }
 
 /* CSS */
@@ -30,7 +34,6 @@
     font-weight: bold;
     background-color: var(--highlight); /* Green background color */
     border: none;
-    color: var(--text-color-h); /* Text color */
     padding: 10px 20px; /* Padding for the buttons */
     text-align: center;
     text-decoration: none;
@@ -41,12 +44,12 @@
 .tool-button {
   align-items: center;
   appearance: none;
-  background-color: #fff;
+  background-color: var(--primary);
   border-radius: 24px;
   border-style: none;
   box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
   box-sizing: border-box;
-  color: grey;
+  color: var(--text-color);
   cursor: pointer;
   display: inline-flex;
   fill: currentcolor;
@@ -79,12 +82,12 @@
 
 .tool {
  align-items: center;
- background-image: linear-gradient(144deg,#d3bbf2, #87c0e3 50%,#bbe8e1);
+ background-image: var(--button-bg);
  border: 0;
  border-radius: 8px;
  box-shadow: rgba(151, 65, 252, 0.2) 5px 10px 15px -5px;
  box-sizing: border-box;
- color: grey;
+ color: var(--text-color);
  display: flex;
  font-size: 18px;
  justify-content: center;
@@ -104,11 +107,11 @@
 .tool:active,
 .tool:hover {
  outline: 0;
- color:white;
+ color:var(--primary);
 }
 
 .tool span {
- background-color: white;
+ background-color: var(--primary);
  padding: 16px 24px;
  border-radius: 6px;
  width: 100%;
@@ -118,7 +121,7 @@
 
 .tool:hover span {
  background: none;
-  color:white;
+  color:var(--primary);
 }
 
 .tool:active {
@@ -139,8 +142,8 @@
 
 body {
   overflow-x: hidden;
-    background-color: var(--bg);
-    background-image: var(--b);
+    background-color: var(--body-bg);
+    background-image: var(--bg);
     background-attachment: fixed;
     color: var(--text-color);
 }
@@ -171,7 +174,6 @@ hr{
 
 .parent_block{
     margin-bottom: 20px;
-    color: var(--b);
     background-color: var(--primary);
     border-radius:  var(--b-radius);
     margin-left: 2.5%; margin-right: 2.5%;
@@ -179,12 +181,13 @@ hr{
 }
 
 textarea{
-  color: grey;
-    background-color: white;
+  outline: none;
+  color: var(--text-color);
+    background-color: var(--primary);
     width:100%;
-    scrollbar-color: var(--bg);
+    scrollbar-color: var(--body-bg);
     border-radius:  var(--b-radius);
-    border: 2px solid grey;
+    border: 2px solid var(--text-color);
     padding:1em;
 }
 
@@ -194,12 +197,12 @@ textarea{
 
 .summary{
   overflow-y: scroll;
-  color: grey;
-    background-color: white;
+  color: var(--text-color);
+    background-color: var(--primary);
     width:90%;
-    scrollbar-color: var(--bg);
+    scrollbar-color: var(--body-bg);
     border-radius:  var(--b-radius);
-    border: 2px solid grey;
+    border: 2px solid var(--text-color);
     padding:1em;
 }
 
@@ -276,7 +279,7 @@ textarea{
 
 .lds-roller {
   /* change color here */
-  color: #1c4c5b
+  color: var(--text-color);
 }
 .lds-roller,
 .lds-roller div,
@@ -386,4 +389,55 @@ textarea{
 .highlight_color::-webkit-color-swatch{
     border-radius:0.5em;
     height:5em;
+}
+
+#input {
+  align-items: center;
+  background-image: var(--button-bg);
+  background-color: var(--button-bg);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: rgba(151, 65, 252, 0.2) 5px 10px 15px -5px;
+  box-sizing: border-box;
+  color: var(--text-color);
+  display: flex;
+  font-size: 18px;
+  justify-content: center;
+  line-height: 1em;
+  width: 100%;
+  padding: 3px;
+  margin: 3px;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all .3s;
+}
+select {
+  font-family: var(--page-font);
+  text-align: center;
+  color: var(--select-text);
+  border: none;
+  outline:none;
+  background-color: var(--select-bg);
+  padding: 16px 24px;
+  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  transition: 300ms;
+  font-size: 20px;
+}
+
+#change-font-button {
+  justify-content: center;
+  margin-top: 5px;
+  height: 35px;
+
+}
+
+#fontFx {
+  padding-top: 25px;
+  text-align: center;
 }

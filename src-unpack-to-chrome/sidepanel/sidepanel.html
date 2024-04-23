@@ -27,21 +27,28 @@
       <div id="buttons-container">
             <button class="tool" id="read-button"><span>READ</span></button>
           <button class="tool" id="bold-button"><span>Bold Keywords</span></button>
-          <button class="tool" id="change-font-button"><span>Change Font</span></button>
-          <div>
-            <select id="input-font" class="input" >
-              <option value="Times">Times New Roman</option>
-              <option value="Arial">Arial</option>
-              <option value="Helvetica" class="bolder">Helvetica</option>
-            </select>
-          </div>
+
+
           <button class="tool" id="highlight-button"><span>Show Highlights</span></button>
-            <button class="tool" id="space-out-button"><span>Space out Sentences</span></button>
+          <button class="tool" id="similarity-button"><span>Find Similar Paragraphs</span></button>
           <button class="tool" id="change-theme-button"><span>Change Theme</span></button>
           <button class="tool" id="open-pdf"><span>Open PDF</span></button>
           <div id="current-theme"> (default) </div>
         </div>
       </div>
+
+<div id = "fontFx" class = "parent_block">
+
+
+        <div id = "input">
+        <select class="input" id = "input-font" >
+          <option value="Times">Times New Roman</option>
+          <option value="Arial">Arial</option>
+          <option value="Lato">Lato</option>
+        </select>
+      </div>
+      <button class="tool-button" id="change-font-button"><span>Change Font</span></button>
+    </div>
 
     <div id="HistoryFx"  class="parent_block">
       <h1>My Notebook</h1>

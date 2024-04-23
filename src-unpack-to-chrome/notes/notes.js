@@ -3,31 +3,78 @@ const notes_title = document.getElementsByClassName('notes_title')[0];
 const regex = /(?<=#)[a-zA-Z0-9]+/m;
 const sidebar = document.getElementById("notes-container");
 
-const idx = lunr(function () {
-  console.log("this is a notes test")
-	this.field("title")
-	this.field("description")
+var idx;
+var n;
+async function test() {
+  n = await chrome.storage.local.get("notes")
 
-  this.add({
-    "title": "Philosophy of Science",
-    "description": "Einstein's own philosophy of science is an original synthesis of elements drawn from sources as diverse as neo Kantianism, conventionalism, and logical empiricism. Einstein s relations with and influence on other prominent twentieth century philosophers of science, including Moritz Schlick, Hans Reichenbach, Ernst Cassirer.",
-    "author": "Albert Einstein",
-    "id": "1"
+  idx = lunr( async function () {
+    console.log("in search")
+    this.field("title")
+    this.field("body")
+
+      console.log("testing search ")
+      var london = n["notes"]
+      var id = 0;
+      for (note in london) {
+        console.log(london[note]);
+        this.add(
+          {"title": london[note]["title"],
+          "body": london[note]["body"],
+          "id": london[note]["title"]
+        })
+        id += 1;
+          }
   })
+  console.log(n)
 
-  this.add({
-    "title": "Quantum Mechanics",
-    "description": "Quantum systems have bound states that are quantized to discrete values of energy, momentum, angular momentum, and other quantities. Measurements of quantum systems show characteristics of both particles and waves. Most theories in classical physics can be derived from quantum mechanics as an approximation valid at large scale.",
-    "author": "Wiki",
-    "id": "2"
+  console.log("after notes")
+
+
+  return idx
+}
+
+
+
+
+const ENTER_KEY_CODE = 13;
+var search_bar = document.getElementById('search-bar');
+search_bar.addEventListener('keyup', function(e) {
+  if (e.keyCode === ENTER_KEY_CODE) {
+    var val = search_bar.value;
+    search_func(val)
+  }
+});
+
+
+async function search_func(val) {
+  idx = await test()
+  await n;
+  console.log(n)
+  var indexes;
+  var res = idx.search(val)
+  console.log(res)
+  sidebar.innerHTML = ""
+  for (note in res) {
+    console.log(res[note]["ref"])
+    new_n = res[note]["ref"]
+    update_n(new_n)
+  }
+
+
+}
+
+function update_n(new_n) {
+  let note_tab = document.createElement("div");
+  note_tab.innerHTML = note_tab_temp.replace('$', new_n);
+  note_tab.children[0].addEventListener('click', ()=>{
+    deletenote(new_n)
   })
-
-})
-
-console.log(idx)
-console.log(idx.search("science"))
-
-
+  note_tab.classList.add("notelink");
+//        note_tab.innerText = n;
+  note_tab.addEventListener('click', () => {switchNotes(new_n)});
+  sidebar.appendChild(note_tab);
+}
 
 
 // Saves options to chrome.storage
@@ -47,12 +94,10 @@ const saveOptions = () => {
       // Update status to let user know options were saved.
       const status = document.getElementById('status');
       status.textContent = 'Notes saved.';
-      setTimeout(() => {
-        status.textContent = '';
-      }, 750);
+
     })
+    update_noteslist()
   });
-  update_noteslist()
 };
 
 chrome.runtime.onMessage.addListener(({ name, data }) => {
@@ -75,7 +120,7 @@ const switchNotes = (title) => {
 
 let note_tab_temp = `
   $
-  <button class="delete-button">x</button>
+  <button class="delete-button">-</button>
 `
 
 const deletenote = (title)=>{
@@ -95,12 +140,11 @@ const update_noteslist = ()=>{
   sidebar.innerHTML = ""
   chrome.storage.local.get(["notes"]).then(
     (notes) => {
-
       for (let n in notes["notes"]){
         console.log(n)
         let note_tab = document.createElement("div");
         note_tab.innerHTML = note_tab_temp.replace('$', n);
-        note_tab.children[0].addEventListener('click', ()=>{
+        note_tab.querySelector(".delete-button").addEventListener('click', ()=>{
           deletenote(n)
         })
         note_tab.classList.add("notelink");

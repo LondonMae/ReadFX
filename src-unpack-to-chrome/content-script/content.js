@@ -84,7 +84,6 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
     sendResponse(doc)
   }
 
-
   if (msg[0] == "extract keywords") {
 
 
