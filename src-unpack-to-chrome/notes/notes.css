@@ -45,6 +45,7 @@ body {
     padding:0.2em 0.5em 0.2em 0.5em;
     margin-right:0px;
     width: fit-content;
+    min-width: 100px;
     height:100%;
     overflow-y: scroll;
 }
@@ -96,6 +97,10 @@ body {
 .delete-button:hover{
     border-radius: 1em;
     background: lightblue;
+}
+
+.inline-buttons {
+   display: inline-block;
 }
 
 .notes_title{
