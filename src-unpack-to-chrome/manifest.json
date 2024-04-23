@@ -21,7 +21,7 @@
             "matches": ["*://*/*"],
             "exclude_matches": ["https://docs.google.com/*", "*://google.com/*"],
             "css": ["content-script/style.css"],
-            "js": ["content-script/highlight.js", "content-script/content.js", "content-script/path.js", "content-script/readability.js"],
+            "js": ["content-script/highlight.js", "content-script/content.js", "content-script/path.js", "content-script/readability.js", "content-script/similar.js"],
             "run_at": "document_end"
         }
     ],

@@ -27,6 +27,10 @@ async function sendDataToServer(selectedText, test) {
        serverEndpoint += 'keywords';
   }
 
+  else if (test == "similarity") {
+       serverEndpoint += 'similarity';
+  }
+
   // POST request data as JSON
   const response = await fetch(serverEndpoint, {
     method: 'POST',
@@ -164,6 +168,17 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
   if (name == "font") {
     console.log("fonts")
   }
+
+  if (name == "similarity") {
+    let requestTy = "similarity"
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    var doc = await chrome.tabs.sendMessage(tab.id, "get_docs");
+    console.log(JSON.stringify(doc));
+    let response =  await sendDataToServer(doc, requestTy);
+    console.log(JSON.parse(response["summary"]))
+    var doc = await chrome.tabs.sendMessage(tab.id, ["similarities", JSON.parse(response["summary"])]);
+  }
+
   if (name === 'loaded') {
     chrome.runtime.sendMessage({
       name: 'summarize-sentence2',

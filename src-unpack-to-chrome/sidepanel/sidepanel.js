@@ -261,6 +261,14 @@ document.getElementById("bold-button").addEventListener("click", () => {
         toggleTheme()
     })
 
+    document.getElementById("similarity-button").addEventListener("click", () => {
+          chrome.runtime.sendMessage({
+              name: "similarity",
+              data: "none"
+          })
+    })
+
+
     document.getElementById("copy-button").addEventListener("click", () => {
         copyText()
     })
