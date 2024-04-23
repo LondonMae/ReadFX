@@ -224,26 +224,23 @@ function cleanPage(){
     const instance = new Readability(document);
     const results = instance.parse();
     document.body.innerHTML = results.content
+    document.head.innerHTML = `"<link rel="stylesheet" href="` + chrome.runtime.getURL("/reading_mode/readingmode.css") + `">`
 }
+document.getElementById('read-button').addEventListener('click', function() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        var activeTab = tabs[0];
+        var url = activeTab.url;
 
-document.addEventListener('DOMContentLoaded', function() {
-    var openReadingModeButton = document.getElementById('read-button');
-    openReadingModeButton.addEventListener('click', function() {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            var activeTab = tabs[0];
-            var url = activeTab.url;
-
-            // Inject content script to remove event listeners, images, graphics, hyperlinks, references, and edit buttons
-            chrome.scripting.executeScript({
-                target: {tabId: activeTab.id},
-                func: cleanPage
-            });
-
-
+        // Inject content script to remove event listeners, images, graphics, hyperlinks, references, and edit buttons
+        chrome.scripting.executeScript({
+            target: {tabId: activeTab.id},
+            func: cleanPage
         });
+
+
+
     });
 });
-
 
 
 

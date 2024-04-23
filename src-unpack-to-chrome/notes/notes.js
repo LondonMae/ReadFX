@@ -163,6 +163,7 @@ const restoreOptions = () => {
   update_noteslist()
   chrome.storage.local.get(["notes"]).then(
     (items) => {
+      console.log("deleteing notes")
       if(Object.keys(items).length == 0){
         chrome.storage.local.set({"notes": {
           "Notes": {
@@ -232,11 +233,17 @@ document.getElementById("add-note-button").addEventListener("click", ()=>{
 })
 
 
+function jump_to_highlight(url){
+  window.location.href = url
+}
+
+
 function add_link(h, highlight_colors){
 
   let link_ele = document.createElement('div');
   console.log(h.color.match('[0-9]')[0])
   link_ele.style.background = highlight_colors[h.color.match('[0-9]')[0]]
+  link_ele.value = h.url
   const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
   link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<div>" + h.text + "</div>";
   let button = document.createElement("button");
@@ -247,13 +254,20 @@ function add_link(h, highlight_colors){
       deletehighlight(h)
   })
   link_ele.appendChild(button);
-  link_ele.classList.add('highlight-link');
-  link_ele.addEventListener('click', ()=>{
-      jump_to_highlights()
+  link_ele.addEventListener('click', (e)=>{
+    console.log(e)
+    e.preventDefault()
+    jump_to_highlights(h.url)
   })
+  link_ele.classList.add('highlight-link');
+  link_ele.value = h.url;
+  link_ele.contentEditable = false;
+  console.log(h.url)
   document.getElementsByClassName("notes_body")[0].appendChild(link_ele)
   document.getElementsByClassName("notes_body")[0].innerHTML += "<br>"
 }
+
+
 
 function listHighlights(){
     let highlight_colors = [];
@@ -280,7 +294,6 @@ function listHighlights(){
             console.log(w);
             for(let h of result.highlights[w]){
                 let link_ele = document.createElement('div');
-                console.log(h.color.match('[0-9]')[0])
                 link_ele.style.background = highlight_colors[h.color.match('[0-9]')[0]]
                 const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
                 link_ele.innerHTML = "<a href='" + h.url + "'>" + regex.exec(h.url) + "</a>" + "<div>" + h.text + "</div>";
