@@ -16,6 +16,8 @@ documents = [
     "Human Computers interact",
 ]
 
+doc = "Human computer interaction"
+
 # remove common words and tokenize
 stoplist = set('for a of the and to in'.split())
 texts = [
@@ -40,7 +42,6 @@ corpus = [dictionary.doc2bow(text) for text in texts]
 
 lsi = models.LsiModel(corpus, id2word=dictionary, num_topics = 2)
 
-doc = "Human computer interaction"
 vec_bow = dictionary.doc2bow(doc.lower().split())
 print(vec_bow)
 vec_lsi = lsi[vec_bow]  # convert the query to LSI space

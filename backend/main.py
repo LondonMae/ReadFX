@@ -2,15 +2,17 @@ from flask import Flask, jsonify, request # BACKEND FRAMEWORK
 import torch # for gpu training
 from transformers import BartTokenizerFast, T5ForConditionalGeneration, BartForConditionalGeneration, BartTokenizer, BartConfig #for summarization
 from rake_nltk import Rake # to identify keywords
-# from keyphrase_vectorizers import KeyphraseCountVectorizer
-from keybert import KeyBERT
-from nltk.corpus import wordnet
-from nltk.corpus import stopwords
-from nltk.corpus import words
 import nltk
-import string
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+import json
+
+from collections import defaultdict
+from gensim import corpora
+from gensim import models
+from gensim import similarities
+
+import numpy as np
 
 
 # tokenize the highlighted text
@@ -31,10 +33,70 @@ limiter = Limiter(
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 print(device)
 
-def keyword_init():
-    nltk.download('stopwords')
-    nltk.download('punkt')
-    print("download word db")
+def topic_analysis(selected, data):
+    documents = data
+
+    doc = selected
+
+    # remove common words and tokenize
+    stoplist = set('for a of the and to in'.split())
+    texts = [
+        [word for word in document.lower().split() if word not in stoplist]
+        for document in documents
+    ]
+
+    # remove words that appear only once
+    frequency = defaultdict(int)
+    for text in texts:
+        for token in text:
+            frequency[token] += 1
+
+    texts = [
+        [token for token in text if frequency[token] > 1]
+        for text in texts
+    ]
+
+    dictionary = corpora.Dictionary(texts)
+    corpus = [dictionary.doc2bow(text) for text in texts]
+
+    lsi = models.LsiModel(corpus, id2word=dictionary)
+
+    vec_bow = dictionary.doc2bow(doc.lower().split())
+    print(vec_bow)
+    vec_lsi = lsi[vec_bow]  # convert the query to LSI space
+
+    index = similarities.MatrixSimilarity(lsi[corpus])  # transform corpus to LSI space and index it
+    print(index)
+
+
+    sims = index[vec_lsi]  # perform a similarity query against the corpus
+    test = list(enumerate(sims))  # print (document_number, document_similarity) 2-tuples
+
+    scores = []
+    for pos, score in test:
+        scores.append(score)
+
+    mean = np.mean(scores)
+    sd = np.std(scores)
+
+
+    ret = []
+    count = 0
+    avg = 0
+    sims = sorted(enumerate(sims), key=lambda item: -item[1])
+    for doc_position, doc_score in sims:
+        if doc_score > .3:
+            print(doc_score, documents[doc_position])
+            ret.append(doc_position)
+            count +=1
+    #
+    # print("avg score = " + str(avg/len(documents)))
+
+
+    # print("\n ", selected)
+
+    return ret
+
 
 def summarize(data):
     ARTICLE = data
@@ -64,11 +126,6 @@ def get_keywords(text):
 
     tokens = nltk.tokenize.word_tokenize(text)
     print(len(tokens))
-    #
-    # stop_words = set(stopwords.words())
-    # main_words = set(words.words())
-    # filtered_sentence = [w for w in tokens if (not w.lower() in stop_words) and (not w.lower() in string.punctuation) and ( not w.lower() in main_words) and (len(wordnet.synsets(w.lower())) < 1)]
-    # print(filtered_sentence)
 
     val = 12.0
     min_val = 5.0
@@ -78,7 +135,6 @@ def get_keywords(text):
         val -= len(tokens)*.0003
     chosen_words = set()
     for score in b:
-        # print(score)
         if score[0] > val:
             if score[1] not in chosen_words:
                 chosen_words.add(score[1])
@@ -87,13 +143,6 @@ def get_keywords(text):
     if val < min_val:
         val = min_val
 
-    # for word in filtered_sentence:
-    #     if word not in chosen_words:
-    #         chosen_words.add(word)
-    #         return_string += word + "."
-
-
-    # print(return_string)
     return return_string
 
 @app.route("/v0/summary", methods = ["POST"])
@@ -115,6 +164,28 @@ def summary():
     print(summary)
     # return data
     return jsonify(data)
+
+@app.route("/v0/similarity", methods = ["POST"])
+@limiter.limit("1/5seconds")
+def similarity():
+    """Return a friendly HTTP greeting."""
+    # post request with JSON data format
+    content = request.get_json()
+
+    selected = content[0]
+    content.pop(0)
+
+    ret = topic_analysis(selected, content)
+    print(ret)
+
+
+    data = {
+    "summary": json.dumps(ret),
+    "raw": "Successful"
+    }
+
+    return data
+
 
 @app.route("/v0/keywords", methods = ["POST"])
 @limiter.limit("1/10seconds")
@@ -139,5 +210,4 @@ if __name__ == "__main__":
     # Used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This
     # can be configured by adding an `entrypoint` to app.yaml.
-    keyword_init()
     app.run(host = "0.0.0.0", port=8000, debug=True)
