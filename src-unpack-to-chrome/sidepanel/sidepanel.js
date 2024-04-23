@@ -30,6 +30,7 @@ function toggleTheme() {
 }
 
 function copyText() {
+function copyText() {
     var copyText = document.getElementById("select-a-word");
     // Select the text field
     copyText.select();
@@ -39,6 +40,7 @@ function copyText() {
     navigator.clipboard.writeText(copyText.value);
 }
 
+function saveText() {
 function saveText() {
     chrome.runtime.sendMessage({
         name: 'save',
@@ -268,7 +270,14 @@ document.getElementById("read-button").addEventListener("click", () => {
             name: 'bold_text',
             data: { value: document.getElementById("bold-word").value }
         })
+    document.getElementById("bold-button").addEventListener("click", () => {
+        chrome.runtime.sendMessage({
+            name: 'bold_text',
+            data: { value: document.getElementById("bold-word").value }
+        })
 
+        document.getElementById("bold-word").value = ""
+    })
         document.getElementById("bold-word").value = ""
     })
 
@@ -276,11 +285,20 @@ document.getElementById("read-button").addEventListener("click", () => {
     document.getElementById("change-theme-button").addEventListener("click", () => {
         toggleTheme()
     })
+    document.getElementById("change-theme-button").addEventListener("click", () => {
+        toggleTheme()
+    })
 
     document.getElementById("copy-button").addEventListener("click", () => {
         copyText()
     })
+    document.getElementById("copy-button").addEventListener("click", () => {
+        copyText()
+    })
 
+    document.getElementById("save-button").addEventListener("click", () => {
+        saveText()
+    })
     document.getElementById("save-button").addEventListener("click", () => {
         saveText()
     })
@@ -398,6 +416,7 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
             data: { value: "loaded2" }
         });
     }
+    if (name === 'display-notes') {
     if (name === 'display-notes') {
         document.getElementById("notebook").value = data
     }

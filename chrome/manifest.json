@@ -1,13 +1,8 @@
 {
-    "name": "ReadFX",
-    "description": "testing woohoo",
-    "version": "0.1",
-
-    "action": {
-      "default_popup":"hello.html"
-    },
-
-    "background": {
+  "name": "ReadFX",
+  "description": "testing woohoo",
+  "version": "0.1",
+  "background": {
       "service_worker": "background.js"
     },
     "action": {},
@@ -31,3 +26,4 @@
     ],
     "manifest_version": 3
 }
+
