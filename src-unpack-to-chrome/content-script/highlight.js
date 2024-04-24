@@ -15,7 +15,7 @@ let pageHighlights = []
 let color_block = `
   <input id="%1" type="radio" name="choice" value="%2">     
   <label for="%1" class="color_label" style="background:var(--%3)">
-    %3
+    
   </label>
 `
 
@@ -63,7 +63,7 @@ async function add_new_highlight(e){
   element = window.getSelection().focusNode.parentNode;  
   
   let popup = document.createElement("div");
-  popup.innerHTML = "Highlight <br>"
+  popup.innerHTML = "Summarize <br>"
   for(let i = 0; i < 4; i++){
       popup.innerHTML += color_block.replaceAll(regex, "color" + i)
   }

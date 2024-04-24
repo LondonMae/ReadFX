@@ -7,33 +7,38 @@
   --color3: rgba(0,255,0,0.5);
 }
 .readfxpopup{
-    position:fixed;
-    background: #eeeeee;
-    color: #333333;
-    box-shadow: 0.1em 0.1em 0.2em 0em rgba(0,0,0,0.2);
-    padding: 1em;
-    z-index: 1000000;
-    border-radius:0.5em;
-    display:flex;
+  font-size: 12px;
+  position:fixed;
+  background: #eeeeee;
+  color: #333333;
+  box-shadow: 0.1em 0.1em 0.2em 0em rgba(0,0,0,0.2);
+  padding: 0.25em;
+  z-index: 1000000;
+  border-radius:0.5em;
+  display:flex;
+
 }
 
-label{
+.readfxpopup>label{
   padding:1em;
+  margin:0.2em;
+  border-radius:0.25em;
 }
 
-input[type=radio] {
+.readfxpopup>input[type=radio] {
   display: none;
   appearance: none;
 }
-input[type=radio]:checked + label {
+.readfxpopup>input[type=radio]:checked + label {
   background:#dddddd;
 }
-input[type=radio]:active + label {
+.readfxpopup>input[type=radio]:active + label {
     background:#ffffff;
 }
 
-label:hover {
+.readfxpopup>label:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  cursor:pointer;
 }
 
 highlight-tag {
@@ -49,6 +54,7 @@ highlight-tag > *{
   height:2em;
 }
 .highlight_info{
+  font-size: 16px;
   opacity: 0;
   top:-5em;
   right:1em;
@@ -61,6 +67,7 @@ highlight-tag > *{
 }
 
 .highlight_button {
+  font-size: 16px;
   padding:0.5em;
   background-color: rgb(75, 90, 72);
   position: fixed;
