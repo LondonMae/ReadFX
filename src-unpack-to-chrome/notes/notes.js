@@ -4,6 +4,7 @@ const regex = /(?<=#)[a-zA-Z0-9]+/m;
 const sidebar = document.getElementById("notes-container");
 POST_URL_NOTES = "http://127.0.0.1:5000/notes";
 GET_URL_NOTES = "http://127.0.0.1:5000/users/user_id/notes";
+DELETE_URL_NOTES = "http://127.0.0.1:5000/users/user_id/header";
 
 var idx;
 var n;
@@ -172,6 +173,23 @@ const deletenote = (title) => {
     chrome.storage.local.set({ notes: items["notes"] });
     update_noteslist();
   });
+
+  user_id = document.getElementById("user_id").value;
+  let url = DELETE_URL_NOTES.replace("user_id", user_id.toString());
+  url.replace("header", title);
+
+  const requestOptions = {
+    method: "DELETE",
+    redirect: "follow",
+  };
+  console.log("url is:", url);
+
+  fetch(url, requestOptions)
+    .then((response) => response.json()) // Parse response as JSON
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => console.error(error));
 };
 
 const update_noteslist = () => {
@@ -223,15 +241,7 @@ const pull_notes = (user_id) => {
   fetch(url, requestOptions)
     .then((response) => response.json()) // Parse response as JSON
     .then((result) => {
-      // console.log(result)
       result.forEach((item) => {
-        /*         console.log("User id:", item.user_id); */
-        console.log("Title:", item.header);
-        /* console.log("Content:", item.content);
-        console.log("-------------------------"); */
-
-        /*       for (let n in notes["notes"]) { */
-        console.log(item.header);
         let note_tab = document.createElement("div");
         note_tab.innerHTML = note_tab_temp.replace("$", item.header);
         note_tab.children[0].addEventListener("click", () => {
@@ -239,13 +249,10 @@ const pull_notes = (user_id) => {
         });
 
         note_tab.classList.add("notelink");
-        //        note_tab.innerText = n;
         note_tab.addEventListener("click", () => {
           switchNotesDB(item.header, user_id);
         });
         sidebar.appendChild(note_tab);
-
-        /*       } */
       });
     })
     .catch((error) => console.error(error));
@@ -359,13 +366,13 @@ function jump_to_highlight(url) {
   window.location.href = url;
 }
 
-// Gernerate id which is 12 characters long
+// Gernerate id which is 8 characters long
 document.getElementById("generate_id").addEventListener("click", () => {
   console.log("invoke generate_id");
   var id = Math.floor(10000000 + Math.random() * 90000000);
   var content = document.getElementById("generated_id");
   /*       alert("invoke generated ID"); */
-  content.textContent = id;
+  content.value = id;
 });
 
 // Invoke push button
