@@ -46,13 +46,6 @@ function copyText(){
     });
   }
 
-function saveText() {
-    chrome.runtime.sendMessage({
-        name: 'save',
-        data: document.getElementById("select-a-word").value
-    })
-
-}
 
 async function open_notes(){
     let newtab = await chrome.tabs.create({url: "notes/notes.html"});
@@ -179,9 +172,13 @@ function openPdf(){
 }
 
 function saveNotebook(){
+    console.log("save")    
     chrome.runtime.sendMessage({
         name: 'write_notebook',
-        data: document.getElementById("notebook").value
+        data: {
+            "title": "uncategorized",
+            "body": document.getElementById("notebook").value
+        }
     })
 }
 
@@ -245,7 +242,6 @@ document.getElementById('read-button').addEventListener('click', function() {
 
 
 
-
 document.getElementById("bold-button").addEventListener("click", () => {
   console.log("bolding");
     chrome.runtime.sendMessage({
@@ -255,51 +251,45 @@ document.getElementById("bold-button").addEventListener("click", () => {
   })
 
 
-    document.getElementById("change-theme-button").addEventListener("click", () => {
-        toggleTheme()
+document.getElementById("change-theme-button").addEventListener("click", () => {
+    toggleTheme()
+})
+
+document.getElementById("similarity-button").addEventListener("click", () => {
+    chrome.runtime.sendMessage({
+        name: "similarity",
+        data: "none"
     })
-
-    document.getElementById("similarity-button").addEventListener("click", () => {
-          chrome.runtime.sendMessage({
-              name: "similarity",
-              data: "none"
-          })
-    })
-
-
-    document.getElementById("copy-button").addEventListener("click", () => {
-        copyText()
-    })
-
-    document.getElementById("save-button").addEventListener("click", () => {
-        saveText()
-    })
-
-document.getElementById("open-pdf").addEventListener("click", () => {
-    openPdf()
- })
-document.getElementById("highlight-button").addEventListener("click", () => {
-    showHighlights()
- })
-
- document.getElementById("list-highlights-button").addEventListener("click", () => {
-    listHighlights()
- })
-
+})
 
 
 document.getElementById("copy-button").addEventListener("click", () => {
     copyText()
- })
+})
 
-document.getElementById("save-button").addEventListener("click", () => {
-    saveText()
- })
 
+document.getElementById("open-pdf").addEventListener("click", () => {
+    openPdf()
+})
+document.getElementById("highlight-button").addEventListener("click", () => {
+    showHighlights()
+})
+
+document.getElementById("list-highlights-button").addEventListener("click", () => {
+    listHighlights()
+})
+
+document.getElementById("copy-button").addEventListener("click", () => {
+    copyText()
+})
 
 document.getElementById("save-notebook-button").addEventListener("click", () => {
     saveNotebook()
- })
+})
+
+document.getElementById("save-button").addEventListener("click", () => {
+    saveNotebook()
+})
 
 for(let i of document.getElementsByClassName("highlight_color")){
     i.addEventListener("input", (e)=>{update_colors(e)})
@@ -346,9 +336,6 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
             name: 'init-sp',
             data: { value: "loaded2" }
         });
-    }
-    if (name === 'display-notes') {
-        document.getElementById("notebook").value = data
     }
 });
 

@@ -152,9 +152,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab)=>{
     }catch{
       return
     }
-    console.log(tab.url)
-    console.log()
-    console.log(highlight)
     if(highlight != undefined){
       if(tab.status == "complete"){
         chrome.storage.local.get(["colors"], (items)=>{
@@ -216,44 +213,39 @@ chrome.runtime.onMessage.addListener(async({ name, data }) => {
     var response = await chrome.tabs.sendMessage(tab.id, ["extract keywords", response.summary]);
   }
 
-  if (name === 'save') {
+  if (name === 'save' || name === 'write_notebook') {
     addToNotes(data);
   }
 
-  if (name === 'write_notebook') {
-    writeNotes(data);
+  if(name === 'highlight_text') {
+    console.log(data)
+    saveHighlight(data)
   }
 
-  if(name === 'highlight_text') {
-  console.log(data)
-  saveHighlight(data)
-}
-if(name === 'show_highlights'){
-  console.log("show highlights")
-}
+  if(name === 'show_highlights'){
+    console.log("show highlights")
+  }
+
 });
 
 
-function addToNotes(text){
+function addToNotes(note){
+  console.log(note)
+  let text = note.body
+  let title = note.title
+  
   chrome.storage.local.get(["notes"]).then((result)=>{
     console.log(result.notes)
-    let updated_notes = result.notes + text
-    chrome.storage.local.set({notes: updated_notes})
-
-    chrome.runtime.sendMessage({name: 'display-notes', data: updated_notes})
+    let updated_notes = result.notes[title] = {
+      "title": title,
+      "body": text
+    }
+    result.notes[title] = updated_notes
+    chrome.storage.local.set({notes: result.notes})
   })
+
 }
 
-
-function writeNotes(text){
-
-  chrome.storage.local.get({notes: text}).then(result=>console.log(result))
-    chrome.storage.local.get({notes: text}).then(result=>chrome.runtime.sendMessage({
-      name: 'test',
-      data: result
-  }))
-  chrome.storage.local.set({notes: text})
-}
 
 function saveHighlight(highlight){
   chrome.storage.local.get(["highlights"]).then((result)=>{
