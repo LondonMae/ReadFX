@@ -2,9 +2,9 @@ const notes_body = document.getElementsByClassName("notes_body")[0];
 const notes_title = document.getElementsByClassName("notes_title")[0];
 const regex = /(?<=#)[a-zA-Z0-9]+/m;
 const sidebar = document.getElementById("notes-container");
-POST_URL_NOTES = "http://127.0.0.1:5000/notes";
-GET_URL_NOTES = "http://127.0.0.1:5000/users/user_id/notes";
-DELETE_URL_NOTES = "http://127.0.0.1:5000/users/user_id/header";
+POST_URL_NOTES = "http://10.20.34.125:5000/notes";
+GET_URL_NOTES = "http://10.20.34.125:5000/users/user_id/notes";
+DELETE_URL_NOTES = "http://10.20.34.125:5000/users/user_id/notes/header";
 
 var idx;
 var n;
@@ -171,31 +171,33 @@ const deletenote = (title) => {
     console.log(items);
     delete items["notes"][title];
     chrome.storage.local.set({ notes: items["notes"] });
+
+    // Send DELETE request to db
+    console.log("user id is: ", items["notes"][title]);
+    var user_id = document.getElementById("user_id").value;
+    let url = DELETE_URL_NOTES.replace("user_id", user_id.toString());
+    url.replace("header", items["notes"][title]);
+    console.log("url is:", url);
+
+    const requestOptions = {
+      method: "DELETE",
+      redirect: "follow",
+    };
+
+    fetch(url, requestOptions)
+      .then((response) => response.json()) // Parse response as JSON
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => console.error(error));
     update_noteslist();
   });
-
-  user_id = document.getElementById("user_id").value;
-  let url = DELETE_URL_NOTES.replace("user_id", user_id.toString());
-  url.replace("header", title);
-
-  const requestOptions = {
-    method: "DELETE",
-    redirect: "follow",
-  };
-  console.log("url is:", url);
-
-  fetch(url, requestOptions)
-    .then((response) => response.json()) // Parse response as JSON
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((error) => console.error(error));
 };
 
 const update_noteslist = () => {
   sidebar.innerHTML = "";
-  chrome.storage.local.get(["notes"]).then((notes) => {
-    for (let n in notes["notes"]) {
+  chrome.storage.local.get(["notesDB"]).then((notes) => {
+    for (let n in notes) {
       console.log(n);
       let note_tab = document.createElement("div");
       note_tab.innerHTML = note_tab_temp.replace("$", n);
@@ -203,7 +205,7 @@ const update_noteslist = () => {
         deletenote(n);
       });
       note_tab.classList.add("notelink");
-      //        note_tab.innerText = n;
+      note_tab.innerText = n;
       note_tab.addEventListener("click", () => {
         switchNotes(n);
       });
@@ -230,6 +232,7 @@ const push_notes = (user_id) => {
 
 const pull_notes = (user_id) => {
   console.log("reached pull notes");
+  console.log("user_id is:  ", user_id.toString());
   let url = GET_URL_NOTES.replace("user_id", user_id.toString());
   console.log(url);
 
@@ -241,7 +244,17 @@ const pull_notes = (user_id) => {
   fetch(url, requestOptions)
     .then((response) => response.json()) // Parse response as JSON
     .then((result) => {
+      console.log("DB Results data stored in Chrome storage");
+
+      let notes = {};
+
       result.forEach((item) => {
+        let nobj = {
+          title: item.header,
+          body: item.content,
+        };
+        notes[item.header] = nobj;
+
         let note_tab = document.createElement("div");
         note_tab.innerHTML = note_tab_temp.replace("$", item.header);
         note_tab.children[0].addEventListener("click", () => {
@@ -254,8 +267,10 @@ const pull_notes = (user_id) => {
         });
         sidebar.appendChild(note_tab);
       });
-    })
-    .catch((error) => console.error(error));
+      chrome.storage.local
+        .set({ notes: notes }, () => {})
+        .catch((error) => console.error(error));
+    });
 };
 
 async function postData(url = "", data = {}) {
@@ -378,7 +393,7 @@ document.getElementById("generate_id").addEventListener("click", () => {
 // Invoke push button
 document.getElementById("push_button").addEventListener("click", () => {
   console.log("invoke push");
-  var user_id = document.getElementById("user_id").textContent;
+  var user_id = document.getElementById("user_id").value;
   console.log("user is is   ", user_id);
   push_notes(user_id);
 });
@@ -386,7 +401,7 @@ document.getElementById("push_button").addEventListener("click", () => {
 // Invoke pull button
 document.getElementById("pull_button").addEventListener("click", () => {
   console.log("invoke pull");
-  var user_id = document.getElementById("user_id").textContent;
+  var user_id = document.getElementById("user_id").value;
   console.log("user is is   ", user_id);
   pull_notes(user_id);
 });
