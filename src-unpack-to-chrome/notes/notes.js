@@ -143,20 +143,6 @@ const switchNotesDB = (title, user_id) => {
       });
       console.log(result);
     });
-
-  /* chrome.storage.local
-    .get("notes")
-    .then((response) => response.json()) // Parse response as JSON
-    .then((result) => {
-      (items) => {
-        let selected_note = items["notes"][title];
-        m = regex.exec(items.notes);
-        document.getElementsByClassName("notes_title")[0].innerHTML =
-          selected_note.title;
-        document.getElementsByClassName("notes_body")[0].innerHTML =
-          selected_note.body;
-      };
-    }); */
 };
 
 let note_tab_temp = `
