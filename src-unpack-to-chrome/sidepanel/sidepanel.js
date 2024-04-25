@@ -10,6 +10,21 @@ const palettes = {
     // "simple": ["white","lightblue","white","white","black", "white"],
 }
 
+
+
+String.prototype.hashCode = function() {
+  var hash = 0,
+    i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr = this.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return Math.abs(hash).toString(16);
+}
+
+
 function toggleTheme() {
     current_theme += 1
     console.log(current_theme)
@@ -82,15 +97,15 @@ function showHighlights(){
     });
 }
 
-function deletehighlight(title){
-  console.log("delete"+ title )
+function deletehighlight(hash, index){
+  console.log("delete "+ hash )
   chrome.storage.local.get("highlights").then(
   (items) => {
-      let selected_note = items["hightlights"][title];
+      let selected_note = items["highlights"][hash];
       console.log(items)
-      delete items["notes"][title]
-      chrome.storage.local.set({highlights: items["notes"]} )
-      //update_noteslist()
+      items["highlights"][hash].splice(index, 1)
+      chrome.storage.local.set({"highlights": items["highlights"]})
+      listHighlights()
     }
   );
 }
@@ -130,6 +145,7 @@ function listHighlights(){
     chrome.storage.local.get(["highlights"]).then((result)=>{
         for(let w in result.highlights){
             console.log(w);
+            var index = 0;
             for(let h of result.highlights[w]){
                 let link_ele = document.createElement('div');
                 console.log(h.color.match('[0-9]')[0])
@@ -140,16 +156,20 @@ function listHighlights(){
                 button.innerText = "X"
                 button.classList.add("delete-button");
                 button.addEventListener("click", (e)=>{
-                    console.log(e)
-                    deletehighlight(h)
+                    if(e.target.classList[0] == 'delete-button'){
+                        console.log(e)
+                        deletehighlight(h.url.hashCode(), result.highlights[w].indexOf(h))
+                    }
                 })
                 link_ele.appendChild(button);
                 link_ele.classList.add('highlight-link');
-                link_ele.addEventListener('click', ()=>{
-                    jump_to_highlight(h)
+                link_ele.addEventListener('click', (e)=>{
+                    if(e.target.classList[0] != 'delete-button'){
+                        jump_to_highlight(h)
+                    }
                 })
                 list.appendChild(link_ele)
-
+                index += 1;
 
             }
         }
