@@ -184,8 +184,8 @@ const deletenote = (title) => {
 
 const update_noteslist = () => {
   sidebar.innerHTML = "";
-  chrome.storage.local.get(["notesDB"]).then((notes) => {
-    for (let n in notes) {
+  chrome.storage.local.get(["notes"]).then((notes) => {
+    for (let n in notes["notes"]) {
       console.log(n);
       let note_tab = document.createElement("div");
       note_tab.innerHTML = note_tab_temp.replace("$", n);
@@ -193,7 +193,7 @@ const update_noteslist = () => {
         deletenote(n);
       });
       note_tab.classList.add("notelink");
-      note_tab.innerText = n;
+      // note_tab.innerText = n;
       note_tab.addEventListener("click", () => {
         switchNotes(n);
       });
@@ -219,6 +219,7 @@ const push_notes = (user_id) => {
 };
 
 const pull_notes = (user_id) => {
+  sidebar.innerHTML = "";
   console.log("reached pull notes");
   console.log("user_id is:  ", user_id.toString());
   let url = GET_URL_NOTES.replace("user_id", user_id.toString());
@@ -255,6 +256,8 @@ const pull_notes = (user_id) => {
         });
         sidebar.appendChild(note_tab);
       });
+      console.log("-------");
+      console.log(notes);
       chrome.storage.local
         .set({ notes: notes }, () => {})
         .catch((error) => console.error(error));
