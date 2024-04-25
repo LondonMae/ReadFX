@@ -1,5 +1,6 @@
 from db import create_connection, create_database, create_tables
 from flask import Flask, jsonify, request
+import logging
 
 app = Flask(__name__)
 
@@ -47,7 +48,7 @@ def get_users():
 @app.route("/notes", methods=["POST"])
 def create_notes():
     connection = create_connection()
-    print("Creating Notes")
+    app.logger.info("Creating Notes")
     if connection is None:
         return jsonify({"error": "Database connection error"}), 500
     try:
@@ -94,7 +95,7 @@ def create_notes():
 
 @app.route("/users/<int:user_id>/notes/<string:note_header>", methods=["DELETE"])
 def remote_user_notes(user_id, note_header):
-    print("Deleting notes from user")
+    app.logger.info("Deleting notes from user")
     connection = create_connection()
     if connection is None:
         return jsonify({"error": "Database connection error"}), 500
@@ -125,7 +126,7 @@ def remote_user_notes(user_id, note_header):
 # Route to retrieve all notes belonging to a user
 @app.route("/users/<int:user_id>/notes", methods=["GET"])
 def get_user_notes(user_id):
-    print("Gettings notes")
+    app.logger.info("Gettings notes")
     connection = create_connection()
     if connection is None:
         return jsonify({"error": "Database connection error"}), 500
@@ -153,8 +154,9 @@ def get_user_notes(user_id):
             connection.close()
 
 
-@app.before_first_request
+# @app.before_first_request
 def before_first_request_func():
+    app.logger.info("Before first request initiate")
     create_database()
     # Connect to the PostgreSQL database and create tables if they don't exist
     connection = create_connection()
@@ -170,4 +172,7 @@ def home():
 
 # Main function
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.logger.info("start up")
+    with app.app_context():
+        before_first_request_func()
