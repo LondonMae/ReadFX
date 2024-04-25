@@ -169,14 +169,14 @@ const deletenote = (title) => {
   chrome.storage.local.get("notes").then((items) => {
     let selected_note = items["notes"][title];
     console.log(items);
-    delete items["notes"][title];
-    chrome.storage.local.set({ notes: items["notes"] });
 
     // Send DELETE request to db
-    console.log("user id is: ", items["notes"][title]);
+    header = items["notes"][title]["title"];
+    console.log("note header is: ", header);
     var user_id = document.getElementById("user_id").value;
     let url = DELETE_URL_NOTES.replace("user_id", user_id.toString());
-    url.replace("header", items["notes"][title]);
+    console.log("url before replace header", url);
+    url = url.replace("header", header.toString());
     console.log("url is:", url);
 
     const requestOptions = {
@@ -190,6 +190,8 @@ const deletenote = (title) => {
         console.log(result);
       })
       .catch((error) => console.error(error));
+    delete items["notes"][title];
+    chrome.storage.local.set({ notes: items["notes"] });
     update_noteslist();
   });
 };
