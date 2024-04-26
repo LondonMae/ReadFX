@@ -398,34 +398,29 @@ document.getElementById("pull_button").addEventListener("click", () => {
 });
 
 function add_link(h, highlight_colors) {
+  if (document.getElementsByClassName("highlight-links").length > 0) {
+    document.getElementsByClassName("highlight-links")[0].remove();
+  }
+
   let link_ele = document.createElement("div");
-  console.log(h.color.match("[0-9]")[0]);
   link_ele.style.background = highlight_colors[h.color.match("[0-9]")[0]];
   link_ele.value = h.url;
   const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
   link_ele.innerHTML =
-    "<a href='" +
+    "<a class='full-url' href='" +
     h.url +
     "'>" +
-    regex.exec(h.url) +
+    h.url +
     "</a>" +
     "<div>" +
     h.text +
     "</div>";
-  let button = document.createElement("button");
-  button.innerText = "X";
-  button.classList.add("delete-button");
-  button.addEventListener("click", (e) => {
-    console.log(e);
-    deletehighlight(h);
-  });
-  link_ele.appendChild(button);
   link_ele.addEventListener("click", (e) => {
     console.log(e);
     e.preventDefault();
     jump_to_highlights(h.url);
   });
-  link_ele.classList.add("highlight-link");
+  link_ele.classList.add("highlight-link-embed");
   link_ele.value = h.url;
   link_ele.contentEditable = false;
   console.log(h.url);
