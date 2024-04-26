@@ -220,7 +220,7 @@ function saveNotebook() {
   chrome.runtime.sendMessage({
     name: "write_notebook",
     data: {
-      title: "uncategorized",
+      title: document.getElementById("notebook-title").value,
       body: document.getElementById("notebook").value,
     },
   });
