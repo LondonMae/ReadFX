@@ -207,6 +207,10 @@ body {
 
 
 .full-url{
+    font-size:0.5em;
+    background:white;
+    height:2em;
+    margin:-1em;
     display:none;
     line-height:0em;
     transform:translate(0px, -1.5em);

@@ -201,8 +201,8 @@ document.addEventListener("keydown", function(e) {
     popup.innerHTML = "Highlight <br>"
     popup.style.position = "absolute"
     let range = window.getSelection().getRangeAt(0).getBoundingClientRect()
-    popup.style.top =  range.x + "px";
-    popup.style.left = range.y + "px";
+    popup.style.top =  range.y + "px";
+    popup.style.left = range.x + "px";
     popup.classList.add("highlight-links")
     document.body.appendChild(popup)
     listHighlights()
@@ -247,7 +247,7 @@ function add_link(h, highlight_colors){
   link_ele.style.background = highlight_colors[h.color.match('[0-9]')[0]]
   link_ele.value = h.url
   const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
-  link_ele.innerHTML = "<a class='full-url' href='" + h.url + "'>" + h.url+ "</a>" + "<div>" + h.text + "</div>";
+  link_ele.innerHTML = "<a class='full-url' href='" + h.url + "'>" + h.url+ "</a>" + "<div>\"" + h.text + "\"</div>";
   link_ele.addEventListener('click', (e)=>{
     console.log(e)
     e.preventDefault()
