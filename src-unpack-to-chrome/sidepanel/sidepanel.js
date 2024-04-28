@@ -315,9 +315,13 @@ for(let i of document.getElementsByClassName("highlight_color")){
     i.addEventListener("input", (e)=>{update_colors(e)})
 }
 
-
-
-  const fonts = document.getElementById("input-font")
+const fontsizeslider = document.getElementById("font-size");
+fontsizeslider.addEventListener("change", (e)=>{
+    document.getElementById("fontsizeindicator").innerText = fontsizeslider.value + "px";
+})
+const fonts = document.getElementById("input-font");
+const bgcolor = document.getElementById("bgcolor");
+const invertcheck = document.getElementById("invertcheck");
 
 fonts.addEventListener('change', (e) => {
     fonts.style.fontFamily = fonts.options[fonts.selectedIndex].text;
@@ -329,7 +333,7 @@ document.getElementById("change-font-button").addEventListener("click", () => {
   var selectedFont= fonts.options[fonts.selectedIndex].text;
   console.log(selectedFont);
   const tab = tabs[0];
-  chrome.tabs.sendMessage(tab.id, { name: 'tab', data: selectedFont});
+  chrome.tabs.sendMessage(tab.id, { name: 'tab', data: {"fontFamily": selectedFont,"fontSize": fontsizeslider.value, "background": bgcolor.value, "invert": invertcheck.checked}});
   })
 })
 

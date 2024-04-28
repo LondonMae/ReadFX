@@ -217,8 +217,9 @@ body {
 }
 
 .highlight-link-embed{
-    margin:-0.5em;
+    margin:-1em;
     padding:0.5em;
+    font-style:italic;
 }
 
 .highlight-link-embed:hover>.full-url{

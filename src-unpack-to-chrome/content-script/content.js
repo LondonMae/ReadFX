@@ -36,13 +36,47 @@ async function bold_text(word, text_elements) {
 }
 }
 
+let invertedcss = `
+img{
+    filter:invert(1);
+}`
+// :link{
+//     color:orange;
+// }
+// :visited{
+//     color:#80FF80;
+// }
+
+
 chrome.runtime.onMessage.addListener(({ name, data }) => {
   if(name === 'tab'){
-      console.log("here!")
-      var el = document.querySelectorAll('*');
-        for(var i=0;i<el.length;i++){
-        el[i].style.fontFamily = data;
-  }
+    try{
+      document.getElementById("invertcss").remove()
+    }catch{
+
+    }
+    console.log("here!")
+    document.body.style.fontSize = data.fontSize + "px";
+    document.body.style.background = data.background;
+    
+    let red = Number("0x" + data.background.slice(1,3));
+    let blue = Number("0x" + data.background.slice(3,5));
+    let green = Number("0x" + data.background.slice(5,7));
+    document.body.style.color = (red*0.299 + green*0.587 + blue*0.114) > 186 ? "#000000" : "#ffffff"
+    if(data.invert){
+      let inverthtml = document.createElement("style")
+      inverthtml.id = "invertcss"
+      inverthtml.innerHTML = invertedcss;
+      document.head.appendChild(inverthtml)
+    }else{
+      document.getElementById("invertcss").remove()
+    }
+    
+    var el = document.querySelectorAll('*');
+    for(var i=0;i<el.length;i++){
+      el[i].style.fontFamily = data.fontFamily;
+    }
+
 
   }
 })

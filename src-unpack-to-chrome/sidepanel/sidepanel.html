@@ -25,7 +25,7 @@
 
     <div id="ToolsFx" class="parent_block">
       <div id="buttons-container">
-            <button class="tool" id="read-button"><span>READ</span></button>
+          <button class="tool" id="read-button"><span>READ</span></button>
           <button class="tool" id="bold-button"><span>Bold Keywords</span></button>
 
 
@@ -37,17 +37,22 @@
         </div>
       </div>
 
-<div id = "fontFx" class = "parent_block">
+  <div id = "fontFx" class = "parent_block">
 
 
-        <div id = "input">
+      <div id = "input">
         <select class="input" id = "input-font" >
           <option value="Times">Times New Roman</option>
           <option value="Arial">Arial</option>
           <option value="Lato">Lato</option>
+          <option value="Georgia">Georgia</option>
         </select>
       </div>
-      <button class="tool-button" id="change-font-button"><span>Change Font</span></button>
+      <div class="tool"><span>Font Size</span><input id="font-size" type="range" min="10" max="30" step="1">
+      <div id="fontsizeindicator"> </div></div>
+      <div class="tool"> <span>Background Color </span><input type="color" id="bgcolor"></div>
+      <div class="tool"><span> Invert Images <input type="checkbox" id="invertcheck"> </span></div>
+      <button class="tool-button" id="change-font-button">Apply Settings</button>
     </div>
 
     <div id="HistoryFx"  class="parent_block">

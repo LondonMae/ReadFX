@@ -5,6 +5,7 @@ const sidebar = document.getElementById("notes-container");
 
 var idx;
 var n;
+let cursor;
 async function test() {
   n = await chrome.storage.local.get("notes")
 
@@ -187,26 +188,25 @@ for (let n of noteslist){
 }
 
 
-let prevKeyCode = 0;
 document.addEventListener("keydown", function(e) {
-    if (document.getElementsByClassName('highlight-links').length > 0){
-        document.getElementsByClassName('highlight-links')[0].remove()
-    }
+  if (document.getElementsByClassName('highlight-links').length > 0){
+    document.getElementsByClassName('highlight-links')[0].remove()
+  }
   if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
     e.preventDefault();
     saveOptions();
   }
-  if (e.keyCode === 191 && prevKeyCode === 191){
+  if (e.keyCode === 191 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
     let popup = document.createElement("div");
     popup.innerHTML = "Highlight <br>"
     popup.style.position = "absolute"
     let range = window.getSelection().getRangeAt(0).getBoundingClientRect()
+    cursor = range;
     popup.style.top =  range.y + "px";
     popup.style.left = range.x + "px";
     popup.classList.add("highlight-links")
     document.body.appendChild(popup)
     listHighlights()
-
   }
   prevKeyCode = e.keyCode
 }, false);
@@ -244,7 +244,7 @@ function add_link(h, highlight_colors){
   }
 
   let link_ele = document.createElement('div');
-  link_ele.style.background = highlight_colors[h.color.match('[0-9]')[0]]
+  link_ele.style.background = highlight_colors[h.color.match('[0-9]')[0]]+"20";
   link_ele.value = h.url
   const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
   link_ele.innerHTML = "<a class='full-url' href='" + h.url + "'>" + h.url+ "</a>" + "<div>\"" + h.text + "\"</div>";
