@@ -127,3 +127,16 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 
   }
 });
+
+
+
+function wiki_preview(word){
+  fetch("https://en.wikipedia.org/api/rest_v1/page/summary/" + word, {
+  "headers": {
+    "accept": "application/json; charset=utf-8; profile=\"https://www.mediawiki.org/wiki/Specs/Summary/1.2.0\"",
+    "origin":"*",
+  },
+  "method": "GET",
+  "mode": "cors"
+  }).then(e=>console.log(e));
+}

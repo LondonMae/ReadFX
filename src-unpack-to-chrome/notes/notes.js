@@ -244,7 +244,7 @@ function add_link(h, highlight_colors){
   }
 
   let link_ele = document.createElement('div');
-  link_ele.style.background = highlight_colors[h.color.match('[0-9]')[0]]+"20";
+  link_ele.style.borderColor = highlight_colors[h.color.match('[0-9]')[0]];
   link_ele.value = h.url
   const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
   link_ele.innerHTML = "<a class='full-url' href='" + h.url + "'>" + h.url+ "</a>" + "<div>\"" + h.text + "\"</div>";
