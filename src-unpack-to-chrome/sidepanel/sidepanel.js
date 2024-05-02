@@ -340,21 +340,27 @@ for (let i of document.getElementsByClassName("highlight_color")) {
   });
 }
 
+const fontsizeslider = document.getElementById("font-size");
+fontsizeslider.addEventListener("change", (e)=>{
+    document.getElementById("fontsizeindicator").innerText = fontsizeslider.value + "px";
+})
 const fonts = document.getElementById("input-font");
+const bgcolor = document.getElementById("bgcolor");
+const invertcheck = document.getElementById("invertcheck");
 
-fonts.addEventListener("change", (e) => {
-  fonts.style.fontFamily = fonts.options[fonts.selectedIndex].text;
-});
+fonts.addEventListener('change', (e) => {
+    fonts.style.fontFamily = fonts.options[fonts.selectedIndex].text;
+ });
 document.getElementById("change-font-button").addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    console.log("Font change invoked");
-    // console.log(`e.target.value = ${e.target.value}`);
-    var selectedFont = fonts.options[fonts.selectedIndex].text;
-    console.log(selectedFont);
-    const tab = tabs[0];
-    chrome.tabs.sendMessage(tab.id, { name: "tab", data: selectedFont });
-  });
-});
+  console.log('Font change invoked');
+  // console.log(`e.target.value = ${e.target.value}`);
+  var selectedFont= fonts.options[fonts.selectedIndex].text;
+  console.log(selectedFont);
+  const tab = tabs[0];
+  chrome.tabs.sendMessage(tab.id, { name: 'tab', data: {"fontFamily": selectedFont,"fontSize": fontsizeslider.value, "background": bgcolor.value, "invert": invertcheck.checked}});
+  })
+})
 
 listHighlights();
 

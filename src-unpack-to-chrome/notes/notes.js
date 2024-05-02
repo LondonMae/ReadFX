@@ -8,6 +8,7 @@ DELETE_URL_NOTES = "http://10.20.34.125:5000/users/user_id/notes/header";
 
 var idx;
 var n;
+let cursor;
 
 var nameList = [
   "Time",
@@ -507,35 +508,30 @@ for (let n of noteslist) {
     switchNotes(n.innerHTML);
   });
 }
-let prevKeyCode = 0;
-document.addEventListener(
-  "keydown",
-  function (e) {
-    if (document.getElementsByClassName("highlight-links").length > 0) {
-      document.getElementsByClassName("highlight-links")[0].remove();
-    }
-    if (
-      e.keyCode === 83 &&
-      (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)
-    ) {
-      e.preventDefault();
-      saveOptions();
-    }
-    if (e.keyCode === 191 && prevKeyCode === 191) {
-      let popup = document.createElement("div");
-      popup.innerHTML = "Highlight <br>";
-      popup.style.position = "absolute";
-      let range = window.getSelection().getRangeAt(0).getBoundingClientRect();
-      popup.style.top = range.x + "px";
-      popup.style.left = range.y + "px";
-      popup.classList.add("highlight-links");
-      document.body.appendChild(popup);
-      listHighlights();
-    }
-    prevKeyCode = e.keyCode;
-  },
-  false,
-);
+
+
+document.addEventListener("keydown", function(e) {
+  if (document.getElementsByClassName('highlight-links').length > 0){
+    document.getElementsByClassName('highlight-links')[0].remove()
+  }
+  if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+    e.preventDefault();
+    saveOptions();
+  }
+  if (e.keyCode === 191 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+    let popup = document.createElement("div");
+    popup.innerHTML = "Highlight <br>"
+    popup.style.position = "absolute"
+    let range = window.getSelection().getRangeAt(0).getBoundingClientRect()
+    cursor = range;
+    popup.style.top =  range.y + "px";
+    popup.style.left = range.x + "px";
+    popup.classList.add("highlight-links")
+    document.body.appendChild(popup)
+    listHighlights()
+  }
+  prevKeyCode = e.keyCode
+}, false);
 
 let closed = true;
 document.getElementById("toggle-button").addEventListener("click", () => {
@@ -598,25 +594,17 @@ function add_link(h, highlight_colors) {
     document.getElementsByClassName("highlight-links")[0].remove();
   }
 
-  let link_ele = document.createElement("div");
-  link_ele.style.background = highlight_colors[h.color.match("[0-9]")[0]];
-  link_ele.value = h.url;
+  let link_ele = document.createElement('div');
+  link_ele.style.borderColor = highlight_colors[h.color.match('[0-9]')[0]];
+  link_ele.value = h.url
   const regex = /(?<=https:\/\/)[a-z.]+(?=\/)/gm;
-  link_ele.innerHTML =
-    "<a class='full-url' href='" +
-    h.url +
-    "'>" +
-    h.url +
-    "</a>" +
-    "<div>" +
-    h.text +
-    "</div>";
-  link_ele.addEventListener("click", (e) => {
-    console.log(e);
-    e.preventDefault();
-    jump_to_highlights(h.url);
-  });
-  link_ele.classList.add("highlight-link-embed");
+  link_ele.innerHTML = "<a class='full-url' href='" + h.url + "'>" + h.url+ "</a>" + "<div>\"" + h.text + "\"</div>";
+  link_ele.addEventListener('click', (e)=>{
+    console.log(e)
+    e.preventDefault()
+    jump_to_highlights(h.url)
+  })
+  link_ele.classList.add('highlight-link-embed');
   link_ele.value = h.url;
   link_ele.contentEditable = false;
   console.log(h.url);

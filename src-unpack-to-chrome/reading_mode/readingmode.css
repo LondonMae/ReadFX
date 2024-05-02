@@ -2,6 +2,9 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
+html{
+}
+
 body{
     padding:5em;
     font-size:25px;
@@ -12,11 +15,14 @@ body{
 
 h1{
     font-size:4rem;
+    line-height:1em;
 }
 h2{
     font-size:3rem;
+    line-height:1em;
 }
 
 img{
     max-width:30em;
 }
+
