@@ -79,13 +79,23 @@ function copyText() {
 }
 
 async function open_notes() {
-  let newtab = await chrome.tabs.create({ url: "notes/notes.html" });
-  chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    // make sure the status is 'complete' and it's the right tab
-    if (tabId == newtab.id && changeInfo.status == "complete") {
-      let response = chrome.tabs.sendMessage(newtab.id, { name: "open_notes" });
-    }
+  let [currentTab] = await chrome.tabs.query({
+    active: true,
+    currentWindow: true,
   });
+  if (currentTab.url.endsWith("notes.html")) {
+    chrome.tabs.reload(currentTab.id);
+  } else {
+    let newtab = await chrome.tabs.create({ url: "notes/notes.html" });
+    chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+      // make sure the status is 'complete' and it's the right tab
+      if (tabId == newtab.id && changeInfo.status == "complete") {
+        let response = chrome.tabs.sendMessage(newtab.id, {
+          name: "open_notes",
+        });
+      }
+    });
+  }
 }
 
 async function jump_to_highlight(h) {
