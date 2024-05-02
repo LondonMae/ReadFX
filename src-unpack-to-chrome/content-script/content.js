@@ -129,14 +129,57 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 });
 
 
+// window.addEventListener("mouseup", (e)=>{
+//     if (window.getSelection().toString() != "") {
+//         if(!highlight_active){
+//           console.log("enable show highlights first")
+//           return
+//         }
+//         let wikipopup = document.createElement("div");
+//         wikipopup.classList.add("wikipopup")
+//         wiki_preview(wikipopup, window.getSelection().toString());
+//         document.body.appendChild(wikipopup);
+//     } 
+// })
 
-function wiki_preview(word){
-  fetch("https://en.wikipedia.org/api/rest_v1/page/summary/" + word, {
+// async function wiki_preview(ele, word){
+//   let data = fetch("https://en.wikipedia.org/api/rest_v1/page/summary/" + word, {
+//   "headers": {
+//     "accept": "application/json; charset=utf-8; profile=\"https://www.mediawiki.org/wiki/Specs/Summary/1.2.0\"",
+//     "origin":"*",
+//   },
+//   "method": "GET",
+//   "mode": "cors"
+//   }).then((response) => {
+//     if (response.status == 404){
+//       return "no wiki"
+//     }
+//     const reader = response.body.getReader();
+//     reader.read().then(({ done, value }) => {
+//         const string= new TextDecoder().decode(value);;
+//         const json = JSON.parse(string);
+//         console.log(json)
+//         ele.innerHTML = `<img src='` + json.thumbnail.source + `'>`
+//         ele.innerHTML += json.extract_html
+//         ele.innerHTML += `<a href='`+ json.content_urls.desktop.page +`'> Open Full URL </a>`
+//     })
+//   })
+// }
+
+async function wiki_search(word){
+  let data = fetch("https://en.wikipedia.org/w/api.php?action=query&format=json&gsrlimit=1&generator=search&origin=*&gsrsearch=" + word, {
   "headers": {
-    "accept": "application/json; charset=utf-8; profile=\"https://www.mediawiki.org/wiki/Specs/Summary/1.2.0\"",
     "origin":"*",
   },
-  "method": "GET",
-  "mode": "cors"
-  }).then(e=>console.log(e));
+  "method": "GET"
+  }).then((response) => {
+    const reader = response.body.getReader();
+    reader.read().then(({ done, value }) => {
+        const string= new TextDecoder().decode(value);;
+        const json = JSON.parse(string);
+        const page = json.query.pages;
+        console.log(page)
+        console.log(page[Object.keys(page)[0]].title)
+    })
+  })
 }

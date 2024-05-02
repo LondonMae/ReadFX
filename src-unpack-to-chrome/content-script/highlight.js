@@ -10,6 +10,8 @@ let highlight = {
   "tailindex": 0
 }
 
+let prevSelectionText = ""
+
 let pageHighlights = []
 
 let color_block = `
@@ -54,11 +56,6 @@ chrome.runtime.onMessage.addListener(({ name, data }) => {
 
 
 async function add_new_highlight(e){
-  if(!highlight_applied){
-    // await chrome.runtime.sendMessage(()=>{
-
-    // })
-  }
   const regex = new RegExp(/%(\d)/, 'g')
   element = window.getSelection().focusNode.parentNode;  
   
@@ -67,6 +64,10 @@ async function add_new_highlight(e){
   for(let i = 0; i < 4; i++){
       popup.innerHTML += color_block.replaceAll(regex, "color" + i)
   }
+  let wiki = document.createElement('div');
+  wiki.classList.add("wikibutton")
+  wiki.innerHTML = "wiki"
+  popup.appendChild(wiki);
   popup.style.top = e.clientY + "px";
   popup.style.left = e.clientX + "px";
   popup.classList.add("readfxpopup")
@@ -80,6 +81,23 @@ async function add_new_highlight(e){
 
 
 window.addEventListener("mouseup", (e)=>{
+    if (highlight_active && document.getElementsByClassName('wikipopup').length > 0){
+        document.getElementsByClassName('wikipopup')[0].remove()
+    }
+    if(e.target.classList[0] == "wikibutton"){
+      let wikipopup = document.createElement("div");
+      wikipopup.classList.add("wikipopup")
+      console.log(e)
+      wikipopup.style.position = "fixed";
+      let left = e.clientX
+      if(left > window.screenX - 300){
+        left -= 300;
+      }
+      wikipopup.style.left = left + "px";
+      wikipopup.style.top = e.clientY + "px";
+      document.body.appendChild(wikipopup);
+      wiki_preview(wikipopup, prevSelectionText);
+    }
     if(e.target.classList[0] == "color_label"){
       highlight.color = e.target.attributes.for.textContent
       console.log(e)
@@ -102,6 +120,7 @@ window.addEventListener("mouseup", (e)=>{
           console.log("enable show highlights first")
           return
         }
+        prevSelectionText = window.getSelection().toString()
         add_new_highlight(e)
     } 
 })
@@ -316,4 +335,33 @@ function changeHighlightColor(colors){
   for(let i = 0; i < colors.length; i++){
     r.style.setProperty('--color' + i, colors[i] + "80")
   }
+}
+
+async function wiki_preview(ele, word){
+  let data = fetch("https://en.wikipedia.org/api/rest_v1/page/summary/" + word, {
+  "headers": {
+    "accept": "application/json; charset=utf-8; profile=\"https://www.mediawiki.org/wiki/Specs/Summary/1.2.0\"",
+    "origin":"*",
+  },
+  "method": "GET",
+  "mode": "cors"
+  }).then((response) => {
+    if (response.status == 404){
+      return "no wiki"
+    }
+    const reader = response.body.getReader();
+    reader.read().then(({ done, value }) => {
+        const string= new TextDecoder().decode(value);;
+        const json = JSON.parse(string);
+        console.log(json)
+        ele = document.getElementsByClassName("wikipopup")[0]
+        try{
+          ele.innerHTML = `<img src='` + json.thumbnail.source + `'>`
+        }catch{
+          ele.innerHTML = "<img>"
+        }
+        ele.innerHTML += json.extract_html
+        ele.innerHTML += `<a href='`+ json.content_urls.desktop.page +`'> Open Full URL </a>`
+    })
+  })
 }
