@@ -183,10 +183,12 @@ let note_tab_temp = `
   <button class="delete-button">-</button>
 `;
 const hashto8 = (user_name) => {
+  let num = "";
   for (let c in user_name) {
     num += c.charCodeAt(0);
-  num = num.substring(0, 8);
-  return parseInt(num);
+    num = num.substring(0, 8);
+    return parseInt(num);
+  }
 };
 
 const deletenote = (title) => {
@@ -260,6 +262,7 @@ const push_notes = (user_id) => {
 };
 
 const pull_notes = (user_id) => {
+  user_id = hashto8(user_id);
   sidebar.innerHTML = "";
   console.log("reached pull notes");
   console.log("user_id is:  ", user_id.toString());
