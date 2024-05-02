@@ -571,9 +571,9 @@ document.getElementById("generate_id").addEventListener("click", () => {
   var finalName = nameList[Math.floor(Math.random() * nameList.length)];
   // console.log("invoke generate_id");
   // var id = Math.floor(10000000 + Math.random() * 90000000);
-  var content = document.getElementById("generated_id");
   /*       alert("invoke generated ID"); */
   // document.getElementById("uNameInput").value = finalName;
+  var content = document.getElementById("user_id");
   content.value = finalName;
 });
 
