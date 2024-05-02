@@ -337,8 +337,8 @@ let note_tab_temp = `
 `;
 const hashto8 = (user_name) => {
   let num = "";
-  for (let c in user_name) {
-    console.log("user character is: ", c);
+  for (let c of user_name) {
+    // console.log("user character is: ", c);
     num += c.charCodeAt(0);
   }
   num = num.substring(0, 8);
@@ -407,7 +407,9 @@ const push_notes = (user_id) => {
   // header = items["notes"][title]["title"];
   // console.log("note header is: ", header);
   var user_id = document.getElementById("user_id").value;
+  console.log("before hash id is: ", user_id);
   user_id = hashto8(user_id);
+  console.log("after hash id is: ", user_id);
   let url = DELETE_URL_NOTES_ALL.replace("user_id", user_id.toString());
   // console.log("url before replace header", url);
   // url = url.replace("header", header.toString());
