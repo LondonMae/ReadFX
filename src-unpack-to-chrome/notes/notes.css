@@ -68,7 +68,7 @@ body {
 
 .sidebar-open {
   min-width: 10em;
-  width: fit-content;
+  width: 10em;
 }
 
 .sidebar-closed {
