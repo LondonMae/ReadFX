@@ -280,3 +280,13 @@ input {
   backface-visibility: hidden;
   transform-style: preserve-3d;
 }
+
+code{
+    font-family: monospace;
+    font-size: 0.9rem;
+    font-weight: 800;
+    background: #ddd;
+    border-radius: 1em;
+    padding: 1em;
+    margin:1em
+}
