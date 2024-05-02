@@ -1,6 +1,7 @@
+import logging
+
 from db import create_connection, create_database, create_tables
 from flask import Flask, jsonify, request
-import logging
 
 app = Flask(__name__)
 
@@ -69,6 +70,19 @@ def create_notes():
         """,
             (user_id,),
         )
+
+        # Check if the combination of user_id, note_header, and note_content already exists
+        cursor.execute(
+            """
+            SELECT 1 FROM Notes 
+            WHERE user_id = %s AND note_header = %s AND note_content = %s
+            """,
+            (user_id, note_header, note_content),
+        )
+
+        # If the combination already exists, return an error
+        if cursor.fetchone():
+            return jsonify({"error": "Note already exists"}), 409
 
         # Insert the data into the Notes table
         cursor.execute(
