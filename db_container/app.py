@@ -147,7 +147,7 @@ def remove_user_notes_all(user_id):
         cursor = connection.cursor()
         cursor.execute(
             """
-            DELETE FROM Notes WHERE user_id = %s AND note_header = %s
+            DELETE FROM Notes WHERE user_id = %s 
 
             """,
             (user_id),
