@@ -422,21 +422,20 @@ const push_notes = (user_id) => {
     .then((response) => response.json()) // Parse response as JSON
     .then((result) => {
       console.log(result);
+      chrome.storage.local.get("notes").then((e) => {
+        let notes = e.notes;
+        let keys = Object.keys(notes);
+        for (let k of keys) {
+          console.log(notes[k]);
+          title = notes[k]["title"];
+          body = notes[k]["body"];
+          data = { user_id: user_id, note_header: title, note_content: body };
+          console.log("data is ", data);
+          postData(POST_URL_NOTES, data);
+        }
+      });
     })
     .catch((error) => console.error(error));
-
-  chrome.storage.local.get("notes").then((e) => {
-    let notes = e.notes;
-    let keys = Object.keys(notes);
-    for (let k of keys) {
-      console.log(notes[k]);
-      title = notes[k]["title"];
-      body = notes[k]["body"];
-      data = { user_id: user_id, note_header: title, note_content: body };
-      console.log("data is ", data);
-      postData(POST_URL_NOTES, data);
-    }
-  });
 };
 
 const pull_notes = (user_id) => {
