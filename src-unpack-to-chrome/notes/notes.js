@@ -554,11 +554,11 @@ document.addEventListener(
     ) {
       let popup = document.createElement("div");
       popup.innerHTML = "Highlight <br>";
-      popup.style.position = "absolute";
-      let range = window.getSelection().getRangeAt(0).getBoundingClientRect();
-      cursor = range;
-      popup.style.top = range.y + "px";
-      popup.style.left = range.x + "px";
+      // let range = window.getSelection().getRangeAt(0).getBoundingClientRect();
+      // cursor = range;
+      popup.style.position = "fixed";
+      popup.style.top = e.clientY + "px";
+      popup.style.left = e.clientX + "px";
       popup.classList.add("highlight-links");
       document.body.appendChild(popup);
       listHighlights();
