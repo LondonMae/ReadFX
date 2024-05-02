@@ -5,6 +5,8 @@ const sidebar = document.getElementById("notes-container");
 POST_URL_NOTES = "http://10.20.34.125:5000/notes";
 GET_URL_NOTES = "http://10.20.34.125:5000/users/user_id/notes";
 DELETE_URL_NOTES = "http://10.20.34.125:5000/users/user_id/notes/header";
+DELETE_URL_NOTES_ALL = "http://10.20.34.125:5000/users/user_id/notes";
+// @app.route("/users/<int:user_id>/notes", methods=["DELETE"])
 
 var idx;
 var n;
@@ -350,26 +352,27 @@ const deletenote = (title) => {
     console.log(items);
 
     // Send DELETE request to db
-    header = items["notes"][title]["title"];
-    console.log("note header is: ", header);
-    var user_id = document.getElementById("user_id").value;
-    user_id = hashto8(user_id);
-    let url = DELETE_URL_NOTES.replace("user_id", user_id.toString());
-    console.log("url before replace header", url);
-    url = url.replace("header", header.toString());
-    console.log("url is:", url);
+    // header = items["notes"][title]["title"];
+    // console.log("note header is: ", header);
+    // var user_id = document.getElementById("user_id").value;
+    // user_id = hashto8(user_id);
+    // let url = DELETE_URL_NOTES.replace("user_id", user_id.toString());
+    // console.log("url before replace header", url);
+    // url = url.replace("header", header.toString());
+    // console.log("url is:", url);
+    //
+    // const requestOptions = {
+    //   method: "DELETE",
+    //   redirect: "follow",
+    // };
+    //
+    // fetch(url, requestOptions)
+    //   .then((response) => response.json()) // Parse response as JSON
+    //   .then((result) => {
+    //     console.log(result);
+    //   })
+    //   .catch((error) => console.error(error));
 
-    const requestOptions = {
-      method: "DELETE",
-      redirect: "follow",
-    };
-
-    fetch(url, requestOptions)
-      .then((response) => response.json()) // Parse response as JSON
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => console.error(error));
     delete items["notes"][title];
     chrome.storage.local.set({ notes: items["notes"] });
     update_noteslist();
@@ -399,6 +402,29 @@ const update_noteslist = () => {
 const push_notes = (user_id) => {
   user_id = hashto8(user_id);
   console.log("invoke chrome storage");
+
+  // Delete Everything Belonging to user in the server
+  // header = items["notes"][title]["title"];
+  // console.log("note header is: ", header);
+  var user_id = document.getElementById("user_id").value;
+  user_id = hashto8(user_id);
+  let url = DELETE_URL_NOTES_ALL.replace("user_id", user_id.toString());
+  // console.log("url before replace header", url);
+  // url = url.replace("header", header.toString());
+  // console.log("url is:", url);
+
+  const requestOptions = {
+    method: "DELETE",
+    redirect: "follow",
+  };
+
+  fetch(url, requestOptions)
+    .then((response) => response.json()) // Parse response as JSON
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => console.error(error));
+
   chrome.storage.local.get("notes").then((e) => {
     let notes = e.notes;
     let keys = Object.keys(notes);

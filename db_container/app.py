@@ -108,7 +108,37 @@ def create_notes():
 
 
 @app.route("/users/<int:user_id>/notes/<string:note_header>", methods=["DELETE"])
-def remote_user_notes(user_id, note_header):
+def remove_user_notes(user_id, note_header):
+    app.logger.info("Deleting notes from user")
+    connection = create_connection()
+    if connection is None:
+        return jsonify({"error": "Database connection error"}), 500
+    try:
+        cursor = connection.cursor()
+        cursor.execute(
+            """
+            DELETE FROM Notes WHERE user_id = %s AND note_header = %s
+
+            """,
+            (user_id, note_header),
+        )
+        connection.commit()  # Committing the changes
+        if cursor.rowcount == 0:
+            return (
+                jsonify({"error": "No notes found for the given user and header"}),
+                404,
+            )
+        return jsonify({"success": "Notes deleted"}), 200
+    except Exception as e:
+        connection.rollback()  # Roll back in case of error
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        connection.close()
+
+
+@app.route("/users/<int:user_id>/notes", methods=["DELETE"])
+def remove_user_notes_all(user_id):
     app.logger.info("Deleting notes from user")
     connection = create_connection()
     if connection is None:
