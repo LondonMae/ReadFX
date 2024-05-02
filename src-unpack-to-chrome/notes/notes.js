@@ -149,6 +149,12 @@ let note_tab_temp = `
   $
   <button class="delete-button">-</button>
 `;
+const hashto8 = (user_name) => {
+  for (let c in user_name) {
+    num += c.charCodeAt(0);
+  num = num.substring(0, 8);
+  return parseInt(num);
+};
 
 const deletenote = (title) => {
   console.log("delete" + title);
@@ -160,6 +166,7 @@ const deletenote = (title) => {
     header = items["notes"][title]["title"];
     console.log("note header is: ", header);
     var user_id = document.getElementById("user_id").value;
+    user_id = hashto8(user_id);
     let url = DELETE_URL_NOTES.replace("user_id", user_id.toString());
     console.log("url before replace header", url);
     url = url.replace("header", header.toString());
@@ -203,6 +210,7 @@ const update_noteslist = () => {
 };
 
 const push_notes = (user_id) => {
+  user_id = hashto8(user_id);
   console.log("invoke chrome storage");
   chrome.storage.local.get("notes").then((e) => {
     let notes = e.notes;
