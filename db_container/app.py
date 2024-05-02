@@ -150,7 +150,7 @@ def remove_user_notes_all(user_id):
             DELETE FROM Notes WHERE user_id = %s 
 
             """,
-            (user_id),
+            (user_id,),
         )
         connection.commit()  # Committing the changes
         if cursor.rowcount == 0:
