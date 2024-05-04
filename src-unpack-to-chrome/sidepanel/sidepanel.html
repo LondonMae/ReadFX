@@ -5,16 +5,26 @@
   </head>
 
   <body>
-    <div id = "bg"></div>
+    <div id="bg"></div>
 
-    <div id="NotesFx"  class="parent_block">
-
-
+    <div id="NotesFx" class="parent_block">
       <h1>Summarize</h1>
-      <div class = "summary">
-      <p id="select-a-word" >Highlight text on the page to use the summarization tool. Your summary will appear here.</p>
-      <div id = "test" class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-    </div>
+      <div class="summary">
+        <p id="select-a-word">
+          Highlight text on the page to use the summarization tool. Your summary
+          will appear here.
+        </p>
+        <div id="test" class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
       <button class="tool-button" id="copy-button">copy</button>
       <button class="tool-button" id="save-button">save to notebook</button>
       <div>
@@ -28,20 +38,23 @@
           <button class="tool" id="read-button"><span>READ</span></button>
           <button class="tool" id="bold-button"><span>Bold Keywords</span></button>
 
-
-          <button class="tool" id="highlight-button"><span>Show Highlights</span></button>
-          <button class="tool" id="similarity-button"><span>Find Similar Paragraphs</span></button>
-          <button class="tool" id="change-theme-button"><span>Change Theme</span></button>
-          <button class="tool" id="open-pdf"><span>Open PDF</span></button>
-          <div id="current-theme"> (default) </div>
-        </div>
+        <button class="tool" id="highlight-button">
+          <span>Show Highlights</span>
+        </button>
+        <button class="tool" id="similarity-button">
+          <span>Find Similar Paragraphs</span>
+        </button>
+        <button class="tool" id="change-theme-button">
+          <span>Change Theme</span>
+        </button>
+        <button class="tool" id="open-pdf"><span>Open PDF</span></button>
+        <div id="current-theme">(default)</div>
       </div>
+    </div>
 
-  <div id = "fontFx" class = "parent_block">
-
-
-      <div id = "input">
-        <select class="input" id = "input-font" >
+    <div id="fontFx" class="parent_block">
+      <div id="input">
+        <select class="input" id="input-font">
           <option value="Times">Times New Roman</option>
           <option value="Arial">Arial</option>
           <option value="Lato">Lato</option>
@@ -55,28 +68,32 @@
       <button class="tool-button" id="change-font-button">Apply Settings</button>
     </div>
 
-    <div id="HistoryFx"  class="parent_block">
+    <div id="HistoryFx" class="parent_block">
       <h1>My Notebook</h1>
-      <textarea id="notebook">your notes!</textarea>
+      <div class="tool">
+        <textarea class="tooltextarea" id="notebook-title">title</textarea>
+      </div>
+      <br />
+      <div class="tool">
+        <textarea class="tooltextarea" id="notebook">your notes!</textarea>
+      </div>
+
       <button class="tool-button" id="save-notebook-button">Save</button>
       <button class="tool-button" id="open-notes">Open Notes!</button>
-
     </div>
 
-
-    <div id="LinksFx"  class="parent_block">
+    <div id="LinksFx" class="parent_block">
       <h1>Links</h1>
 
-      <input type="color" class="highlight_color" id="color0">
-      <input type="color" class="highlight_color" id="color1">
-      <input type="color" class="highlight_color" id="color2">
-      <input type="color" class="highlight_color" id="color3">
-      <div id="highlight-links">
-
-      </div>
-      <button class="tool-button" id="list-highlights-button">List Links</button>
+      <input type="color" class="highlight_color" id="color0" />
+      <input type="color" class="highlight_color" id="color1" />
+      <input type="color" class="highlight_color" id="color2" />
+      <input type="color" class="highlight_color" id="color3" />
+      <div id="highlight-links"></div>
+      <button class="tool-button" id="list-highlights-button">
+        List Links
+      </button>
     </div>
-
 
     <script src="sidepanel.js"></script>
   </body>

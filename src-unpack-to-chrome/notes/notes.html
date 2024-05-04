@@ -1,30 +1,43 @@
 <html>
-  <head>
-    <title>Dictionary Side Panel</title>
-    <link href="notes.css" rel="stylesheet" />
-  </head>
 
-  <body>
+<head>
+  <title>Dictionary Side Panel</title>
+  <link href="notes.css" rel="stylesheet" />
+</head>
 
-    <div class="sidebar sidebar-open">
-      <button class="tool-button" id="toggle-button">close</button>
-      <i class="icon-search"></i>
-      <input type="text" id = "search-bar" placeholder="Search..">
-      <div id="notes-container"></div>
+<body>
 
+  <div class="sidebar sidebar-open">
+    <button class="tool-button" id="toggle-button">close</button>
+    <button class="tool-button" id="add-note-button">+</button>
+    <!-- <button class=" tool-button" id="toggle-button">close</button> -->
+    <br>
+    <button class="tool-button inline-buttons" id="pull_button">Pull Notes from Server</button>
+    <button class="tool-button inline-buttons" id="push_button">Push Notes to Server</button>
+    <br>
+    <button class="tool-button" id="generate_id">Generate id</button>
+    <!-- <input class="tool-button" id="generated_id" readonly></input> -->
+    <br>
+    <p class="tool-button">Enter ID</p>
+    <input type="text" class="tool-button" id="user_id" contentEditable="true""></input>
+    <br>
+    <i class=" icon-search"></i>
+    <input type="text" id="search-bar" placeholder="Search..">
+    <div id="notes-container"></div>
+  </div>
+  <div class="parent_block">
+    <div class="notes_title" contenteditable>Notes</div>
+    <div class="notes_body" contentEditable>Summarized Text</div>
+    <div class="button_container">
+      <button class="tool-button" id="copy-button">Copy</button>
+      <button class="tool-button" id="save-button">Save</button>
+      <button class="tool-button" id="add-note-button">new</button>
     </div>
-    <div class="parent_block">
-        <div class="notes_title" contenteditable>Notes</div>
-        <div class="notes_body" contentEditable>Summarized Text</div>
-        <div class="button_container">
-            <button class="tool-button" id="copy-button">Copy</button>
-            <button class="tool-button" id="save-button">Save</button>
-            <button class="tool-button" id="add-note-button">new</button>
-        </div>
-    </div>
+  </div>
 
-      <script src="lunr.js"></script>
-    <script src="notes.js"></script>
+  <script src="lunr.js"></script>
+  <script src="notes.js"></script>
 
-  </body>
+</body>
+
 </html>
